@@ -2,9 +2,15 @@ package com.example.ex4.repository;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,11 +18,7 @@ public class User {
 
     @NotEmpty
     @Pattern(regexp = "^[A-Za-z]+$")
-    private String firstName;
-
-    @NotEmpty
-    @Pattern(regexp = "^[A-Za-z]+$")
-    private String lastName;
+    private String username;
 
     @NotEmpty
     @Column(unique = true)
@@ -25,9 +27,8 @@ public class User {
 
     public User() {}
 
-    public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username, String email) {
+        this.username =
         this.email = email;
     }
 
@@ -35,12 +36,8 @@ public class User {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
