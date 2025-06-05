@@ -1,8 +1,12 @@
 package com.example.ex4;
 
+import com.example.ex4.repository.AppUser;
+import com.example.ex4.repository.UserRepository;
 import com.example.ex4.service.CustomUserDetailsService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,13 +25,14 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/shared/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -53,5 +58,26 @@ public class ApplicationConfig {
                 );
 
         return http.build();
+    }
+    @Bean
+    public CommandLineRunner initAdmin(UserRepository userRepository,
+                                       PasswordEncoder passwordEncoder,
+                                       @Value("${admin.username}") String username,
+                                       @Value("${admin.email}") String email,
+                                       @Value("${admin.password}") String password)
+    {
+        return args -> {
+            if (userRepository.findByUserName(username).isEmpty()) {
+                AppUser admin = new AppUser();
+                admin.setEmail(email);
+                admin.setUserName(username);
+                admin.setPassword(passwordEncoder.encode(password));
+                admin.setRole("ADMIN");
+                userRepository.save(admin);
+                System.out.println("✅ Admin user created: " + username);
+            } else {
+                System.out.println("ℹ️ Admin user already exists: " + username);
+            }
+        };
     }
 }
