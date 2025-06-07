@@ -23,8 +23,15 @@ public class UserService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveUser(AppUser user) {
-        userRepository.save(user);
+    public void saveUser(AppUser user) {userRepository.save(user);}
+
+    public void saveAdminProfile(String username, Admin AdminProfile) {
+        System.out.println("principal name: " + username);
+        Admin admin = adminRepository.findByUserName(username).orElseThrow(() -> new IllegalArgumentException("Admin not found"));
+        admin.setProfileUrl(AdminProfile.getProfileUrl());
+        admin.setAboutMe(AdminProfile.getAboutMe());
+        admin.setLanguages(AdminProfile.getLanguages());
+        adminRepository.save(admin);
     }
 
     public void deleteUser(long id) {

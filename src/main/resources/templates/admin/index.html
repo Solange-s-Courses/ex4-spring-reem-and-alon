@@ -19,7 +19,9 @@
                        class="btn btn-primary mt-2">create profile card</a>
                 </div>
             </div>
-            <div th:unless="${#strings.isEmpty(admin.aboutMe)}"></div>
+            <div th:if="${! #strings.isEmpty(admin.aboutMe)}">
+                <div th:replace="~{fragments/adminprofilecard :: profileCard(admin=${admin})}"></div>
+            </div>
         </div>
 
         <div class="col-7">

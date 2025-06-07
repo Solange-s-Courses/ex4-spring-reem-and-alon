@@ -2,12 +2,15 @@ package com.example.ex4.entity;
 
 import com.example.ex4.constants.ProgrammingLanguage;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.Set;
 
 @Entity
 public class Admin extends AppUser {
 
     @Column(length = 200)
+    @NotEmpty(message = "About Me is required")
     private String aboutMe;
 
     @Column(length = 200)
