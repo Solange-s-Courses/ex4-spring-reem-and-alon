@@ -11,7 +11,7 @@ public class RedirectController {
     public String redirectAfterLogin(Authentication authentication) {
         if (authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            return "redirect:/provider_profile";
+            return "redirect:/admin";
         } else if (authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
             return "redirect:/user";

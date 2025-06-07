@@ -1,11 +1,13 @@
-package com.example.ex4.repository;
+package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+
 import java.io.Serializable;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser implements Serializable {
 
     @Id

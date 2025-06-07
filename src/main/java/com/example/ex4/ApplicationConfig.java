@@ -1,16 +1,14 @@
 package com.example.ex4;
 
-import com.example.ex4.repository.AppUser;
+import com.example.ex4.entity.Admin;
+import com.example.ex4.entity.AppUser;
+import com.example.ex4.repository.AdminRepository;
 import com.example.ex4.repository.UserRepository;
-import com.example.ex4.service.CustomUserDetailsService;
-import com.example.ex4.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -60,20 +58,21 @@ public class ApplicationConfig {
         return http.build();
     }
     @Bean
-    public CommandLineRunner initAdmin(UserRepository userRepository,
+    public CommandLineRunner initAdmin(AdminRepository adminRepository,
                                        PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
                                        @Value("${admin.email}") String email,
                                        @Value("${admin.password}") String password)
     {
         return args -> {
-            if (userRepository.findByUserName(username).isEmpty()) {
-                AppUser admin = new AppUser();
+            if (adminRepository.findByUserName(username).isEmpty()) {
+                Admin admin = new Admin();
                 admin.setEmail(email);
                 admin.setUserName(username);
                 admin.setPassword(passwordEncoder.encode(password));
                 admin.setRole("ADMIN");
-                userRepository.save(admin);
+                admin.setProfileUrl("images/profile-picture.jpg");
+                adminRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);
             } else {
                 System.out.println("ℹ️ Admin user already exists: " + username);

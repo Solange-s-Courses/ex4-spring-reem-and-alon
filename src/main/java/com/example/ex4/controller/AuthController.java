@@ -1,12 +1,11 @@
 package com.example.ex4.controller;
 
-import com.example.ex4.repository.AppUser;
+import com.example.ex4.entity.AppUser;
 import com.example.ex4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;

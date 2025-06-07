@@ -1,6 +1,6 @@
 package com.example.ex4.service;
 
-import com.example.ex4.repository.AppUser;
+import com.example.ex4.entity.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

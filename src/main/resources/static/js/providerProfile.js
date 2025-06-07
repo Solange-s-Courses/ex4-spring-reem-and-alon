@@ -18,11 +18,5 @@
 
     document.addEventListener("DOMContentLoaded",()=>{
         openOfferBtn.addEventListener("click",()=>toggleHtmlElements.toggleForm())
-
-        // createOfferBtn.addEventListener('submit', (e)=>{
-        //     e.preventDefault()
-        //     //validation module;
-        //
-        // })
     })
 })()
