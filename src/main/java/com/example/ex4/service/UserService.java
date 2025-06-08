@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.dto.AdminFormDTO;
 import com.example.ex4.entity.Admin;
 import com.example.ex4.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,22 +19,11 @@ import java.util.Optional;
 public class UserService{
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AdminRepository adminRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void saveUser(AppUser user) {userRepository.save(user);}
-
-    public void saveAdminProfile(String username, Admin AdminProfile) {
-        System.out.println("principal name: " + username);
-        Admin admin = adminRepository.findByUserName(username).orElseThrow(() -> new IllegalArgumentException("Admin not found"));
-        admin.setProfileUrl(AdminProfile.getProfileUrl());
-        admin.setAboutMe(AdminProfile.getAboutMe());
-        admin.setLanguages(AdminProfile.getLanguages());
-        adminRepository.save(admin);
-    }
 
     public void deleteUser(long id) {
         userRepository.deleteById(id);
@@ -56,14 +47,6 @@ public class UserService{
 
     public Optional<AppUser> findByUsername(String username) {
         return userRepository.findByUserName(username);
-    }
-
-    public Admin findAdmin(String username) {
-        Optional<Admin> admin = adminRepository.findByUserName(username);
-        if (admin.isEmpty()) {
-            throw new RuntimeException("Admin not found");
-        }
-        return admin.get();
     }
 
     public void registerUser(AppUser user) {

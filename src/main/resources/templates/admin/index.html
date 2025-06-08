@@ -8,18 +8,18 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container-fluid mt-5">
-    <h1 class="text-center mb-5" th:text="${admin.userName}"></h1>
+    <h1 class="text-center mb-5" th:text="'Hello ' +${admin.userName}+ ' !'"></h1>
     <div class="row justify-content-center">
         <div class="col-4">
             <p class="h4 mb-3 text-start">My public info</p>
-            <div th:if="${#strings.isEmpty(admin.aboutMe)}">
+            <div th:if="${!admin.complete}">
                 <div class="alert alert-warning text-center">
                     haven't created a public profile info yet!<br>
                     <a th:href="@{/admin/create-profile}"
                        class="btn btn-primary mt-2">create profile card</a>
                 </div>
             </div>
-            <div th:if="${! #strings.isEmpty(admin.aboutMe)}">
+            <div th:if="${admin.complete}">
                 <div th:replace="~{fragments/adminprofilecard :: profileCard(admin=${admin})}"></div>
             </div>
         </div>
@@ -65,7 +65,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<!--<script th:src="@{/js/providerProfile.js}"></script>-->
+<script th:src="@{/js/providerProfile.js}"></script>
 
 </body>
 </html>

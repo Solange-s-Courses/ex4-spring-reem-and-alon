@@ -62,17 +62,16 @@ public class ApplicationConfig {
                                        PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
                                        @Value("${admin.email}") String email,
-                                       @Value("${admin.password}") String password)
+                                       @Value("${admin.password}") String password, UserRepository userRepository)
     {
         return args -> {
-            if (adminRepository.findByUserName(username).isEmpty()) {
+            if (userRepository.findByUserName(username).isEmpty()) {
                 Admin admin = new Admin();
                 admin.setEmail(email);
                 admin.setUserName(username);
                 admin.setPassword(passwordEncoder.encode(password));
                 admin.setRole("ADMIN");
-                admin.setProfileUrl("images/profile-picture.jpg");
-                adminRepository.save(admin);
+                userRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);
             } else {
                 System.out.println("ℹ️ Admin user already exists: " + username);

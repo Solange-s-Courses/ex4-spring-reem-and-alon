@@ -27,7 +27,6 @@ public class AppUser implements Serializable {
     private String role;
 
     @Column(nullable = false)
-    @Email(message = "Email is mandatory")
     private String password;
 
     public AppUser() {this.role = "USER";}
