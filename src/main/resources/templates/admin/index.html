@@ -12,15 +12,15 @@
     <div class="row justify-content-center">
         <div class="col-4">
             <p class="h4 mb-3 text-start">My public info</p>
-            <div th:if="${!admin.complete}">
+            <div th:if="${businessCard == null or !businessCard.complete}">
                 <div class="alert alert-warning text-center">
                     haven't created a public profile info yet!<br>
                     <a th:href="@{/admin/create-profile}"
                        class="btn btn-primary mt-2">create profile card</a>
                 </div>
             </div>
-            <div th:if="${admin.complete}">
-                <div th:replace="~{fragments/adminprofilecard :: profileCard(admin=${admin})}"></div>
+            <div th:if="${businessCard != null and businessCard.complete}">
+                <div th:replace="~{fragments/adminprofilecard :: profileCard(businessCard=${businessCard})}"></div>
             </div>
         </div>
 

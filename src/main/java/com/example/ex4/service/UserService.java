@@ -1,18 +1,11 @@
 package com.example.ex4.service;
 
-import com.example.ex4.dto.AdminFormDTO;
-import com.example.ex4.entity.Admin;
-import com.example.ex4.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.repository.UserRepository;
-
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,8 +38,8 @@ public class UserService{
         return userRepository.findAll();
     }
 
-    public Optional<AppUser> findByUsername(String username) {
-        return userRepository.findByUserName(username);
+    public AppUser findByUsername(String username) {
+        return userRepository.findByUserName(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     public void registerUser(AppUser user) {

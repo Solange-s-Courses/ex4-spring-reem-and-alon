@@ -1,8 +1,6 @@
 package com.example.ex4;
 
-import com.example.ex4.entity.Admin;
 import com.example.ex4.entity.AppUser;
-import com.example.ex4.repository.AdminRepository;
 import com.example.ex4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -58,7 +56,7 @@ public class ApplicationConfig {
         return http.build();
     }
     @Bean
-    public CommandLineRunner initAdmin(AdminRepository adminRepository,
+    public CommandLineRunner initAdmin(UserRepository adminRepository,
                                        PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
                                        @Value("${admin.email}") String email,
@@ -66,10 +64,7 @@ public class ApplicationConfig {
     {
         return args -> {
             if (userRepository.findByUserName(username).isEmpty()) {
-                Admin admin = new Admin();
-                admin.setEmail(email);
-                admin.setUserName(username);
-                admin.setPassword(passwordEncoder.encode(password));
+                AppUser admin = new AppUser(username, email, passwordEncoder.encode(password));
                 admin.setRole("ADMIN");
                 userRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);

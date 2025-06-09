@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="profileCard(admin)">
+<div th:fragment="profileCard(businessCard)">
     <div class="card mb-3 shadow border-0">
         <div class="row g-0 align-items-center">
             <div class="col-md-4 text-center p-2">
-                <img th:src="@{/admin/image/{id}(id=${admin.id})}" class="img-fluid rounded-circle" alt="profile picture"/>
+                <img th:src="@{/admin/image/{id}(id=${businessCard.id})}" class="img-fluid rounded-circle" alt="profile picture"/>
             </div>
             <div class="col-md-8">
                 <h6 class="card-title mb-2 text-primary">My Expertise</h6>
-                <p class="card-text small mb-1" th:text="${admin.aboutMe}"></p>
+                <p class="card-text small mb-1" th:text="${businessCard.aboutMe}"></p>
                 <hr class="my-2">
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="badge bg-success" th:each="lang : ${admin.languages}" th:text="${lang}"></span>
-                </div>
             </div>
         </div>
     </div>

@@ -2,12 +2,20 @@ package com.example.ex4.entity;
 
 import com.example.ex4.constants.ProgrammingLanguage;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import org.hibernate.action.internal.OrphanRemovalAction;
 
 import java.util.Set;
 
 @Entity
-public class Admin extends AppUser {
+public class BusinessCard {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "app_user_id", unique = true)
+    private AppUser appUser;
 
     @Column(length = 200)
     private String aboutMe;
@@ -15,11 +23,7 @@ public class Admin extends AppUser {
     @Lob
     private byte[] profileImage;
 
-    @ElementCollection(targetClass = ProgrammingLanguage.class)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "admin_languages", joinColumns = @JoinColumn(name = "admin_id"))
-    @Column(name = "language")
-    private Set<ProgrammingLanguage> languages;
+    public BusinessCard() {}
 
     public String getAboutMe() { return aboutMe; }
     public void setAboutMe(String aboutMe) { this.aboutMe = aboutMe; }
@@ -27,12 +31,12 @@ public class Admin extends AppUser {
     public byte[] getProfileImage() { return profileImage; }
     public void setProfileImage(byte[] profileImage) { this.profileImage = profileImage; }
 
-    public Set<ProgrammingLanguage> getLanguages() { return languages; }
-    public void setLanguages(Set<ProgrammingLanguage> languages) { this.languages = languages; }
+    public void setAppUser(AppUser appUser) { this.appUser = appUser; }
+
+    public long getId() {return id;}
 
     public boolean isComplete() {
         return aboutMe != null && !aboutMe.isEmpty()
-                && languages != null && !languages.isEmpty()
                 && profileImage != null && profileImage.length > 0;
     }
 }

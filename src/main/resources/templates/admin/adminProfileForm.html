@@ -7,7 +7,7 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container mt-5">
-    <form th:action="@{/admin/create-profile}" th:object="${admin}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/create-profile}" th:object="${businessInfo}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="aboutMe">About Me:</label>
             <textarea class="form-control" th:field="*{aboutMe}" id="aboutMe"></textarea>
@@ -16,12 +16,6 @@
         <div class="mb-3">
             <label for="imageFile">Profile Picture:</label>
             <input type="file" class="form-control" th:field="*{imageFile}" id="imageFile" accept="image/*"/>
-        </div>
-        <div class="mb-3">
-            <label for="languages">Languages:</label>
-            <select multiple class="form-select" th:field="*{languages}" id="languages" size="5">
-                <option th:each="lang : ${lang}" th:value="${lang}" th:text="${lang}"></option>
-            </select>
         </div>
 
         <button type="submit" class="btn btn-success">Save changes</button>
