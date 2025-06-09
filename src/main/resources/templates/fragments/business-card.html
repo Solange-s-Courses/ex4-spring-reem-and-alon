@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="profileCard(businessCard)">
+<div th:fragment="businessCard(businessCard)">
     <div class="card mb-3 shadow border-0">
-        <div class="row g-0 align-items-center">
+        <div class="row g-0">
             <div class="col-md-4 text-center p-2">
                 <img th:src="@{/admin/image/{id}(id=${businessCard.id})}" class="img-fluid rounded-circle" alt="profile picture"/>
             </div>

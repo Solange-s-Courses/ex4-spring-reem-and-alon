@@ -1,7 +1,7 @@
 package com.example.ex4.entity;
 
-import com.example.ex4.constants.ProgrammingLanguage;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.action.internal.OrphanRemovalAction;
 
 import java.util.Set;
@@ -17,7 +17,8 @@ public class BusinessCard {
     @JoinColumn(name = "app_user_id", unique = true)
     private AppUser appUser;
 
-    @Column(length = 200)
+    private String category;
+
     private String aboutMe;
 
     @Lob
@@ -32,6 +33,9 @@ public class BusinessCard {
     public void setProfileImage(byte[] profileImage) { this.profileImage = profileImage; }
 
     public void setAppUser(AppUser appUser) { this.appUser = appUser; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) {this.category = category;}
 
     public long getId() {return id;}
 

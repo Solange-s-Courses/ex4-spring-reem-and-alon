@@ -1,10 +1,10 @@
 package com.example.ex4.controller;
 
-import com.example.ex4.constants.ProgrammingLanguage;
-import com.example.ex4.dto.AdminFormDTO;
+import com.example.ex4.constants.JobType;
+import com.example.ex4.dto.BusinessCardFormDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.BusinessCard;
-import com.example.ex4.repository.BusinessCardRepository;
+import com.example.ex4.service.BusinessCardService;
 import com.example.ex4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,50 +25,39 @@ public class AdminController {
     private UserService adminService;
 
     @Autowired
-    private BusinessCardRepository businessCardRepository;
+    private BusinessCardService businessCardService;
 
     @GetMapping
     public String adminIndex(Model model, Principal principal) {
         AppUser admin = adminService.findByUsername(principal.getName());
+        BusinessCard adminBusinessCard = businessCardService.findAdminBusinessCard(admin);
         model.addAttribute("admin", admin);
-        model.addAttribute("businessCard", businessCardRepository.findByAppUser(admin).orElse(null));
+        model.addAttribute("businessCard", adminBusinessCard);
         return "admin/index";
     }
 
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id) {
-        BusinessCard businessCard = businessCardRepository.findById(id).orElse(null);
-        if (businessCard == null) {
-            return ResponseEntity.notFound().build();
-        }
-        byte[] image = businessCard.getProfileImage();
-        if (image == null || image.length == 0) {
-            return ResponseEntity.notFound().build();
-        }
+        byte[] image = businessCardService.findProfileImage(id);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
     }
 
     @GetMapping("/create-profile")
     public String adminProfile(Model model) {
-        model.addAttribute("businessInfo", new AdminFormDTO());
-        return "admin/adminProfileForm";
+        model.addAttribute("businessInfo", new BusinessCardFormDTO());
+        model.addAttribute("jobTypes", JobType.values());
+        return "admin/business-card-form";
     }
 
     @PostMapping("/create-profile")
-    public String createProfile(@Valid @ModelAttribute("businessInfo") AdminFormDTO profile,
-                                Principal principal,
-                                BindingResult result) throws IOException
-    {
+    public String createProfile(@Valid @ModelAttribute("businessInfo") BusinessCardFormDTO profile,
+                                BindingResult result, Principal principal, Model model) throws IOException {
         AppUser admin = adminService.findByUsername(principal.getName());
         if (result.hasErrors()) {
-            System.out.println(result.getAllErrors());
-            return "admin/adminProfileForm";
+            model.addAttribute("jobTypes", JobType.values());
+            return "admin/business-card-form";
         }
-        BusinessCard card = new BusinessCard();
-        card.setProfileImage(profile.getImageFile().getBytes());
-        card.setAboutMe(profile.getAboutMe());
-        card.setAppUser(admin);
-        businessCardRepository.save(card);
+        businessCardService.saveAdminProfile(admin, profile);
         return "redirect:/admin";
     }
 }
