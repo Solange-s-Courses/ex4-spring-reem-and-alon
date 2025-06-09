@@ -27,40 +27,8 @@
 
         <div class="col-7">
             <h3 class="text-center mb-4">My service packages List</h3>
-            <div sec:authorize="hasRole('ADMIN')" class="d-flex justify-content-end mb-2">
-                <button type="button" id="open-offer-btn" class="btn btn-primary">Add Item</button>
-                <form id="form" class="needs-validation d-none" novalidate method="post" action="#">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                        <div class="invalid-feedback">
-                            Please enter your username.
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                        <div class="invalid-feedback">
-                            Please enter a valid email address.
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
-                        <div class="invalid-feedback">
-                            Password must be at least 6 characters.
-                        </div>
-                    </div>
-
-                    <button id="create-offer-btn" class="btn btn-primary" type="submit">Submit</button>
-                </form>
-            </div>
-
-            <ul class="list-group">
-                <li class="list-group-item" th:each="item : ${items}" th:text="${item}">Example Item</li>
-            </ul>
+            <div th:if="${package != null}" th:replace="~{fragments/service-packages :: businessCard(businessCard=${businessCard})}"></div>
+            <a class="btn btn-primary" th:href="@{/admin/add-package}">Add new package</a>
         </div>
     </div>
 </div>
