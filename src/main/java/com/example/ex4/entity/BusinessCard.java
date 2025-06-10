@@ -1,11 +1,6 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import org.hibernate.action.internal.OrphanRemovalAction;
-
-import java.util.Set;
-
 @Entity
 public class BusinessCard {
 
@@ -20,6 +15,8 @@ public class BusinessCard {
     private String category;
 
     private String aboutMe;
+
+    private String city;
 
     @Lob
     private byte[] profileImage;
@@ -39,6 +36,8 @@ public class BusinessCard {
 
     public long getId() {return id;}
 
+    public void setCity(String city) {this.city = city;}
+    public String getCity() {return city;}
     public boolean isComplete() {
         return aboutMe != null && !aboutMe.isEmpty()
                 && profileImage != null && profileImage.length > 0;

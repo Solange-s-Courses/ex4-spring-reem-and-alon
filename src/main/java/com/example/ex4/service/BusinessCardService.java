@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class BusinessCardService {
@@ -23,6 +24,7 @@ public class BusinessCardService {
         card.setProfileImage(profile.getImageFile().getBytes());
         card.setCategory(profile.getCategory());
         card.setAboutMe(profile.getAboutMe());
+        card.setCity(profile.getCity());
         card.setAppUser(admin);
         repository.save(card);
     }
@@ -30,5 +32,12 @@ public class BusinessCardService {
     public byte[] findProfileImage(long id) {
         BusinessCard adminBusinessCard = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Business card not found"));
         return adminBusinessCard.getProfileImage();
+    }
+
+    public List<BusinessCard> getAllBusinessResults(String category, String city,String sortByPrice) {
+        List<BusinessCard> results= repository.findAllByCategoryAndCity(category,city).orElse(null);
+        results.stream().sorted().forEach(result->
+        })
+        return
     }
 }

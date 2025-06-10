@@ -30,6 +30,12 @@
             <div th:if="${#fields.hasErrors('imageFile')}" th:errors="*{imageFile}" class="invalid-feedback d-block"></div>
         </div>
 
+        <div class="mb-3">
+            <label for="city" class="form-label fw-semibold">Profile Picture</label>
+            <input type="text" class="form-control rounded-3" th:field="*{city}" id="city" />
+            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="invalid-feedback d-block"></div>
+        </div>
+
         <div class="mb-4">
             <label for="jobTypes" class="form-label fw-semibold">Job Type</label>
             <select th:field="*{category}" id="jobTypes" class="form-select rounded-3">

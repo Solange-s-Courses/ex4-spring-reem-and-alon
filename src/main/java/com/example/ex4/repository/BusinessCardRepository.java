@@ -5,11 +5,12 @@ import com.example.ex4.entity.BusinessCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface BusinessCardRepository extends JpaRepository<BusinessCard, Long> {
     Optional<BusinessCard> findByAppUser(AppUser appUser);
-
+    Optional<List<BusinessCard>> findAllByCategoryAndCity(String category, String city);
 }
 

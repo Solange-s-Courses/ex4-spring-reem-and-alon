@@ -14,6 +14,8 @@ public class BusinessCardFormDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
+    @NotBlank(message = "City is required")
+    private String city;
 
     private MultipartFile imageFile;
 
@@ -28,5 +30,7 @@ public class BusinessCardFormDTO {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 }
 

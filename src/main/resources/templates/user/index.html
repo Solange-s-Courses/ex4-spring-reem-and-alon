@@ -10,29 +10,27 @@
     <div th:replace="fragments/navbar :: navbar"></div>
     <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
 
-    <!-- Greeting -->
     <h1 class="display-5 fw-bold mb-4 text-primary text-center">
-        Hello <span th:text="${userName}">User</span>!
+        Hello <span th:text="${userName}"></span>!
     </h1>
 
-    <!-- Inline Form -->
-    <form class="row g-2 justify-content-center align-items-center mb-5" style="max-width:600px;">
+    <form th:action="@{/user/search-service}" class="row g-2 justify-content-center align-items-center mb-5" style="max-width:600px;">
         <div class="col-auto">
-            <select class="form-select rounded-pill" th:field="*{dropdown1}">
+            <select class="form-select rounded-pill">
                 <option th:value="" selected disabled>Option 1</option>
                 <option th:value="a">A</option>
                 <option th:value="b">B</option>
             </select>
         </div>
         <div class="col-auto">
-            <select class="form-select rounded-pill" th:field="*{dropdown2}">
+            <select class="form-select rounded-pill">
                 <option th:value="" selected disabled>Option 2</option>
                 <option th:value="c">C</option>
                 <option th:value="d">D</option>
             </select>
         </div>
         <div class="col-auto">
-            <select class="form-select rounded-pill" th:field="*{dropdown3}">
+            <select class="form-select rounded-pill">
                 <option th:value="" selected disabled>Option 3</option>
                 <option th:value="e">E</option>
                 <option th:value="f">F</option>
@@ -46,7 +44,7 @@
     </form>
 
     <!-- My Services Section -->
-    <div class="w-100" style="max-width: 700px;">
+    <!--<div class="w-100" style="max-width: 700px;">
         <h3 class="fw-bold text-center mb-3">My Services</h3>
         <ul class="list-group shadow-sm">
             <li class="list-group-item d-flex align-items-center justify-content-between rounded-3 mb-2" 
@@ -54,7 +52,7 @@
                 Service Name
             </li>
         </ul>
-    </div>
+    </div>-->
 </div>
 </body>
 </html>
