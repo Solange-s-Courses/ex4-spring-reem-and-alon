@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div class="card-group row row-cols-1 row-cols-md-2 g-4" th:fragment="planPackages(planPackages)">
+    <div class="col" th:each="pkg : ${planPackages}">
+        <div class="card h-100 shadow">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${pkg.title}">Title</h5>
+                <p class="card-text" th:text="${pkg.description}">Description</p>
+                <p class="card-text">
+                    <strong>Price:</strong> <span th:text="${pkg.price}">0</span> ₪
+                </p>
+                <p class="card-text">
+                    <strong>Type:</strong> <span th:text="${pkg.packageType}">Type</span>
+                </p>
+            </div>
+            <div class="card-footer d-flex justify-content-end gap-2">
+                <form th:action="@{/admin/packages/edit/{id}(id=${pkg.id})}" method="get" sec:authorize="hasRole('ADMIN')">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+                <form th:action="@{/admin/packages/delete/{id}(id=${pkg.id})}" method="post" sec:authorize="hasRole('ADMIN')">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <form th:action="@{/user/packages/send/{id}(id=${pkg.id})}" method="post" sec:authorize="hasRole('USER')">
+                    <button type="submit" class="btn btn-success">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
