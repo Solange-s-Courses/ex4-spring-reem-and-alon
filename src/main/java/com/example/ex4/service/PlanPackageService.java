@@ -1,7 +1,7 @@
 package com.example.ex4.service;
 
-import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,15 @@ public class PlanPackageService {
     @Autowired
     private PlanPackageRepository planPackageRepository;
 
-    public List<PlanPackage> getAllPackages(AppUser user) {
-        return planPackageRepository.findAllByAppUser(user).orElse(null);
+    public List<PlanPackage> getAllPackagesByCategory(String category, String sortByPrice) {
+        return planPackageRepository.findPlanPackagesByProviderProfile_Category(category).orElse(null);
     }
-    public void saveNewPackage(AppUser admin,PlanPackage planPackage){
-        planPackage.setAppUser(admin);
+
+    public List<PlanPackage> getAllProviderPackages(ProviderProfile profile) {
+        return planPackageRepository.findAllByProviderProfile(profile).orElse(null);
+    }
+    public void saveNewPackage(ProviderProfile provider, PlanPackage planPackage){
+        planPackage.setProviderProfile(provider);
         planPackageRepository.save(planPackage);
     }
-
-
 }

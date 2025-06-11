@@ -1,34 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(90deg, #f8fafc 0%, #717680 100%); }
+        .card { transition: box-shadow .3s, transform .3s; }
+        .card:hover { box-shadow: 0 0.5rem 2rem #6366f180; transform: translateY(-3px) scale(1.02); }
+        .btn-primary, .btn-success { box-shadow: 0 0.2rem 0.8rem #6366f150; }
+        h1, h3 { font-weight: bold; letter-spacing: .5px; }
+        .rounded-4 { border-radius: 1.5rem !important; }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-<div class="container-fluid mt-5">
-    <h1 class="text-center mb-5" th:text="'Hello ' +${admin.userName}+ ' !'"></h1>
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-4">
-            <p class="h4 mb-3 text-start">My public info</p>
-            <div th:if="${businessCard == null}">
-                <div class="alert alert-warning text-center">
-                    haven't created a public profile info yet!<br>
-                    <a th:href="@{/admin/create-profile}"
-                       class="btn btn-primary mt-2">create profile card</a>
+        <div class="col-12 mb-4 text-center">
+            <h1 class="display-5 mb-1" th:text="'Hello ' + ${admin.userName} + ' !'">Hello Admin!</h1>
+            <hr class="mx-auto" style="width: 120px;">
+        </div>
+        <div class="col-md-4 mb-5">
+            <p class="h4 mb-3 text-start text-secondary fw-semibold">My public info</p>
+            <div th:if="${profile == null}">
+                <div class="alert alert-warning text-center shadow rounded-4 p-4">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    haven't created a public profile yet!<br>
+                    <a th:href="@{/admin/add-profile}" class="btn btn-primary mt-3">Create Profile Card</a>
                 </div>
             </div>
-            <div th:unless="${businessCard == null}">
-                <div th:replace="~{fragments/business-card :: businessCard(businessCard=${businessCard})}"></div>
+            <div th:unless="${profile == null}">
+                <div th:replace="~{fragments/profile-card :: profileCard(profile=${profile})}"></div>
             </div>
         </div>
-
-        <div class="col-7">
-            <h3 class="text-center mb-4">My service packages List</h3>
-            <div th:if="${planPackages != null}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${planPackages})}"></div>
-            <a class="btn btn-primary" th:href="@{/admin/add-package}">Add new package</a>
+        <div class="col-md-7 mb-5">
+            <h3 class="text-center mb-4 text-dark">My Service Packages List</h3>
+            <div th:if="${plans != null}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${plans})}"></div>
+            <div class="text-end mt-4">
+                <a class="btn btn-primary px-4 py-2 rounded-3" th:href="@{/admin/add-package}">
+                    <i class="bi bi-plus-lg me-2"></i>Add new package
+                </a>
+            </div>
         </div>
     </div>
 </div>

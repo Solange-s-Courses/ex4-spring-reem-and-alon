@@ -21,6 +21,9 @@ public class PlanPackage {
     @NotBlank(message = "description is required")
     private String description;
 
+    @NotBlank(message= "this field is required")
+    private String packageType;
+
     @NotBlank(message = "Price is required")
     @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?$", message = "Please enter a valid number")
     private String price;
@@ -28,10 +31,7 @@ public class PlanPackage {
 
     @ManyToOne
     //@JoinColumn(name = "app_user_id", unique = true)
-    private AppUser appUser;
-
-    @NotBlank(message= "this field is required")
-    private String packageType;
+    private ProviderProfile providerProfile;
 
     public PlanPackage(){}
     public long getId() { return id; }
@@ -43,5 +43,5 @@ public class PlanPackage {
     public void setDescription(String description) { this.description = description; }
     public void setPrice(String price) { this.price = price; }
     public void setPackageType(String packageType) { this.packageType = packageType; }
-    public void setAppUser(AppUser appUser) { this.appUser = appUser; }
+    public void setProviderProfile(ProviderProfile providerProfile) { this.providerProfile = providerProfile; }
 }

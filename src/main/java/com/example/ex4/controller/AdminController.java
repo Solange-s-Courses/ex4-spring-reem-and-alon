@@ -1,13 +1,13 @@
 package com.example.ex4.controller;
 
-import com.example.ex4.constants.JobType;
+import com.example.ex4.constants.ProviderType;
 import com.example.ex4.constants.PlanPackageTypes;
-import com.example.ex4.dto.BusinessCardFormDTO;
+import com.example.ex4.dto.ProviderProfileDTO;
 import com.example.ex4.entity.AppUser;
-import com.example.ex4.entity.BusinessCard;
+import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.service.BusinessCardService;
 import com.example.ex4.service.PlanPackageService;
+import com.example.ex4.service.ProviderProfileService;
 import com.example.ex4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class AdminController {
     @Autowired
     private UserService adminService;
     @Autowired
-    private BusinessCardService businessCardService;
+    private ProviderProfileService profileService;
     @Autowired
     private PlanPackageService planPackageService;
 
@@ -36,37 +35,43 @@ public class AdminController {
     public String adminIndex(Model model, Principal principal) {
 
         AppUser admin = adminService.findByUsername(principal.getName());
-        BusinessCard adminBusinessCard = businessCardService.findAdminBusinessCard(admin);
-        List<PlanPackage> plans = planPackageService.getAllPackages(admin);
+        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
+        List<PlanPackage> plans = planPackageService.getAllProviderPackages(providerProfile);
 
         model.addAttribute("admin", admin);
-        model.addAttribute("businessCard", adminBusinessCard);
-        model.addAttribute("planPackages", plans);
+        model.addAttribute("profile", providerProfile);
+        model.addAttribute("plans", plans);
         return "admin/index";
     }
 
-    @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id) {
-        byte[] image = businessCardService.findProfileImage(id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-    }
-
-    @GetMapping("/create-profile")
-    public String adminProfile(Model model) {
-        model.addAttribute("businessInfo", new BusinessCardFormDTO());
-        model.addAttribute("jobTypes", JobType.values());
-        return "admin/business-card-form";
-    }
-
-    @PostMapping("/create-profile")
-    public String createProfile(@Valid @ModelAttribute("businessInfo") BusinessCardFormDTO profile,
-                                BindingResult result, Principal principal, Model model) throws IOException {
-        AppUser admin = adminService.findByUsername(principal.getName());
-        if (result.hasErrors()) {
-            model.addAttribute("jobTypes", JobType.values());
-            return "admin/business-card-form";
+    @GetMapping("/profile-image")
+    public ResponseEntity<byte[]> getProfileImage(Principal principal) {
+        try {
+            byte[] image = profileService.findProfileImage(principal.getName());
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
         }
-        businessCardService.saveAdminProfile(admin, profile);
+        catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/add-profile")
+    public String adminProfile(Model model) {
+        model.addAttribute("profile", new ProviderProfileDTO());
+        model.addAttribute("providers", ProviderType.values());
+        return "admin/add-profile-form";
+    }
+
+    @PostMapping("/add-profile")
+    public String createProfile(@Valid @ModelAttribute("profile") ProviderProfileDTO profile,
+                                BindingResult result, Principal principal, Model model) {
+        if (result.hasErrors()) {
+            System.out.println(result.getAllErrors());
+            model.addAttribute("providers", ProviderType.values());
+            return "admin/add-profile-form";
+        }
+        AppUser admin = adminService.findByUsername(principal.getName());
+        profileService.saveProviderProfile(admin, profile);
         return "redirect:/admin";
     }
 
@@ -74,17 +79,18 @@ public class AdminController {
     public String getPackageForm(Model model) {
         model.addAttribute("planPackage", new PlanPackage());
         model.addAttribute("planPackageTypes", PlanPackageTypes.values());
-        return "admin/plan-package-form";
+        return "admin/add-package-form";
     }
 
     @PostMapping("/add-package")
-    public String addPackage(@Valid @ModelAttribute PlanPackage planPackage, BindingResult result, Principal principal, Model model) throws IOException {
+    public String addPackage(@Valid @ModelAttribute PlanPackage planPackage, BindingResult result, Principal principal, Model model) {
         AppUser admin = adminService.findByUsername(principal.getName());
+        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
         if (result.hasErrors()) {
             model.addAttribute("planPackageTypes", PlanPackageTypes.values());
-            return "admin/plan-package-form";
+            return "admin/add-package-form";
         }
-        planPackageService.saveNewPackage(admin,planPackage);
+        planPackageService.saveNewPackage(providerProfile,planPackage);
         return "redirect:/admin";
     }
 }
