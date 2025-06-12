@@ -1,3 +1,4 @@
+/*
 package com.example.ex4.service;
 
 import org.springframework.stereotype.Service;
@@ -6,3 +7,4 @@ import org.springframework.stereotype.Service;
 public class SubscriptionService {
 
 }
+*/

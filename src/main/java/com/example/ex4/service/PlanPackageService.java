@@ -17,7 +17,7 @@ public class PlanPackageService {
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
 
-    public List<PlanPackage> getAllPackagesByCategory(String category, String sortByPrice) {
+    public List<PlanPackage> getAllPackagesByCategory(String category) {
         return planPackageRepository.findPlanPackagesByProviderProfile_Category(category).orElse(null);
     }
 

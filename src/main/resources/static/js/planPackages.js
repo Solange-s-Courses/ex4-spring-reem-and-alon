@@ -1,4 +1,3 @@
-import axios from 'axios'
 (()=>{
     const WEEKLY_MONTH="once a week per month"
     const ONE_TIME="one time"

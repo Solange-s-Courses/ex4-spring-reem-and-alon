@@ -50,10 +50,10 @@
         <div class="col-10 col-lg-8">
             <div class="search-card p-4 mb-5 shadow">
                 <div class="search-title">Search for Services</div>
-                <form class="row g-2 align-items-center justify-content-center" th:action="@{/search}" method="get">
+                <form class="row g-2 align-items-center justify-content-center" th:action="@{/search-providers}" method="post">
                     <div class="mb-4">
-                        <label for="packageType" class="form-label fw-semibold">Type</label>
-                        <select  id="packageType" class="form-select rounded-3">
+                        <label for="providerCategory" class="form-label fw-semibold">Type</label>
+                        <select  id="providerCategory" class="form-select rounded-3" name="providerCategory">
                             <option value="" selected>Select package type</option>
                             <option th:each="type : ${providers}" th:value="${type.displayName}" th:text="${type.displayName}"></option>
                         </select>
@@ -67,29 +67,10 @@
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col" th:each="pkg : ${results}">
-            <div class="card package-card h-100 shadow">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${pkg.title}">Title</h5>
-                    <p class="card-text" th:text="${pkg.description}">Description</p>
-                    <div class="mb-2">
-                        <span class="fw-semibold">Type: </span>
-                        <span th:text="${pkg.packageType}">Type</span>
-                    </div>
-                    <div>
-                        <span class="fw-semibold">Price: </span>
-                        <span th:text="${pkg.price}">0</span> ₪
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a th:href="@{/packages/order/{id}(id=${pkg.id})}" class="btn btn-outline-light btn-sm rounded-pill">Order</a>
-                </div>
-            </div>
-        </div>
-        <div th:if="${#lists.isEmpty(results)}" class="text-center mt-4 fs-5 text-muted">
-            No services found.
-        </div>
+    <div th:if="${results != null}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${results})}"></div>
+
+    <div th:unless="${results != null}" class="text-center mt-4 fs-5 text-muted">
+        No services found.
     </div>
 </div>
 </body>
