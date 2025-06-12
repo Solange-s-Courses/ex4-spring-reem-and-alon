@@ -13,7 +13,7 @@ public class PlanPackageService {
     @Autowired
     private PlanPackageRepository planPackageRepository;
 
-    public List<PlanPackage> getAllPackagesByCategory(String category, String sortByPrice) {
+    public List<PlanPackage> getAllPackagesByCategory(String category) {
         return planPackageRepository.findPlanPackagesByProviderProfile_Category(category).orElse(null);
     }
 
@@ -21,9 +21,9 @@ public class PlanPackageService {
         return planPackageRepository.findAllByProviderProfile(profile).orElse(null);
     }
 
-    public List<PlanPackage> getAllUserPackages() {
+/*    public List<PlanPackage> getAllUserPackages() {
 
-    }
+    }*/
 
     public void saveNewPackage(PlanPackage planPackage){
         planPackageRepository.save(planPackage);

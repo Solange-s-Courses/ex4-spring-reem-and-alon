@@ -21,8 +21,7 @@ public class UserController {
     @GetMapping("/user")
     public String userIndex(Model model, Principal principal) {
         model.addAttribute("userName", principal.getName());
-        List<PlanPackage> results = packageService.getAllPackagesByCategory(providerCategory);
-        model.addAttribute("results", results);
+        model.addAttribute("results",null);
         return "user/index";
     }
 /*    @PostMapping("/user/search-service")

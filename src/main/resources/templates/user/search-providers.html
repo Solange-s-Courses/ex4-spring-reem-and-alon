@@ -51,20 +51,13 @@
             <div class="search-card p-4 mb-5 shadow">
                 <div class="search-title">Search for Services</div>
                 <form class="row g-2 align-items-center justify-content-center" th:action="@{/search}" method="get">
-                    <div class="col-md-4">
-                        <input type="text" name="title" class="form-control" placeholder="Title" th:value="${title}">
-                    </div>
-                    <div class="col-md-3">
-                        <select name="type" class="form-select">
-                            <option value="">All Types</option>
-                            <option value="WEEKLY">Weekly</option>
-                            <option value="ONETIME">One-time</option>
-                            <option value="HALF_YEARLY">Half-yearly</option>
-                            <option value="CUSTOM">Custom</option>
+                    <div class="mb-4">
+                        <label for="packageType" class="form-label fw-semibold">Type</label>
+                        <select  id="packageType" class="form-select rounded-3">
+                            <option value="" selected>Select package type</option>
+                            <option th:each="type : ${providers}" th:value="${type.displayName}" th:text="${type.displayName}"></option>
                         </select>
-                    </div>
-                    <div class="col-md-3">
-                        <input type="number" name="maxPrice" class="form-control" placeholder="Max Price" min="1" th:value="${maxPrice}">
+                        <div  class="invalid-feedback d-block"></div>
                     </div>
                     <div class="col-md-2 d-grid">
                         <button type="submit" class="btn btn-warning">Search</button>
@@ -73,7 +66,7 @@
             </div>
         </div>
     </div>
-    <!-- תוצאות החיפוש -->
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col" th:each="pkg : ${results}">
             <div class="card package-card h-100 shadow">
