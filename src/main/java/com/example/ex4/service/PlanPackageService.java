@@ -20,8 +20,7 @@ public class PlanPackageService {
     public List<PlanPackage> getAllProviderPackages(ProviderProfile profile) {
         return planPackageRepository.findAllByProviderProfile(profile).orElse(null);
     }
-    public void saveNewPackage(ProviderProfile provider, PlanPackage planPackage){
-        planPackage.setProviderProfile(provider);
+    public void saveNewPackage(PlanPackage planPackage){
         planPackageRepository.save(planPackage);
     }
 }

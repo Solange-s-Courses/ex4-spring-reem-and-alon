@@ -44,4 +44,5 @@ public class PlanPackage {
     public void setPrice(String price) { this.price = price; }
     public void setPackageType(String packageType) { this.packageType = packageType; }
     public void setProviderProfile(ProviderProfile providerProfile) { this.providerProfile = providerProfile; }
+    public ProviderProfile getProviderProfile() { return providerProfile; }
 }

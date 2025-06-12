@@ -76,13 +76,17 @@ public class AdminController {
     }
 
     @GetMapping("/add-package")
-    public String getPackageForm(Model model) {
-        model.addAttribute("planPackage", new PlanPackage());
+    public String getPackageForm(Principal principal, Model model) {
+        AppUser admin = adminService.findByUsername(principal.getName());
+        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
+        PlanPackage planPackage=new PlanPackage();
+        planPackage.setProviderProfile(providerProfile);
+        model.addAttribute("planPackage", planPackage);
         model.addAttribute("planPackageTypes", PlanPackageTypes.values());
         return "admin/add-package-form";
     }
 
-    @PostMapping("/add-package")
+/*    @PostMapping("/add-package")
     public String addPackage(@Valid @ModelAttribute PlanPackage planPackage, BindingResult result, Principal principal, Model model) {
         AppUser admin = adminService.findByUsername(principal.getName());
         ProviderProfile providerProfile = profileService.findProviderProfile(admin);
@@ -92,5 +96,5 @@ public class AdminController {
         }
         planPackageService.saveNewPackage(providerProfile,planPackage);
         return "redirect:/admin";
-    }
+    }*/
 }
