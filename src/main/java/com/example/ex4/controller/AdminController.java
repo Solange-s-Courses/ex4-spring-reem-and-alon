@@ -2,6 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.constants.ProviderType;
 import com.example.ex4.constants.PlanPackageTypes;
+import com.example.ex4.dto.PlanPackageDTO;
 import com.example.ex4.dto.ProviderProfileDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
@@ -77,11 +78,7 @@ public class AdminController {
 
     @GetMapping("/add-package")
     public String getPackageForm(Principal principal, Model model) {
-        AppUser admin = adminService.findByUsername(principal.getName());
-        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
-        PlanPackage planPackage=new PlanPackage();
-        planPackage.setProviderProfile(providerProfile);
-        model.addAttribute("planPackage", planPackage);
+        model.addAttribute("planPackage", new PlanPackageDTO());
         model.addAttribute("planPackageTypes", PlanPackageTypes.values());
         return "admin/add-package-form";
     }

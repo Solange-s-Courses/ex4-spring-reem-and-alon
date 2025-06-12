@@ -28,7 +28,7 @@ public class ProviderProfileService {
             card.setProviderName(profile.getProviderName());
             card.setContactInfo(profile.getContactInfo());
             card.setAppUser(admin);
-            System.out.println(Arrays.toString(card.getProfileImage()));
+            //System.out.println(Arrays.toString(card.getProfileImage()));
             repository.save(card);
         }
         catch (IOException e) {
@@ -39,7 +39,7 @@ public class ProviderProfileService {
     public byte[] findProfileImage(String username) {
         System.out.println();
         ProviderProfile adminBusinessCard = repository.findProviderProfileByAppUser_UserName(username).get();
-        System.out.println(Arrays.toString(adminBusinessCard.getProfileImage()));
+        //System.out.println(Arrays.toString(adminBusinessCard.getProfileImage()));
 
         return adminBusinessCard.getProfileImage();
     }
