@@ -27,7 +27,11 @@
 
            try {
                console.log(inputs)
-               const response = await axios.post("/package-plan/add-package", inputs, {headers: { 'Content-Type': 'application/json'}});
+               const response =await axios.post('/package-plan/add-package', inputs, {
+                   headers: {
+                       'Content-Type': 'application/json'
+                   }
+               })
                console.log(response)
                window.location = "/admin";
            } catch (err) {
