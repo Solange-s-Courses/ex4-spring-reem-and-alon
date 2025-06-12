@@ -9,30 +9,28 @@
     const priceInput= document.getElementById('price')
     const packageTypeInput= document.getElementById('packageType')
 
-    //  const createOfferBtn=document.getElementById("create-offer-btn")
 
    const processInput = (()=>{
 
+       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 
        const handleSubmit= async(e)=>{
-           console.log("SUBMIT EVENT TRIGGERED!"); // זה חייב להדפס
-
            e.preventDefault()
            const inputs = {
                title: titleInput.value.trim(),
                description: descriptionInput.value.trim(),
                packageType: packageTypeInput.value.trim(),
-               price: priceInput.value.trim(), // המרה למספר
+               price: priceInput.value.trim(),
            };
-
            try {
-               console.log(inputs)
-               const response =await axios.post('/package-plan/add-package', inputs, {
+               await axios.post('/package-plan/add-package', inputs, {
                    headers: {
-                       'Content-Type': 'application/json'
+                       'Content-Type': 'application/json',
+                       [csrfHeader]: csrfToken
                    }
                })
-               console.log(response)
                window.location = "/admin";
            } catch (err) {
                console.log("error", err);

@@ -15,7 +15,7 @@ public class Subscription {
     @ManyToOne
     private AppUser appUser;
 
-    Subscription(){}
+    public Subscription(){}
 
     public void setPlanPackage(PlanPackage planPackage) { this.planPackage = planPackage; }
     public void setAppUser(AppUser appUser) { this.appUser = appUser; }

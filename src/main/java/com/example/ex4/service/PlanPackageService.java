@@ -7,6 +7,7 @@ import com.example.ex4.repository.PlanPackageRepository;
 import com.example.ex4.repository.ProviderProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,16 +25,16 @@ public class PlanPackageService {
     public List<PlanPackage> getAllProviderPackages(ProviderProfile profile) {
         return planPackageRepository.findAllByProviderProfile(profile).orElse(null);
     }
+
+    @Transactional
     public void saveNewPackage(String username,PlanPackageDTO planPackage){
         ProviderProfile providerProfile = providerProfileRepository.findProviderProfileByAppUser_UserName(username).orElse(null);
-        System.out.println(planPackage);
         PlanPackage newPackage = new PlanPackage();
         newPackage.setProviderProfile(providerProfile);
         newPackage.setPackageType(planPackage.packageType);
         newPackage.setPrice(planPackage.price);
         newPackage.setDescription(planPackage.description);
         newPackage.setTitle(planPackage.title);
-        System.out.println(newPackage);
         planPackageRepository.save(newPackage);
     }
 }

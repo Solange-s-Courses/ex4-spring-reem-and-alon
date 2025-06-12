@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 public class ApplicationConfig {
 
@@ -25,11 +26,11 @@ public class ApplicationConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(withDefaults()).csrf(csrf->csrf.disable())
+        http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
                         .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/admin/**","/package-plan/add-package").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/shared/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -65,7 +66,7 @@ public class ApplicationConfig {
                                        @Value("${admin.password}") String password, UserRepository userRepository)
     {
         return args -> {
-            if (userRepository.findByUserName(username).isEmpty()) {
+            if (userRepository.findByUserName(username) != null) {
                 AppUser admin = new AppUser(username, email, passwordEncoder.encode(password));
                 admin.setRole("ADMIN");
                 userRepository.save(admin);

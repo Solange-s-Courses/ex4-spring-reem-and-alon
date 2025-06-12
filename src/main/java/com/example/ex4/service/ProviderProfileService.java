@@ -17,7 +17,7 @@ public class ProviderProfileService {
     private ProviderProfileRepository repository;
 
     public ProviderProfile findProviderProfile(AppUser admin) {
-        return repository.findByAppUser(admin).orElse(null);
+        return repository.findByAppUser(admin);
     }
 
     public void saveProviderProfile(AppUser admin, ProviderProfileDTO profile) {
@@ -37,10 +37,7 @@ public class ProviderProfileService {
     }
 
     public byte[] findProfileImage(String username) {
-        System.out.println();
-        ProviderProfile adminBusinessCard = repository.findProviderProfileByAppUser_UserName(username).get();
-        //System.out.println(Arrays.toString(adminBusinessCard.getProfileImage()));
-
+        ProviderProfile adminBusinessCard = repository.findProviderProfileByAppUser_UserName(username).orElseThrow(()-> new RuntimeException("No profile found for username " + username));
         return adminBusinessCard.getProfileImage();
     }
 }

@@ -21,6 +21,7 @@ public class SearchProviderController {
 
     @Autowired
     PlanPackageService planPackageService;
+
     @GetMapping
     public String searchProvidersPage(Model model) {
         model.addAttribute("providers", ProviderType.values());

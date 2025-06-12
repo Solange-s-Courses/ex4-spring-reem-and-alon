@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -24,11 +25,4 @@ public class UserController {
         model.addAttribute("results",null);
         return "user/index";
     }
-/*    @PostMapping("/user/search-service")
-    public String searchService(@RequestParam String providerCategory, @RequestParam String sortByPrice,
-            Model model) {
-
-        return "user/index";
-    }*/
-
 }

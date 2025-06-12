@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProviderProfileRepository extends JpaRepository<ProviderProfile, Long> {
-    Optional<ProviderProfile> findByAppUser(AppUser appUser);
+    ProviderProfile findByAppUser(AppUser appUser);
     Optional<ProviderProfile> findProviderProfileByAppUser_UserName(String username);
 }
 

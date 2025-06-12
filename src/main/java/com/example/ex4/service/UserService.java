@@ -39,11 +39,11 @@ public class UserService{
     }
 
     public AppUser findByUsername(String username) {
-        return userRepository.findByUserName(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findByUserName(username);
     }
 
     public void registerUser(AppUser user) {
-        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+        if (userRepository.findByUserName(user.getUserName()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Entity
 public class ProviderProfile {
@@ -26,6 +27,9 @@ public class ProviderProfile {
  //   @JoinColumn(name = "app_user_id", unique = true)
     private AppUser appUser;
 
+    @OneToMany(mappedBy = "providerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    //   @JoinColumn(name = "app_user_id", unique = true)
+    private List<PlanPackage> planPackage;
 
     public ProviderProfile() {}
 
