@@ -21,14 +21,15 @@ public class UserController {
     @GetMapping("/user")
     public String userIndex(Model model, Principal principal) {
         model.addAttribute("userName", principal.getName());
-        return "user/index";
-    }
-    @PostMapping("/user/search-service")
-    public String searchService(@RequestParam String providerCategory, @RequestParam String sortByPrice,
-            Model model) {
-        List<PlanPackage> results = packageService.getAllPackagesByCategory(providerCategory, sortByPrice);
+        List<PlanPackage> results = packageService.getAllPackagesByCategory(providerCategory);
         model.addAttribute("results", results);
         return "user/index";
     }
+/*    @PostMapping("/user/search-service")
+    public String searchService(@RequestParam String providerCategory, @RequestParam String sortByPrice,
+            Model model) {
+
+        return "user/index";
+    }*/
 
 }

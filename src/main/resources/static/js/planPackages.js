@@ -4,7 +4,7 @@ import axios from 'axios'
     const ONE_TIME="one time"
     const CUSTOM="custom";
     const openOfferBtn=document.getElementById("open-offer-btn")
-    const form=document.querySelector("form")
+    const form=document.querySelector('form')
 
     //  const createOfferBtn=document.getElementById("create-offer-btn")
 
@@ -22,6 +22,7 @@ import axios from 'axios'
                price:priceInput.value.trim(),
                packageType:packageTypeInput.value.trim()
            }
+
            axios.post(form.action,inputs)
                .then(res=>{window.location="/admin"})
                .catch(()=>console.log("error"))
