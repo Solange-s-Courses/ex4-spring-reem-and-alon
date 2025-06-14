@@ -33,4 +33,8 @@ public class Cart implements Serializable {
     public void setUser(AppUser user) {
         this.user = user;
     }
+
+    public void addPackage(PlanPackage item) {
+        packages.add(item);
+    }
 }

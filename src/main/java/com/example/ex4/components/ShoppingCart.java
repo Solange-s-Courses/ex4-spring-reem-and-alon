@@ -7,6 +7,7 @@ import org.springframework.web.context.annotation.SessionScope;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @SessionScope
@@ -18,7 +19,7 @@ public class ShoppingCart implements Serializable {
         this.items = new ArrayList<>();
     }
 
-    public void setItems(ArrayList<PlanPackage> items) {
+    public void setItems(List<PlanPackage> items) {
         this.items = items;
     }
 
@@ -36,5 +37,16 @@ public class ShoppingCart implements Serializable {
 
     public List<PlanPackage> getItems() {
         return items;
+    }
+
+    public void addPackage(PlanPackage newPackage) {
+        items.add(newPackage);
+    }
+
+    public PlanPackage findPackage(Long pkgId) {
+        return items.stream()
+                .filter(pkg -> Objects.equals(pkg.getId(), pkgId))
+                .findFirst()
+                .orElse(null);
     }
 }

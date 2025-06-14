@@ -1,6 +1,8 @@
 package com.example.ex4.components;
 import com.example.ex4.entity.Cart;
+import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.repository.CartRepository;
+import com.example.ex4.service.CartService;
 import com.example.ex4.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,8 +17,9 @@ import java.util.ArrayList;
 
 @Component
 public class CartInterceptor implements HandlerInterceptor {
+
     @Autowired
-    private CartRepository cartRepository;
+    private CartService cartService;
 
     @Autowired
     private ShoppingCart shoppingCart;
@@ -25,10 +28,7 @@ public class CartInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Principal principal = request.getUserPrincipal();
         if (principal != null && shoppingCart.getItems().isEmpty()) {
-            Cart savedCart = cartRepository.findByUser_UserName(principal.getName());
-            if (savedCart != null && savedCart.getPackages() != null) {
-                shoppingCart.setItems(new ArrayList<>(savedCart.getPackages()));
-            }
+            shoppingCart.setItems(cartService.getUserCartPackages(principal.getName()));
         }
         return true;
     }

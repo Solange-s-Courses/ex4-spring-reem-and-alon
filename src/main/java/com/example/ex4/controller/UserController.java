@@ -23,13 +23,10 @@ public class UserController {
 
     @GetMapping
     public String userIndex(Model model, Principal principal, ShoppingCart shoppingCart) {
-        System.out.println("hiii");
         model.addAttribute("shoppingCart", shoppingCart.getItems());
         model.addAttribute("packages", shoppingCart.getItems());
         model.addAttribute("userName", principal.getName());
         model.addAttribute("results",null);
-        System.out.println("hiii");
-
         return "user/index";
     }
 }
