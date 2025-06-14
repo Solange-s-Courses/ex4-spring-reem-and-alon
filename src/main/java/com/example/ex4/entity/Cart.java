@@ -12,11 +12,18 @@ public class Cart implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "cart_packages",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "package_id")
+    )
     private List<PlanPackage> packages = new ArrayList<>();
 
     @OneToOne
     private AppUser user;
+
+    public Cart() {}
 
     public List<PlanPackage> getPackages() {
         return packages;
@@ -36,5 +43,9 @@ public class Cart implements Serializable {
 
     public void addPackage(PlanPackage item) {
         packages.add(item);
+    }
+
+    public Long getId() {
+        return id;
     }
 }

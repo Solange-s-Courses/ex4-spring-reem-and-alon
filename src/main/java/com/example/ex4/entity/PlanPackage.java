@@ -45,4 +45,17 @@ public class PlanPackage {
     public void setPackageType(String packageType) { this.packageType = packageType; }
     public void setProviderProfile(ProviderProfile providerProfile) { this.providerProfile = providerProfile; }
     public ProviderProfile getProviderProfile() { return providerProfile; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlanPackage)) return false;
+        PlanPackage that = (PlanPackage) o;
+        return id == that.id;
+    }
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
 }

@@ -32,25 +32,21 @@ public class CartController {
     @Autowired
     private CartService service;
 
-    @Autowired
-    private PlanPackageService planPackageService;
-
-
-
-
     @PostMapping("/add")
-    public ResponseEntity<String> addNewPackage(@RequestParam Long pkgId, ShoppingCart sessionCart, Principal principal) {
+    public String addNewPackage(@RequestParam Long pkgId, ShoppingCart sessionCart, Principal principal) {
         if (sessionCart.findPackage(pkgId) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Package already exists");
+            return "redirect:/user";
         }
         PlanPackage savedPackage = service.addToCart(principal.getName(), pkgId);
+        System.out.println("After save, cart ID: " + savedPackage.getId());
         sessionCart.addPackage(savedPackage);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Package added successfully");
+        System.out.println("Session cart: " + sessionCart.getItems().stream().map(PlanPackage::getId).toList());
+
+        return "redirect:/user";
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})
     public ResponseEntity<String> handleInvalidRequest(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid request: " + ex.getMessage());
     }
-
 }

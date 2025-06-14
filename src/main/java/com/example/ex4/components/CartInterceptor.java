@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CartInterceptor implements HandlerInterceptor {
@@ -25,12 +26,26 @@ public class CartInterceptor implements HandlerInterceptor {
     private ShoppingCart shoppingCart;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Principal principal = request.getUserPrincipal();
-        if (principal != null && shoppingCart.getItems().isEmpty()) {
-            shoppingCart.setItems(cartService.getUserCartPackages(principal.getName()));
+
+        System.out.println("=== CartInterceptor Debug ===");
+        System.out.println("URL: " + request.getRequestURI());
+        System.out.println("Principal exists: " + (principal != null));
+        System.out.println("Cart items count: " + shoppingCart.getItems().size());
+        System.out.println("Cart is empty: " + shoppingCart.getItems().isEmpty());
+
+        if (principal != null) {
+            System.out.println("Loading cart from DB for user: " + principal.getName());
+            List<PlanPackage> dbItems = cartService.getUserCartPackages(principal.getName());
+            System.out.println("Found " + dbItems.size() + " items in DB");
+            shoppingCart.setItems(dbItems);
+            System.out.println("Cart after loading: " + shoppingCart.getItems().size());
         }
+
         return true;
     }
+
+
 }
 

@@ -27,17 +27,25 @@ public class CartService {
     private PlanPackageRepository planPackageRepository;
 
     @Transactional
-    public PlanPackage addToCart(String username, Long newPackage) {
-        PlanPackage planPackage = planPackageRepository.findById(newPackage).orElse(null);
+    public PlanPackage addToCart(String username, Long newPackageId) {
+        PlanPackage planPackage = planPackageRepository.findById(newPackageId)
+                .orElseThrow(() -> new IllegalArgumentException("Package does not exist"));
         AppUser user = userRepository.findByUserName(username);
-        Cart userCart = repository.findCartByUser(user);
 
+        Cart userCart = repository.findCartByUser(user);
         if (userCart == null) {
             userCart = new Cart();
             userCart.setUser(user);
         }
-        userCart.addPackage(planPackage);
-        repository.save(userCart);
+        boolean exists = userCart.getPackages().stream()
+                .anyMatch(pkg -> pkg.getId() == planPackage.getId());
+        if (!exists) {
+            userCart.getPackages().add(planPackage);
+            repository.save(userCart); // <-- **קריטי!** כאן מתבצע עדכון הטבלה המקשרת
+
+            System.out.println("After save, cart ID: " + userCart.getId());
+        }
+
         return planPackage;
     }
 
