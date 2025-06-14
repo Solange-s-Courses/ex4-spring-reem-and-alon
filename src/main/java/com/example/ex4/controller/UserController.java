@@ -1,9 +1,11 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,15 @@ public class UserController {
     @Autowired
     private PlanPackageService packageService;
 
-    @GetMapping("/user")
-    public String userIndex(Model model, Principal principal) {
+    @GetMapping
+    public String userIndex(Model model, Principal principal, ShoppingCart shoppingCart) {
+        System.out.println("hiii");
+        model.addAttribute("shoppingCart", shoppingCart.getItems());
+        model.addAttribute("packages", shoppingCart.getItems());
         model.addAttribute("userName", principal.getName());
         model.addAttribute("results",null);
+        System.out.println("hiii");
+
         return "user/index";
     }
 }

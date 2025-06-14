@@ -83,15 +83,15 @@ public class AdminController {
         return "admin/add-package-form";
     }
 
-/*    @PostMapping("/add-package")
-    public String addPackage(@Valid @ModelAttribute PlanPackage planPackage, BindingResult result, Principal principal, Model model) {
-        AppUser admin = adminService.findByUsername(principal.getName());
-        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
-        if (result.hasErrors()) {
-            model.addAttribute("planPackageTypes", PlanPackageTypes.values());
-            return "admin/add-package-form";
-        }
-        planPackageService.saveNewPackage(providerProfile,planPackage);
-        return "redirect:/admin";
-    }*/
+//   @PostMapping("/add-package")
+//    public String addPackage(@Valid @ModelAttribute PlanPackageDTO planPackage, BindingResult result, Principal principal, Model model) {
+//        AppUser admin = adminService.findByUsername(principal.getName());
+//        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
+//        if (result.hasErrors()) {
+//            model.addAttribute("planPackageTypes", PlanPackageTypes.values());
+//            return "admin/add-package-form";
+//        }
+//        planPackageService.saveNewPackage(principal.getName(),planPackage);
+//        return "redirect:/admin";
+//    }
 }

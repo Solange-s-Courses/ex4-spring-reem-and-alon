@@ -3,7 +3,7 @@ package com.example.ex4.repository;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderProfile;
-import com.example.ex4.entity.Subscription;
+//import com.example.ex4.entity.Subscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

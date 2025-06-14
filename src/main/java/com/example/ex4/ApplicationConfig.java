@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,7 +16,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 public class ApplicationConfig {
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -59,14 +57,13 @@ public class ApplicationConfig {
         return http.build();
     }
     @Bean
-    public CommandLineRunner initAdmin(UserRepository adminRepository,
-                                       PasswordEncoder passwordEncoder,
+    public CommandLineRunner initAdmin(PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
                                        @Value("${admin.email}") String email,
                                        @Value("${admin.password}") String password, UserRepository userRepository)
     {
         return args -> {
-            if (userRepository.findByUserName(username) != null) {
+            if (userRepository.findByUserName(username) == null) {
                 AppUser admin = new AppUser(username, email, passwordEncoder.encode(password));
                 admin.setRole("ADMIN");
                 userRepository.save(admin);
