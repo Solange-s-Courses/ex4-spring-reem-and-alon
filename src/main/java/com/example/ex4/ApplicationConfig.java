@@ -29,7 +29,7 @@ public class ApplicationConfig {
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
                         .requestMatchers("/user/**, /cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/shared/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

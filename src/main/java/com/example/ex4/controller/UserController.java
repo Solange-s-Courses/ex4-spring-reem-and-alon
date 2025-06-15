@@ -31,9 +31,9 @@ public class UserController {
         return "user/index";
     }
 
-    @GetMapping("/cart")
-    public String userCart(Model model) {
-        model.addAttribute("shoppingCart", shoppingCart.getProducts());;
-        return "user/cart";
-    }
+//    @GetMapping("/cart")
+//    public String userCart(Model model) {
+//        model.addAttribute("shoppingCart", shoppingCart.getProducts());;
+//        return "user/cart";
+//    }
 }
