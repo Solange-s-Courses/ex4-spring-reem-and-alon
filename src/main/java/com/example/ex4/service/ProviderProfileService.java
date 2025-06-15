@@ -6,10 +6,8 @@ import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.ProviderProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+
 
 @Service
 public class ProviderProfileService {
@@ -35,8 +33,8 @@ public class ProviderProfileService {
         }
     }
 
-    public byte[] findProfileImage(String username) {
-        ProviderProfile adminBusinessCard = repository.findProviderProfileByAppUser_UserName(username).orElseThrow(()-> new RuntimeException("No profile found for username " + username));
+    public byte[] findProfileImage(Long id) {
+        ProviderProfile adminBusinessCard = repository.findById(id).orElseThrow(()-> new RuntimeException("No profile found for username "));
         return adminBusinessCard.getProfileImage();
     }
 }

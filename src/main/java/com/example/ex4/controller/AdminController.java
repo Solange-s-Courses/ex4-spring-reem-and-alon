@@ -45,17 +45,6 @@ public class AdminController {
         return "admin/index";
     }
 
-    @GetMapping("/profile-image")
-    public ResponseEntity<byte[]> getProfileImage(Principal principal) {
-        try {
-            byte[] image = profileService.findProfileImage(principal.getName());
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-        }
-        catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/add-profile")
     public String adminProfile(Model model) {
         model.addAttribute("profile", new ProviderProfileDTO());
