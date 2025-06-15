@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface PlanPackageRepository extends JpaRepository<PlanPackage, Long> {
     Optional<List<PlanPackage>> findAllByProviderProfile(ProviderProfile profile);
     Optional<List<PlanPackage>> findPlanPackagesByProviderProfile_Category(String category);
+
+    PlanPackage findPlanPackagesById(long id);
 /*
     Optional<List<PlanPackage>> findAllPlanPackagesBySubscription(Subscription subscription);
 */

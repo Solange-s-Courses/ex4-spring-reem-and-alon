@@ -1,48 +1,30 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.constants.PlanPackageTypes;
-import com.example.ex4.dto.PlanPackageDTO;
-import com.example.ex4.entity.AppUser;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
-import com.example.ex4.service.CartService;
-import com.example.ex4.service.PlanPackageService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import java.security.Principal;
-import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/cart")
 public class CartController {
 
     @Autowired
-    private CartService service;
+    @Qualifier("sessionBeanCart")
+    private ShoppingCart sessionCart;
+
+    @Autowired
+    private PlanPackageRepository PlanPackageRepository;
 
     @PostMapping("/add")
-    public String addNewPackage(@RequestParam Long pkgId, ShoppingCart sessionCart, Principal principal) {
-        if (sessionCart.findPackage(pkgId) != null) {
-            return "redirect:/user";
-        }
-        PlanPackage savedPackage = service.addToCart(principal.getName(), pkgId);
-        System.out.println("After save, cart ID: " + savedPackage.getId());
-        sessionCart.addPackage(savedPackage);
-        System.out.println("Session cart: " + sessionCart.getItems().stream().map(PlanPackage::getId).toList());
-
-        return "redirect:/user";
+    public ResponseEntity<String> addNewPackage(@RequestParam Long pkgId, Principal principal) {
+        sessionCart.addProduct(PlanPackageRepository.findPlanPackagesById(pkgId));
+        return ResponseEntity.accepted().body("Package have been saved to cart");
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})

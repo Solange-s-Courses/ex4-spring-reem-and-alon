@@ -27,7 +27,7 @@ public class ApplicationConfig {
         http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/user/**, /cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/shared/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()

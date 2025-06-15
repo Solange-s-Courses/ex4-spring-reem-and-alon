@@ -12,30 +12,9 @@
             background: #f7f8fa;
         }
         .search-card {
-            background: #4b4a55;
-            color: #fff;
+            background: #a5a4a4;
             border-radius: 20px;
             box-shadow: 0 6px 24px 0 rgba(0,0,0,0.08);
-        }
-        .package-card {
-            background: #23232a;
-            color: #e8e8ea;
-            border-radius: 18px;
-            box-shadow: 0 3px 15px 0 rgba(30,32,36,0.06);
-            min-height: 260px;
-            transition: transform 0.1s;
-        }
-        .package-card:hover {
-            transform: scale(1.03);
-        }
-        .card-title {
-            font-weight: bold;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-        }
-        .card-footer {
-            background: transparent;
-            border: none;
         }
         .search-title {
             color: #212121;
@@ -50,6 +29,15 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="container my-5">
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+        <div id="toast-feedback" class="toast align-items-center text-white bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-body-msg">
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
 
     <div class="row justify-content-center">
         <div class="col-10 col-lg-8">
@@ -78,5 +66,8 @@
         No services found.
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/cartManager.js"></script>
 </body>
 </html>

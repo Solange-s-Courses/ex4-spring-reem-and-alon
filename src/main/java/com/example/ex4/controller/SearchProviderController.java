@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,17 +23,14 @@ public class SearchProviderController {
     @GetMapping
     public String searchProvidersPage(Model model) {
         model.addAttribute("providers", ProviderType.values());
-        model.addAttribute("results", null);
         return "user/search-providers";
     }
 
     @PostMapping
-    public String searchService(@RequestParam String providerCategory,
-                                Model model) {
-        List<PlanPackage> results= planPackageService.getAllPackagesByCategory(providerCategory);
+    public String searchService(@RequestParam String providerCategory, Model model) {
         model.addAttribute("providers", ProviderType.values());
+        List<PlanPackage> results= planPackageService.getAllPackagesByCategory(providerCategory);
         model.addAttribute("results", results);
         return "user/search-providers";
     }
-
 }

@@ -28,7 +28,6 @@ public class ProviderProfileService {
             card.setProviderName(profile.getProviderName());
             card.setContactInfo(profile.getContactInfo());
             card.setAppUser(admin);
-            //System.out.println(Arrays.toString(card.getProfileImage()));
             repository.save(card);
         }
         catch (IOException e) {

@@ -1,24 +1,13 @@
 package com.example.ex4.controller;
-
-import com.example.ex4.constants.PlanPackageTypes;
 import com.example.ex4.dto.PlanPackageDTO;
-import com.example.ex4.entity.AppUser;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.service.PlanPackageService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/package-plan")
@@ -27,12 +16,6 @@ public class PlanPackageController {
     @Autowired
     private PlanPackageService service;
 
- /*   @PostMapping("/category")
-    public String getPlanC(@RequestBody String category) {
-        service.getAllPackagesByCategory(category,  "");
-    }*/
-
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value="/add-package", consumes = "application/json")
     public ResponseEntity<?> addPackage(@RequestBody PlanPackageDTO planPackage, Principal principal) {
         service.saveNewPackage(principal.getName(), planPackage);
