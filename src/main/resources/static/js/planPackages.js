@@ -10,24 +10,6 @@
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-    // axios.post('/your-url', data, {
-    //     headers: {
-    //         [csrfHeader]: csrfToken
-    //     }
-    // });
-
-    //
-    // const getCookie = (name) => {
-    //     const cookies = document.cookie.split(';');
-    //     for (let cookie of cookies) {
-    //         const [cookieName, cookieValue] = cookie.trim().split('=');
-    //         if (cookieName === name) {
-    //             return cookieValue;
-    //         }
-    //     }
-    //     return null;
-    // };
-
     const showToast = (title, message,  isError = false) => {
         toastTitle.textContent = title;
         toastBody.textContent = message;
