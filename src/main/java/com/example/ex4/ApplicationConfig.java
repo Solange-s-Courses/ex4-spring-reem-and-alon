@@ -26,10 +26,10 @@ public class ApplicationConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(withDefaults()).csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+        http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
-                        .requestMatchers("/user/**", "/cart/**", "/api/cart/**").hasRole("USER")
+                        .requestMatchers("/user/**", "/cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()

@@ -7,16 +7,26 @@
     const toastBody = document.getElementById('toast-body')
     const addItemForms = document.querySelectorAll(".add-to-cart-form")
 
-    const getCookie = (name) => {
-        const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.trim().split('=');
-            if (cookieName === name) {
-                return cookieValue;
-            }
-        }
-        return null;
-    };
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    // axios.post('/your-url', data, {
+    //     headers: {
+    //         [csrfHeader]: csrfToken
+    //     }
+    // });
+
+    //
+    // const getCookie = (name) => {
+    //     const cookies = document.cookie.split(';');
+    //     for (let cookie of cookies) {
+    //         const [cookieName, cookieValue] = cookie.trim().split('=');
+    //         if (cookieName === name) {
+    //             return cookieValue;
+    //         }
+    //     }
+    //     return null;
+    // };
 
     const showToast = (title, message,  isError = false) => {
         toastTitle.textContent = title;
@@ -34,22 +44,14 @@
             const pkgId = form.querySelector('input[name="pkgId"]').value;
             console.log('pkgId value:', pkgId);
             try {
-                const response = await fetch('/api/cart/add', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'datatype': 'json',
-                        'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
-                    },
-                    body: `pkgId=${encodeURIComponent(pkgId)}`,
-                    credentials: 'same-origin'
+                const response = await axios.post('/api/cart/add', new URLSearchParams({ pkgId: pkgId }).toString(), {
+                    headers: {[csrfHeader]: csrfToken},
+                    // body: new URLSearchParams({pkgId: pkgId}).toString(),
                 });
-                const data = await response.text();
-                if (response.ok)
-                    showToast(SUCCESS_TITLE, data)
+                showToast(SUCCESS_TITLE, response.data)
             }
             catch (err){
-                showToast(SUCCESS_TITLE, err.response.data, true)
+                showToast(ERR_TITLE, err.response?.data, true)
             }
 
         }
