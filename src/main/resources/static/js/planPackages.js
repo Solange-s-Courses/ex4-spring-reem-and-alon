@@ -5,7 +5,7 @@
     const toastEl = document.getElementById('main-toast');
     const toastTitle = document.getElementById('toast-title')
     const toastBody = document.getElementById('toast-body')
-    const addItemForms = document.querySelectorAll(".add-to-cart-form")
+    const productsButtons = document.querySelectorAll(".product-buttons")
     const cartSizeEl = document.getElementById("cart-size")
 
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
@@ -21,34 +21,57 @@
     }
 
     const restApiRequests = (() => {
-        const postRequest = async (e) => {
-            e.preventDefault()
-            const form = e.target;
-            const pkgId = form.querySelector('input[name="pkgId"]').value;
-            console.log('pkgId value:', pkgId);
-            try {
-                const response = await axios.post('/api/cart/add', new URLSearchParams({ pkgId: pkgId }).toString(), {
-                    headers: {[csrfHeader]: csrfToken},
-                    // body: new URLSearchParams({pkgId: pkgId}).toString(),
-                });
-                showToast(SUCCESS_TITLE, response.data)
-                const size = parseInt(cartSizeEl.innerText);
-                cartSizeEl.innerText = String(size + 1);
-            }
-            catch (err){
-                showToast(ERR_TITLE, err.response?.data, true)
-            }
+        const apiRequest = async (request) => {
+
+            const response = await axios({
+                ...request,
+                headers: {[csrfHeader]: csrfToken},
+            });
+            showToast(SUCCESS_TITLE, response.data)
 
         }
 
         return {
-            postRequest
+            apiRequest
         }
     })()
 
 
 
     document.addEventListener("DOMContentLoaded",()=>{
-        addItemForms.forEach(form => form.addEventListener('submit', (e) => restApiRequests.postRequest(e)))
+        productsButtons.forEach(product => {
+            const pkgId = product.dataset.pkgId;
+            const btnAdd = product.querySelector('.btn-add');
+            const btnRemove = product.querySelector('.btn-remove');
+
+
+
+            btnAdd.addEventListener("click",async ()=>{
+                try{
+                    const res= await restApiRequests.apiRequest({method: 'POST',url:"/api/cart/add",data:{pkgId:pkgId}})
+                    btnRemove.classList.remove('d-none');
+                    btnAdd.classList.add('d-none');
+                    const size = parseInt(cartSizeEl.innerText);
+                    cartSizeEl.innerText = String(size + 1);
+                }
+                catch (err){
+                    showToast(ERR_TITLE, err.response?.data, true)
+                }
+
+            })
+            btnRemove.addEventListener("click",async ()=>{
+                try{
+                    const res=restApiRequests.apiRequest({method: 'DELETE',url:`/api/cart/remove/${pkgId}`})
+                    btnRemove.classList.add('d-none');
+                    btnAdd.classList.remove('d-none');
+                    const size = parseInt(cartSizeEl.innerText);
+                    cartSizeEl.innerText = String(size - 1);
+                }
+                catch(err){
+                    showToast(ERR_TITLE, err.response?.data, true)
+                }
+
+            })
+        })
     })
 })()

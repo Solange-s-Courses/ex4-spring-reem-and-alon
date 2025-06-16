@@ -12,19 +12,25 @@ import java.util.Objects;
 
 @Component
 public class ShoppingCart implements Serializable {
-    private List<PlanPackage> products;
+    private List<Long> productsIds;
 
     public ShoppingCart() {
-        products = new ArrayList<>();
+        productsIds = new ArrayList<>();
     }
-    public boolean addProduct(PlanPackage product) {
-        if (products.stream().anyMatch(p -> p.getId() == product.getId())) {
+    public boolean addProduct(long productId) {
+        if (productsIds.stream().anyMatch( pid-> pid == productId)) {
             return false;
         }
-        products.add(product);
+        productsIds.add(productId);
         return true;
     }
-    public void removeProduct(PlanPackage product) { products.remove(product); }
-    public List<PlanPackage> getProducts() { return List.copyOf(products); }
-    public void clear() { products.clear(); }
+    public boolean removeProduct(long productId) {
+        if (productsIds.stream().anyMatch( pid-> pid == productId)) {
+            productsIds.remove(productId);
+            return true;
+        }
+        return false;
+    }
+    public List<Long> getProducts() { return List.copyOf(productsIds); }
+    public void clear() { productsIds.clear(); }
 }

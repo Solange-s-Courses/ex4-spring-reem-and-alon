@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+import java.util.Map;
+
+@RestController
 @RequestMapping("/api/cart")
 public class CartRestController {
 
@@ -24,11 +26,19 @@ public class CartRestController {
     private PlanPackageRepository PlanPackageRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addToCart(@RequestParam Long pkgId) {
-        if (!sessionCart.addProduct(PlanPackageRepository.findPlanPackagesById(pkgId))){
+    public ResponseEntity<String> addToCart(@RequestBody Map<String,Object> data) {
+        long pkgId = Long.parseLong(data.get("pkgId").toString());
+        if (!sessionCart.addProduct(pkgId)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product already exists in the cart!");
         }
         return ResponseEntity.accepted().body("Package added to cart successfully!");
+    }
+    @DeleteMapping("/remove/{pkgId}")
+    public ResponseEntity<String> removeFromCart(@PathVariable Long pkgId) {
+        if (!sessionCart.removeProduct(pkgId)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product does not exists in the cart!");
+        }
+        return ResponseEntity.ok().body("Package removed from cart successfully!");
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})

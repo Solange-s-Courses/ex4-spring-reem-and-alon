@@ -199,7 +199,7 @@
             align-items: center;
         }
 
-        .btn-add-cart {
+        .btn-add,.btn-remove {
             background-color: #495057;
             border: 1px solid #495057;
             color: white;
@@ -211,7 +211,7 @@
             transition: all 0.2s ease;
         }
 
-        .btn-add-cart:hover {
+        .btn-add:hover,.btn-remove:hover {
             background-color: #212529;
             border-color: #212529;
             color: white;
@@ -379,13 +379,15 @@
 
                     <div class="product-type" th:text="${pkg.packageType}">per package</div>
 
-                    <div class="product-actions">
-                        <form class="add-to-cart-form flex-fill" action="#" method="post" sec:authorize="hasRole('USER')">
-                            <input id="pkgId" type="hidden" name="pkgId" th:value="${pkg.id}">
-                            <button type="submit" class="btn btn-add-cart w-100">
+                    <div class="product-actions" sec:authorize="hasRole('USER')">
+                        <div class="product-buttons flex-fill" th:data-pkg-id="${pkg.id}">
+                            <button type="button" class="btn w-100 btn-add" th:classappend="${#lists.contains(shoppingCart, pkg.id)} ? 'd-none'">
                                 <i class="bi bi-cart-plus me-1"></i> Add to Cart
                             </button>
-                        </form>
+                            <button type="button" class="btn w-100 btn-remove" th:classappend="${#lists.contains(shoppingCart, pkg.id)} ? '' : 'd-none'">
+                                <i class="bi bi-cart-dash me-1"></i> Remove from Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

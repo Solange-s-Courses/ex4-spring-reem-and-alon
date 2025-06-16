@@ -20,9 +20,12 @@ public class CartPageController {
     @Qualifier("sessionBeanCart")
     private ShoppingCart sessionCart;
 
+    @Autowired
+    private PlanPackageRepository planPackageRepository;
+
     @GetMapping
     public String cartPage(Model model) {
-        model.addAttribute("shoppingCart", sessionCart.getProducts());
+        model.addAttribute("shoppingCart", planPackageRepository.findAllById(sessionCart.getProducts()));
         return "user/cart";
     }
 }

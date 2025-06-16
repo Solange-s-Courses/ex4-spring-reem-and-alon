@@ -29,7 +29,7 @@ public class ApplicationConfig {
         http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
-                        .requestMatchers("/user/**", "/cart/**").hasRole("USER")
+                        .requestMatchers("/user/**", "/cart/**","/api/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()
