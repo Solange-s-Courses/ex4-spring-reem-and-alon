@@ -16,7 +16,7 @@
         <li  class="nav-item" sec:authorize="hasRole('USER')">
           <a class="nav-link position-relative" href="/user/cart">
             <i class="bi bi-cart2 fs-1"></i>
-            <span class="position-absolute my-3 translate-middle badge rounded-pill bg-danger" th:text="${shoppingCart != null ? #lists.size(shoppingCart) : 0}"></span>
+            <span id="cart-size" class="position-absolute my-3 translate-middle badge rounded-pill bg-danger" th:text="${shoppingCart != null ? #lists.size(shoppingCart) : 0}"></span>
           </a>
         </li>
         <li  class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">

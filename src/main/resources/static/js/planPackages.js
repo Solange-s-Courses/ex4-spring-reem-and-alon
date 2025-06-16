@@ -6,6 +6,7 @@
     const toastTitle = document.getElementById('toast-title')
     const toastBody = document.getElementById('toast-body')
     const addItemForms = document.querySelectorAll(".add-to-cart-form")
+    const cartSizeEl = document.getElementById("cart-size")
 
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
@@ -31,6 +32,8 @@
                     // body: new URLSearchParams({pkgId: pkgId}).toString(),
                 });
                 showToast(SUCCESS_TITLE, response.data)
+                const size = parseInt(cartSizeEl.innerText);
+                cartSizeEl.innerText = String(size + 1);
             }
             catch (err){
                 showToast(ERR_TITLE, err.response?.data, true)
