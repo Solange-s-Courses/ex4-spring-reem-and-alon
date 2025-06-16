@@ -7,7 +7,16 @@
     const toastBody = document.getElementById('toast-body')
     const addItemForms = document.querySelectorAll(".add-to-cart-form")
 
-    const getCookie = (name) => document.cookie.split('; ').find(row => row.startsWith(name + '='))?.split('=')[1];
+    const getCookie = (name) => {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            const [cookieName, cookieValue] = cookie.trim().split('=');
+            if (cookieName === name) {
+                return cookieValue;
+            }
+        }
+        return null;
+    };
 
     const showToast = (title, message,  isError = false) => {
         toastTitle.textContent = title;
@@ -23,14 +32,16 @@
             e.preventDefault()
             const form = e.target;
             const pkgId = form.querySelector('input[name="pkgId"]').value;
+            console.log('pkgId value:', pkgId);
             try {
                 const response = await fetch('/api/cart/add', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        'datatype': 'json',
                         'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
                     },
-                    body: new URLSearchParams({pkgId}).toString(),
+                    body: `pkgId=${encodeURIComponent(pkgId)}`,
                     credentials: 'same-origin'
                 });
                 const data = await response.text();

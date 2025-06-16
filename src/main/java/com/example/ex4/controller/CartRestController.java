@@ -25,6 +25,7 @@ public class CartRestController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestParam Long pkgId) {
+        System.out.println("hiii");
         if (!sessionCart.addProduct(PlanPackageRepository.findPlanPackagesById(pkgId))){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Product already exists in the cart!");
         }
