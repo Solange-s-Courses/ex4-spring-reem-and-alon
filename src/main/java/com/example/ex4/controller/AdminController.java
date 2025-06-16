@@ -56,7 +56,6 @@ public class AdminController {
     public String createProfile(@Valid @ModelAttribute("profile") ProviderProfileDTO profile,
                                 BindingResult result, Principal principal, Model model) {
         if (result.hasErrors()) {
-            System.out.println(result.getAllErrors());
             model.addAttribute("providers", ProviderType.values());
             return "admin/add-profile-form";
         }
@@ -66,21 +65,21 @@ public class AdminController {
     }
 
     @GetMapping("/add-package")
-    public String getPackageForm(Principal principal, Model model) {
-        model.addAttribute("planPackage", new PlanPackageDTO());
+    public String getPackageForm(Model model) {
+        model.addAttribute("planPackage", new PlanPackage());
         model.addAttribute("planPackageTypes", PlanPackageTypes.values());
         return "admin/add-package-form";
     }
 
-//   @PostMapping("/add-package")
-//    public String addPackage(@Valid @ModelAttribute PlanPackageDTO planPackage, BindingResult result, Principal principal, Model model) {
-//        AppUser admin = adminService.findByUsername(principal.getName());
-//        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
-//        if (result.hasErrors()) {
-//            model.addAttribute("planPackageTypes", PlanPackageTypes.values());
-//            return "admin/add-package-form";
-//        }
-//        planPackageService.saveNewPackage(principal.getName(),planPackage);
-//        return "redirect:/admin";
-//    }
+   @PostMapping("/add-package")
+    public String addPackage(@Valid @ModelAttribute PlanPackage planPackage, BindingResult result, Principal principal, Model model) {
+        AppUser admin = adminService.findByUsername(principal.getName());
+        ProviderProfile providerProfile = profileService.findProviderProfile(admin);
+        if (result.hasErrors()) {
+            model.addAttribute("planPackageTypes", PlanPackageTypes.values());
+            return "admin/add-package-form";
+        }
+        planPackageService.saveNewPackage(providerProfile,planPackage);
+        return "redirect:/admin";
+    }
 }

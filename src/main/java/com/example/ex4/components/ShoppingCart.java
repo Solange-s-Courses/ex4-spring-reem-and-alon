@@ -17,7 +17,13 @@ public class ShoppingCart implements Serializable {
     public ShoppingCart() {
         products = new ArrayList<>();
     }
-    public void addProduct(PlanPackage product) { products.add(product); }
+    public boolean addProduct(PlanPackage product) {
+        if (products.stream().anyMatch(p -> p.getId() == product.getId())) {
+            return false;
+        }
+        products.add(product);
+        return true;
+    }
     public void removeProduct(PlanPackage product) { products.remove(product); }
     public List<PlanPackage> getProducts() { return List.copyOf(products); }
     public void clear() { products.clear(); }

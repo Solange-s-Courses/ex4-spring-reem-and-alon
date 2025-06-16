@@ -1,50 +1,56 @@
 (()=>{
-    const WEEKLY_MONTH="once a week per month"
-    const ONE_TIME="one time"
-    const CUSTOM="custom";
-    const openOfferBtn=document.getElementById("open-offer-btn")
-    const form=document.getElementById("pkg-form")
-    const titleInput= document.getElementById('title')
-    const descriptionInput= document.getElementById('description')
-    const priceInput= document.getElementById('price')
-    const packageTypeInput= document.getElementById('packageType')
+    const SUCCESS_TITLE = "Successfully added to cart!"
+    const ERR_TITLE = "Error!"
 
+    const toastEl = document.getElementById('main-toast');
+    const toastTitle = document.getElementById('toast-title')
+    const toastBody = document.getElementById('toast-body')
+    const addItemForms = document.querySelectorAll(".add-to-cart-form")
 
-   const processInput = (()=>{
+    const getCookie = (name) => document.cookie.split('; ').find(row => row.startsWith(name + '='))?.split('=')[1];
 
-       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const showToast = (title, message,  isError = false) => {
+        toastTitle.textContent = title;
+        toastBody.textContent = message;
+        toastEl.classList.toggle('bg-danger', isError);
+        toastEl.classList.toggle('text-white', isError);
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
 
+    const restApiRequests = (() => {
+        const postRequest = async (e) => {
+            e.preventDefault()
+            const form = e.target;
+            const pkgId = form.querySelector('input[name="pkgId"]').value;
+            try {
+                const response = await fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+                    },
+                    body: new URLSearchParams({pkgId}).toString(),
+                    credentials: 'same-origin'
+                });
+                const data = await response.text();
+                if (response.ok)
+                    showToast(SUCCESS_TITLE, data)
+            }
+            catch (err){
+                showToast(SUCCESS_TITLE, err.response.data, true)
+            }
 
-       const handleSubmit= async(e)=>{
-           e.preventDefault()
-           const inputs = {
-               title: titleInput.value.trim(),
-               description: descriptionInput.value.trim(),
-               packageType: packageTypeInput.value.trim(),
-               price: priceInput.value.trim(),
-           };
-           try {
-               await axios.post('/package-plan/add-package', inputs, {
-                   headers: {
-                       'Content-Type': 'application/json',
-                       [csrfHeader]: csrfToken
-                   }
-               })
-               window.location = "/admin";
-           } catch (err) {
-               console.log("error", err);
-           }
+        }
 
-       }
-       return{
-           handleSubmit
-       }
+        return {
+            postRequest
+        }
     })()
 
 
 
     document.addEventListener("DOMContentLoaded",()=>{
-        form.addEventListener('submit',processInput.handleSubmit)
+        addItemForms.forEach(form => form.addEventListener('submit', (e) => restApiRequests.postRequest(e)))
     })
 })()

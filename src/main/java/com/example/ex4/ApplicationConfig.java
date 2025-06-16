@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableMethodSecurity(prePostEnabled = true)
@@ -24,10 +26,10 @@ public class ApplicationConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(withDefaults()).csrf(withDefaults())
+        http.cors(withDefaults()).csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register").permitAll()
-                        .requestMatchers("/user/**, /cart/**").hasRole("USER")
+                        .requestMatchers("/user/**", "/cart/**", "/api/cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated()

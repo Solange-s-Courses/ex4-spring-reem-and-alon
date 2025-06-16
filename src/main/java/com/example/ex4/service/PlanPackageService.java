@@ -27,14 +27,8 @@ public class PlanPackageService {
     }
 
     @Transactional
-    public void saveNewPackage(String username,PlanPackageDTO planPackage){
-        ProviderProfile providerProfile = providerProfileRepository.findProviderProfileByAppUser_UserName(username).orElse(null);
-        PlanPackage newPackage = new PlanPackage();
-        newPackage.setProviderProfile(providerProfile);
-        newPackage.setPackageType(planPackage.packageType);
-        newPackage.setPrice(planPackage.price);
-        newPackage.setDescription(planPackage.description);
-        newPackage.setTitle(planPackage.title);
+    public void saveNewPackage( ProviderProfile providerProfile,PlanPackage newPackage){
+        newPackage.setProviderProfile(providerProfile);;
         planPackageRepository.save(newPackage);
     }
 }
