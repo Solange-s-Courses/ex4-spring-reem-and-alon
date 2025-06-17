@@ -24,30 +24,27 @@
         </div>
         <div class="col-md-4 mb-5">
             <p class="h4 mb-3 text-start text-secondary fw-semibold">My public info</p>
-            <div th:if="${!profile.approved}">
+            <!--<div th:if="${profile == null}">
                 <div class="alert alert-warning text-center shadow rounded-4 p-4">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    You are not approved as admin yet!<br>
-                    <!--<a th:href="@{/admin/add-profile}" class="btn btn-primary mt-3">Create Profile Card</a>-->
+                    haven't created a public profile yet!<br>
+&lt;!&ndash;
+                    <a th:href="@{/admin/add-profile}" class="btn btn-primary mt-3">Create Profile Card</a>
+&ndash;&gt;
                 </div>
-            </div>
-            <div th:unless="${!profile.approved}">
+            </div>-->
+            <div th:if="${profile != null}">
                 <div th:replace="~{fragments/profile-card :: profileCard(profile=${profile})}"></div>
             </div>
         </div>
-        <div th:if="${profile.approved}">
-            <div th:if="${profile.plans != null}"
-                 th:replace="~{fragments/plan-packages :: planPackages(planPackages=${plans})}">
-            </div>
+        <div class="col-md-7 mb-5">
+            <h3 class="text-center mb-4 text-dark">My Service Packages List</h3>
+            <div th:if="${plans != null}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${plans})}"></div>
             <div class="text-end mt-4">
                 <a class="btn btn-primary px-4 py-2 rounded-3" th:href="@{/admin/add-package}">
                     <i class="bi bi-plus-lg me-2"></i>Add new package
                 </a>
             </div>
-        </div>
-        <div th:unless="${profile.approved}" class="alert alert-info text-center rounded-4 shadow-sm p-4">
-            <i class="bi bi-info-circle me-2"></i>
-            You must be approved by the super admin to view your profile or manage packages.
         </div>
     </div>
 </div>

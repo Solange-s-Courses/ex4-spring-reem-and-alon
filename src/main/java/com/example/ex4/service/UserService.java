@@ -63,5 +63,6 @@ public class UserService{
         user.setRole("ADMIN");
         return user;
     }
+    public void removeUser(AppUser user) {userRepository.deleteById(user.getId());}
 
 }

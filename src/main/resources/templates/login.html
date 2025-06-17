@@ -10,8 +10,17 @@
     <div class="col-md-5">
       <h2 class="mb-4">Login</h2>
       <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+<!--
+      <div th:if="${param.rejected}" class="alert alert-danger">
+        Your registration request was declined by the super admin.
+      </div>
+-->
+
+      <div th:if="${param.pending}" class="alert alert-warning">
+        Your profile is not yet approved.
+      </div>
       <div th:if="${param.error}" class="alert alert-danger">
-        Invalid username or password.
+          Invalid username or password.
       </div>
       <form th:action="@{/login}" method="post">
         <div class="mb-3">

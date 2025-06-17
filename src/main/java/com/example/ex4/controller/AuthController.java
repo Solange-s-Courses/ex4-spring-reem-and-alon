@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
+
 @Controller
 public class AuthController {
 
@@ -23,19 +25,21 @@ public class AuthController {
     private ProviderProfileService providerProfileService;
 
     @GetMapping("/")
-    public String redirectAfterLogin(Authentication authentication) {
-        if (authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+    public String redirectAfterLogin(Authentication authentication, Principal principal, Model model) {
+
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            AppUser user = userService.findByUsername(principal.getName());
+            ProviderProfile profile = providerProfileService.findProviderProfile(user);
+            if (!profile.isApproved()) {
+                return "redirect:/login?pending";
+            }
             return "redirect:/admin";
-        } else if (authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
             return "redirect:/user";
-        } else if (authentication.getAuthorities().stream()
-                .anyMatch(a->a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
             return "redirect:/super-admin";
-        } else {
-            return "redirect:/login?error";
         }
+        return "redirect:/login?error";
     }
 
     @GetMapping("/login")

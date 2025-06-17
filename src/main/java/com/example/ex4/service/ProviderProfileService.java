@@ -42,5 +42,6 @@ public class ProviderProfileService {
         return adminBusinessCard.getProfileImage();
     }
 
-    public List<ProviderProfile> getAllPendingProfiles(){ return repository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
+    public List<ProviderProfile> findAllPendingProfiles(){ return repository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
+    public void removeProviderProfile(long id) {repository.deleteById(id);}
 }
