@@ -1,6 +1,6 @@
 package com.example.ex4.service;
 
-import com.example.ex4.dto.ProviderProfileDTO;
+import com.example.ex4.dto.AdminRegistrationFormDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.ProviderProfileRepository;
@@ -18,15 +18,16 @@ public class ProviderProfileService {
         return repository.findByAppUser(admin);
     }
 
-    public void saveProviderProfile(AppUser admin, ProviderProfileDTO profile) {
+    public void saveProviderProfile(AppUser admin, AdminRegistrationFormDTO profileForm) {
         try {
-            ProviderProfile card = new ProviderProfile();
-            card.setProfileImage(profile.getImageFile().getBytes());
-            card.setCategory(profile.getCategory());
-            card.setProviderName(profile.getProviderName());
-            card.setContactInfo(profile.getContactInfo());
-            card.setAppUser(admin);
-            repository.save(card);
+            ProviderProfile profile = new ProviderProfile();
+            profile.setProfileImage(profileForm.getImageFile().getBytes());
+            profile.setCategory(profileForm.getCategory());
+            profile.setProviderName(profileForm.getProviderName());
+            profile.setContactInfo(profileForm.getContactInfo());
+            profile.setAppUser(admin);
+            profile.setApproved(false);
+            repository.save(profile);
         }
         catch (IOException e) {
             throw new RuntimeException("You must provide an image file");

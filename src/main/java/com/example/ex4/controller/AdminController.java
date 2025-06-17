@@ -2,8 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.constants.ProviderType;
 import com.example.ex4.constants.PlanPackageTypes;
-import com.example.ex4.dto.PlanPackageDTO;
-import com.example.ex4.dto.ProviderProfileDTO;
+import com.example.ex4.dto.AdminRegistrationFormDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.PlanPackage;
@@ -12,13 +11,12 @@ import com.example.ex4.service.ProviderProfileService;
 import com.example.ex4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -47,14 +45,14 @@ public class AdminController {
 
     @GetMapping("/add-profile")
     public String adminProfile(Model model) {
-        model.addAttribute("profile", new ProviderProfileDTO());
+        model.addAttribute("profile", new AdminRegistrationFormDTO());
         model.addAttribute("providers", ProviderType.values());
         return "admin/add-profile-form";
     }
 
     @PostMapping("/add-profile")
-    public String createProfile(@Valid @ModelAttribute("profile") ProviderProfileDTO profile,
-                                BindingResult result, Principal principal, Model model) {
+    public String createProfile(@Valid @ModelAttribute("profile") AdminRegistrationFormDTO profile,
+                                BindingResult result, Principal principal, Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("providers", ProviderType.values());
             return "admin/add-profile-form";

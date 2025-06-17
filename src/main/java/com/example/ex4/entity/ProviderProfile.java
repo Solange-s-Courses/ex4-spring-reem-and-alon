@@ -20,6 +20,9 @@ public class ProviderProfile {
 
     private String contactInfo;
 
+    private boolean approved = false;
+
+
     @Lob
     private byte[] profileImage;
 
@@ -52,4 +55,6 @@ public class ProviderProfile {
         return providerName != null && !providerName.isEmpty()
                 && profileImage != null && profileImage.length > 0;
     }
+    public void setApproved(boolean approved) {this.approved = approved;}
+    public boolean isApproved() {return approved;}
 }

@@ -29,13 +29,12 @@ public class AppUser implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    public AppUser() {this.role = "USER";}
+    public AppUser() {}
 
     public AppUser(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.role = "USER";
     }
 
     public long getId() {
