@@ -30,6 +30,9 @@ public class AuthController {
         } else if (authentication.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
             return "redirect:/user";
+        } else if (authentication.getAuthorities().stream()
+                .anyMatch(a->a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
+            return "redirect:/super-admin";
         } else {
             return "redirect:/login?error";
         }

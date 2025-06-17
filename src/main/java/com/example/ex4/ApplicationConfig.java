@@ -67,7 +67,7 @@ public class ApplicationConfig {
         return args -> {
             if (userRepository.findByUserName(username) == null) {
                 AppUser admin = new AppUser(username, email, passwordEncoder.encode(password));
-                admin.setRole("ADMIN");
+                admin.setRole("SUPER_ADMIN");
                 userRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);
             } else {

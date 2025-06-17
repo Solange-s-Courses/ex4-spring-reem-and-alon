@@ -44,6 +44,8 @@ public class ProviderProfile {
 
     public void setAppUser(AppUser appUser) { this.appUser = appUser; }
 
+    public AppUser getAppUser() {return appUser;}
+
     public String getCategory() { return category; }
     public void setCategory(String category) {this.category = category;}
 

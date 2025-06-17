@@ -7,6 +7,8 @@ import com.example.ex4.repository.ProviderProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -17,6 +19,7 @@ public class ProviderProfileService {
     public ProviderProfile findProviderProfile(AppUser admin) {
         return repository.findByAppUser(admin);
     }
+    public ProviderProfile findProviderProfileById(long id) {return repository.findById(id).orElse(null);}
 
     public void saveProviderProfile(AppUser admin, AdminRegistrationFormDTO profileForm) {
         try {
@@ -38,4 +41,6 @@ public class ProviderProfileService {
         ProviderProfile adminBusinessCard = repository.findById(id).orElseThrow(()-> new RuntimeException("No profile found for username "));
         return adminBusinessCard.getProfileImage();
     }
+
+    public List<ProviderProfile> getAllPendingProfiles(){ return repository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
 }
