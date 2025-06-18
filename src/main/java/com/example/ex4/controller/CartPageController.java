@@ -2,6 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.repository.PlanPackageRepository;
+import com.example.ex4.service.PlanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,11 @@ public class CartPageController {
     private ShoppingCart sessionCart;
 
     @Autowired
-    private PlanPackageRepository planPackageRepository;
+    private PlanPackageService planPackageService;
 
     @GetMapping
     public String cartPage(Model model) {
-        model.addAttribute("shoppingCart", planPackageRepository.findAllById(sessionCart.getProducts()));
+        model.addAttribute("shoppingCart", planPackageService.findAllProducts(sessionCart.getProducts()));
         return "user/cart";
     }
 }
