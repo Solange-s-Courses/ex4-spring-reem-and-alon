@@ -2,9 +2,12 @@ package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DialectOverride;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -28,6 +31,9 @@ public class AppUser implements Serializable {
 
     @Column(nullable = false)
     private String password;
+
+    @ColumnDefault("0")
+    private Integer balance;
 
     public AppUser() {}
 
@@ -70,5 +76,8 @@ public class AppUser implements Serializable {
     }
 
     public void setRole(String role) {this.role = role.trim();}
+
+    public Integer getBalance() { return balance; }
+    public void setBalance(Integer balance) { this.balance = balance; }
 
 }

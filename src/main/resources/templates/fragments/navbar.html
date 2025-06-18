@@ -24,6 +24,15 @@
             <i class="bi bi-person fs-1"></i>
           </a>
         </li>
+        <li class="nav-item ms-4 pt-1 d-flex align-items-center gap-2" sec:authorize="hasRole('USER')">
+          <span class="nav-link position-relative d-flex align-items-center gap-2 p-0">
+            <i class="bi bi-cash-coin fs-1"></i>
+              <span class="fs-5 text-light">
+                $<span th:text="${balance != null ? balance : 0}">0</span>
+              </span>
+          </span>
+        </li>
+
 
       </ul>
       <form th:action="@{/logout}" method="post" class="d-flex me-3">
