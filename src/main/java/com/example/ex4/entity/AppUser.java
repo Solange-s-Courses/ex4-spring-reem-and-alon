@@ -33,7 +33,7 @@ public class AppUser implements Serializable {
     private String password;
 
     @ColumnDefault("0")
-    private Integer balance;
+    private int balance;
 
     public AppUser() {}
 
@@ -77,7 +77,7 @@ public class AppUser implements Serializable {
 
     public void setRole(String role) {this.role = role.trim();}
 
-    public Integer getBalance() { return balance; }
+    public int getBalance() { return balance; }
     public void setBalance(Integer balance) { this.balance = balance; }
 
 }

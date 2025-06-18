@@ -41,8 +41,6 @@ public class UserController {
         appUser.setBalance(appUser.getBalance()+amount);
         model.addAttribute("userName", principal.getName());
         model.addAttribute("balance", appUser.getBalance());
-        System.out.println(appUser.getBalance());
-
        return "user/index";
     }
 }
