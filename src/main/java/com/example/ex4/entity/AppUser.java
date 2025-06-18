@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 public class AppUser implements Serializable {
 
     @Id
@@ -38,6 +37,7 @@ public class AppUser implements Serializable {
     public AppUser() {}
 
     public AppUser(String userName, String email, String password) {
+        this.role = "USER";
         this.userName = userName;
         this.email = email;
         this.password = password;

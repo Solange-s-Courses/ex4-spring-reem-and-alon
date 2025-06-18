@@ -36,7 +36,17 @@ public class AdminRegistrationFormDTO {
         this.id = id;
     }
 
-    public MultipartFile getImageFile() throws IOException {return imageFile;}
+    public MultipartFile getImageFile() {return imageFile;}
+
+    public byte[] getImageBytes() {
+        try {
+            return imageFile != null ? imageFile.getBytes() : null;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get image bytes", e);
+        }
+    }
+
+
     public void setImageFile(MultipartFile imageFile) {
         this.imageFile = imageFile;
     }

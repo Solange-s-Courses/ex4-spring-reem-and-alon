@@ -23,8 +23,6 @@ public class SuperAdminController {
 
     @Autowired
     private ProviderProfileService providerProfileService;
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public String landingPage(Model model) {
@@ -34,21 +32,15 @@ public class SuperAdminController {
     }
 
     @PostMapping("approve/{id}")
-    @Transactional
     public String approveProfile(@PathVariable long id, RedirectAttributes redirectAttributes) {
-        ProviderProfile profile = providerProfileService.findProviderProfileById(id);
-        profile.setApproved(true);
+        providerProfileService.activateAdminAccount(id);
         redirectAttributes.addFlashAttribute("message", "Profile approved.");
         return "redirect:/super-admin";
     }
 
     @PostMapping("/reject/{id}")
-    @Transactional
     public String rejectProfile(@PathVariable long id, RedirectAttributes redirectAttributes) {
-        ProviderProfile profile =providerProfileService.findProviderProfileById(id);
-        AppUser reletedAppUser= profile.getAppUser();
         providerProfileService.removeProviderProfile(id);
-        userService.removeUser(reletedAppUser);
         redirectAttributes.addFlashAttribute("message", "Profile rejected and removed.");
         return "redirect:/super-admin";
     }

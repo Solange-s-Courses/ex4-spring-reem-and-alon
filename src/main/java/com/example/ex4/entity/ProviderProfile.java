@@ -27,7 +27,6 @@ public class ProviderProfile {
     private byte[] profileImage;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
- //   @JoinColumn(name = "app_user_id", unique = true)
     private AppUser appUser;
 
     @OneToMany(mappedBy = "providerProfile", cascade = CascadeType.ALL, orphanRemoval = true)

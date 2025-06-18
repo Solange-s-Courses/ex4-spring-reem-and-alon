@@ -1,14 +1,11 @@
 package com.example.ex4.service;
 
-import com.example.ex4.dto.AdminRegistrationFormDTO;
-import com.example.ex4.entity.ProviderProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.repository.UserRepository;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,31 +35,22 @@ public class UserService{
         return userRepository.findById(id);
     }
 
-    public List<AppUser> getUsers() {
-        return userRepository.findAll();
+    public void depositToBalance(String username, int amount) {
+        AppUser user = userRepository.findByUserName(username);
+        user.setBalance(user.getBalance() + amount);
+        userRepository.save(user);
     }
 
     public AppUser findByUsername(String username) {
         return userRepository.findByUserName(username);
     }
 
-    public void registerUser(AppUser user,String Role) {
+    public void addNewUser(AppUser user,String Role) {
         if (userRepository.findByUserName(user.getUserName()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role);
+        user.setRole("USER");
         userRepository.save(user);
     }
-
-    public AppUser buildAdminUser(AdminRegistrationFormDTO form) {
-        AppUser user = new AppUser();
-        user.setUserName(form.getUserName());
-        user.setEmail(form.getEmail());
-        user.setPassword(form.getPassword());
-        user.setRole("ADMIN");
-        return user;
-    }
-    public void removeUser(AppUser user) {userRepository.deleteById(user.getId());}
-
 }

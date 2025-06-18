@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,7 +57,7 @@ public class AuthController {
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("user") AppUser user, Model model, RedirectAttributes redirectAttributes) {
         try {
-            userService.registerUser(user,"USER");
+            userService.addNewUser(user,"USER");
             redirectAttributes.addFlashAttribute("message", "Registration successful. Please login.");
             return "redirect:/login";
         } catch (Exception e) {
@@ -73,11 +74,13 @@ public class AuthController {
     }
 
     @PostMapping("/register-admin")
-    public String processRegisterAdmin(@Valid @ModelAttribute("admin") AdminRegistrationFormDTO adminForm, Model model, RedirectAttributes redirectAttributes) {
+    public String processRegisterAdmin(@Valid @ModelAttribute("admin") AdminRegistrationFormDTO adminForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         try {
-            AppUser adminUser=userService.buildAdminUser(adminForm);
-            userService.registerUser(adminUser,"ADMIN");
-            providerProfileService.saveProviderProfile(adminUser,adminForm);
+            if (result.hasErrors()) {
+                model.addAttribute("providers", ProviderType.values());
+                return "register-admin";
+            }
+            providerProfileService.registerProviderProfile(adminForm);
             redirectAttributes.addFlashAttribute("message", "Registration successful! Awaiting super admin approval. you can login for meanwhile");
             return "redirect:/login";
         } catch (Exception e) {

@@ -34,13 +34,10 @@ public class UserController {
         model.addAttribute("balance", appUser.getBalance());
         return "user/index";
     }
+
     @PostMapping("/balance/add")
-    @Transactional
-    public String loadBalance(@RequestParam Integer amount, Principal principal,Model model) {
-        AppUser appUser= userService.findByUsername(principal.getName());
-        appUser.setBalance(appUser.getBalance()+amount);
-        model.addAttribute("userName", principal.getName());
-        model.addAttribute("balance", appUser.getBalance());
-       return "user/index";
+    public String depositCredit(@RequestParam int amount, Principal principal) {
+        userService.depositToBalance(principal.getName(), amount);
+        return "redirect:/user";
     }
 }
