@@ -26,21 +26,23 @@ public class AuthController {
     private ProviderProfileService providerProfileService;
 
     @GetMapping("/")
-    public String redirectAfterLogin(Authentication authentication, Principal principal, Model model) {
+    public String redirectAfterLogin(Principal principal) {
+        AppUser user = userService.findByUsername(principal.getName());
+        String role = user.getRole();
+        switch (role) {
+            case "ADMIN":
+                ProviderProfile profile = providerProfileService.findProviderProfile(user);
+                return profile.isApproved() ? "redirect:/admin" : "redirect:/login?pending";
 
-        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-            AppUser user = userService.findByUsername(principal.getName());
-            ProviderProfile profile = providerProfileService.findProviderProfile(user);
-            if (!profile.isApproved()) {
-                return "redirect:/login?pending";
-            }
-            return "redirect:/admin";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
-            return "redirect:/user";
-        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN"))) {
-            return "redirect:/super-admin";
+            case "USER":
+                return "redirect:/user";
+
+            case "SUPER_ADMIN":
+                return "redirect:/super-admin";
+
+            default:
+                return "redirect:/login?error";
         }
-        return "redirect:/login?error";
     }
 
     @GetMapping("/login")
@@ -75,11 +77,11 @@ public class AuthController {
 
     @PostMapping("/register-admin")
     public String processRegisterAdmin(@Valid @ModelAttribute("admin") AdminRegistrationFormDTO adminForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("providers", ProviderType.values());
+            return "register-admin";
+        }
         try {
-            if (result.hasErrors()) {
-                model.addAttribute("providers", ProviderType.values());
-                return "register-admin";
-            }
             providerProfileService.registerProviderProfile(adminForm);
             redirectAttributes.addFlashAttribute("message", "Registration successful! Awaiting super admin approval. you can login for meanwhile");
             return "redirect:/login";

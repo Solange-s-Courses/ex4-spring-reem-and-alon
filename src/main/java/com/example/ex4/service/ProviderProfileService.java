@@ -7,6 +7,8 @@ import com.example.ex4.repository.ProviderProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,8 @@ import java.util.List;
 public class ProviderProfileService {
     @Autowired
     private ProviderProfileRepository repository;
+    @Autowired
+    private UserService userService;
 
     public ProviderProfile findProviderProfile(AppUser admin) {
         return repository.findByAppUser(admin);
@@ -27,11 +31,12 @@ public class ProviderProfileService {
     }
 
     @Transactional
-    public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws RuntimeException {
+    public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws IOException {
         AppUser admin = new AppUser(profileForm.getUserName(), profileForm.getEmail(), profileForm.getPassword());
-        ProviderProfile profile = new ProviderProfile();
+        userService.addNewUser(admin, "ADMIN");
 
-        profile.setProfileImage(profileForm.getImageBytes());
+        ProviderProfile profile = new ProviderProfile();
+        profile.setProfileImage(profileForm.getImageFile().getBytes());
         profile.setCategory(profileForm.getCategory());
         profile.setProviderName(profileForm.getProviderName());
         profile.setContactInfo(profileForm.getContactInfo());

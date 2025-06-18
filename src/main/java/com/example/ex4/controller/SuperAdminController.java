@@ -1,12 +1,8 @@
 package com.example.ex4.controller;
-
-import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.service.ProviderProfileService;
-import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +27,7 @@ public class SuperAdminController {
         return "super_admin/index";
     }
 
-    @PostMapping("approve/{id}")
+    @PostMapping("/approve/{id}")
     public String approveProfile(@PathVariable long id, RedirectAttributes redirectAttributes) {
         providerProfileService.activateAdminAccount(id);
         redirectAttributes.addFlashAttribute("message", "Profile approved.");

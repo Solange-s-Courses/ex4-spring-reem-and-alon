@@ -1,5 +1,6 @@
 package com.example.ex4.dto;
 
+import com.example.ex4.validator.ValidImage;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ public class AdminRegistrationFormDTO {
     @NotBlank(message = "City is required")
     private String contactInfo;
 
+    @ValidImage
     private MultipartFile imageFile;
 
     public Long getId() {
@@ -37,14 +39,6 @@ public class AdminRegistrationFormDTO {
     }
 
     public MultipartFile getImageFile() {return imageFile;}
-
-    public byte[] getImageBytes() {
-        try {
-            return imageFile != null ? imageFile.getBytes() : null;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to get image bytes", e);
-        }
-    }
 
 
     public void setImageFile(MultipartFile imageFile) {

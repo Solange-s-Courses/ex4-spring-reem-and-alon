@@ -45,12 +45,16 @@ public class UserService{
         return userRepository.findByUserName(username);
     }
 
-    public void addNewUser(AppUser user,String Role) {
+    public void addNewUser(AppUser user,String role) {
         if (userRepository.findByUserName(user.getUserName()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("USER");
+        user.setRole(role);
         userRepository.save(user);
+    }
+
+    public String findUserRole(String username) {
+        return userRepository.findByUserName(username).getRole();
     }
 }
