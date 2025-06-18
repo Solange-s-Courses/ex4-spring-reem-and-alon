@@ -43,7 +43,7 @@ public class AdminController {
         return "admin/index";
     }
 
-    @GetMapping("/add-profile")
+/*    @GetMapping("/add-profile")
     public String adminProfile(Model model) {
         model.addAttribute("profile", new AdminRegistrationFormDTO());
         model.addAttribute("providers", ProviderType.values());
@@ -60,7 +60,7 @@ public class AdminController {
         AppUser admin = adminService.findByUsername(principal.getName());
         profileService.saveProviderProfile(admin, profile);
         return "redirect:/admin";
-    }
+    }*/
 
     @GetMapping("/add-package")
     public String getPackageForm(Model model) {
