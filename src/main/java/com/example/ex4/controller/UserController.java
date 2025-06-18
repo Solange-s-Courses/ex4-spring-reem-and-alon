@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping
     public String userIndex(Model model, Principal principal) {
-        model.addAttribute("shoppingCart", shoppingCart.getProducts());
+        model.addAttribute("shoppingCart", packageService.findAllProducts(shoppingCart.getProducts()));
         model.addAttribute("userName", principal.getName());
         model.addAttribute("results",null);
         AppUser appUser= userService.findByUsername(principal.getName());

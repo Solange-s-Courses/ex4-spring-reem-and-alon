@@ -31,4 +31,8 @@ public class PlanPackageService {
         newPackage.setProviderProfile(providerProfile);;
         planPackageRepository.save(newPackage);
     }
+
+    public List<PlanPackage> findAllProducts(List<Long> products) {
+        return planPackageRepository.findAllById(products);
+    }
 }
