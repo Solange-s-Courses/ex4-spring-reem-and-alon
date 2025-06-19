@@ -1,20 +1,15 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.entity.AppUser;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
-import java.util.List;
 
-@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CartPageController.class})
+@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class})
 public class AdminControllerAdvice {
 
     @Autowired

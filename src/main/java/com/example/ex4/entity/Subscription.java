@@ -3,6 +3,7 @@ package com.example.ex4.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
 
@@ -26,5 +27,6 @@ public class Subscription {
     @NotNull(message = "Start date is required")
     private LocalDate startDate;
 
-    private boolean active;
+    @Builder.Default
+    private String status = "ACTIVE";
 }

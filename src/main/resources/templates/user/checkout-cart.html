@@ -19,7 +19,12 @@
 </div>
 <div class="container py-5">
   <h1 class="text-center mb-5 fw-bold">Current Packages in Cart</h1>
-  <div th:replace="~{fragments/plan-packages :: planPackages(planPackages=${shoppingCart}, page='cart')}"></div>
+  <div th:if= "${#lists.size(shoppingCart) > 0}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${shoppingCart}, page='cart')}"></div>
+  <div th:unless="${#lists.size(shoppingCart) > 0}" >
+    <h3>Your cart is empty!</h3>
+    <p>Return to search provider page</p><i class="bi bi-search"></i>
+  </div>
+  <div th:if="${error}" class="alert alert-success" th:text="${error}"></div>
 
   <!--  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">-->
 <!--    <div class="col" th:each="pkg : ${shoppingCart}">-->

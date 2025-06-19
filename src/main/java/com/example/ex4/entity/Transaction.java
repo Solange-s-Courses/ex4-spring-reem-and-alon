@@ -31,10 +31,5 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
-
-    // אפשרות לשדה סטטוס (PENDING, DONE, CANCELED וכו')
-    // private String status;
-
-    // ...getters/setters
 }
 

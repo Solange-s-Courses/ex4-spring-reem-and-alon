@@ -39,9 +39,11 @@
                         <button type="button" class="btn btn-remove">
                             Remove from <i class="bi bi-cart-dash me-1"></i>
                         </button>
-                        <a th:href="@{/cart/checkout}" class="btn btn-purchase">
-                            purchase <i class="bi bi-cash-coin me-1 "></i>
-                        </a>
+                        <form th:action="@{/user/checkout}" method="post">
+                            <button>
+                                purchase <i class="bi bi-cash-coin me-1 "></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

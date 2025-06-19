@@ -14,7 +14,7 @@
           </a>
         </li>
         <li  class="nav-item" sec:authorize="hasRole('USER')">
-          <a class="nav-link position-relative" href="/user/cart">
+          <a class="nav-link position-relative" href="/user/checkout">
             <i class="bi bi-cart2 fs-1"></i>
             <span id="cart-size" class="position-absolute my-3 translate-middle badge rounded-pill bg-danger" th:text="${cartSize}"></span>
           </a>

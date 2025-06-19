@@ -5,9 +5,15 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class PlanPackage {
 
@@ -30,32 +36,5 @@ public class PlanPackage {
 
 
     @ManyToOne
-    //@JoinColumn(name = "app_user_id", unique = true)
     private ProviderProfile providerProfile;
-
-    public PlanPackage(){}
-    public long getId() { return id; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getPrice() { return price; }
-    public String getPackageType() { return packageType; }
-    public void setTitle(String title) { this.title = title; }
-    public void setDescription(String description) { this.description = description; }
-    public void setPrice(String price) { this.price = price; }
-    public void setPackageType(String packageType) { this.packageType = packageType; }
-    public void setProviderProfile(ProviderProfile providerProfile) { this.providerProfile = providerProfile; }
-    public ProviderProfile getProviderProfile() { return providerProfile; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PlanPackage)) return false;
-        PlanPackage that = (PlanPackage) o;
-        return id == that.id;
-    }
-    @Override
-    public int hashCode() {
-        return Long.hashCode(id);
-    }
-
 }
