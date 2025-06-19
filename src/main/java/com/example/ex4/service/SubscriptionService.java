@@ -7,6 +7,7 @@ import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -18,6 +19,10 @@ public class SubscriptionService {
     public void createSubscription(AppUser user, PlanPackage plan) {
         Subscription sub = Subscription.builder().appUser(user).planPackage(plan).startDate(LocalDate.now()).build();
         subscriptionRepository.save(sub);
+    }
+
+    public List<Subscription> findUserSubscriptions(String username) {
+        return subscriptionRepository.getSubscriptionsByAppUser_UserName(username);
     }
 
     public void deleteSubscription(long id) {

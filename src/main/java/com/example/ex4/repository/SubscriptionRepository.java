@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 //    Optional<List<Subscription>> findAllSubscriptionBy(Long appUserId);
     List<Subscription> findByPlanPackage_PackageType(String packageType);
+
+    List<Subscription> getSubscriptionsByAppUser_UserName(String username);
 }

@@ -165,29 +165,30 @@
     <div class="row">
         <div class="col-12 mb-4">
             <h2 class="section-title fs-4 fw-semibold mb-4">
-                <i class="bi bi-box me-2"></i> My Services
+                <i class="bi bi-box me-2"></i> My Services Subscriptions
             </h2>
 
-            <div th:if="${packages != null and !packages.isEmpty()}" class="packages-grid">
-                <div class="card shadow-sm p-3" th:each="pkg : ${packages}">
-                    <span class="package-status" th:text="${pkg.status}" th:classappend="${pkg.status == 'Active' ? '' : (pkg.status == 'Pending' ? 'pending' : 'inactive')}">Active</span>
-                    <h3 class="fs-5 fw-semibold" th:text="${pkg.name}">Professional Service Package</h3>
-                    <p class="text-muted small mb-3" th:text="${pkg.description}">
+            <div th:if="${results != null and !results.isEmpty()}" class="packages-grid">
+                <div class="card shadow-sm p-3" th:each="subscribe : ${results}">
+                    <span class="package-status" th:text="${subscribe.status}" th:classappend="${subscribe.status == 'Active' ? '' : (subscribe.status == 'Pending' ? 'pending' : 'inactive')}">Active</span>
+                    <img th:src="@{/provider-image/{id}(id=${subscribe.planPackage.providerProfile.id})}" class="img-fluid rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover;" alt="profile picture"/>
+                    <h3 class="fs-5 fw-semibold" th:text="${subscribe.planPackage.providerProfile.providerName}">Professional Service Package</h3>
+                    <p class="text-muted small mb-3" th:text="${subscribe.planPackage.description}">
                         Comprehensive service description that provides detailed information about what this package includes.
                     </p>
                     <div class="fs-4 fw-bold mb-1">
-                        <span th:text="${pkg.price}">299</span>
+                        <span th:text="${subscribe.planPackage.price}"></span>
                         <span class="fs-6">₪</span>
                     </div>
-                    <div class="small text-muted text-uppercase mb-3" th:text="${pkg.billingType}">Monthly</div>
+<!--                    <div class="small text-muted text-uppercase mb-3" th:if="${subscribe.startDate != null}" th:text="${subscribe.startDate}">Monthly</div>-->
                     <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">Next billing: <span th:text="${pkg.nextBillingDate}">July 15, 2025</span></small>
-                        <button class="btn btn-sm btn-outline-danger" th:if="${pkg.status == 'Active'}">Cancel</button>
+<!--                        <small class="text-muted">Next billing: <span th:if="${pkg.startDate != null}" th:text="${pkg.nextBillingDate}">July 15, 2025</span></small>-->
+                        <button class="btn btn-sm btn-outline-danger" th:if="${subscribe.status == 'Active'}">Cancel</button>
                     </div>
                 </div>
             </div>
 
-            <div th:unless="${packages != null and !packages.isEmpty()}" class="text-center py-5">
+            <div th:unless="${results != null and !results.isEmpty()}" class="text-center py-5">
                 <i class="bi bi-box fs-1 text-muted mb-3 d-block"></i>
                 <p class="text-muted mb-3">You don't have any services yet</p>
                 <a th:href="@{/user/search-providers}" class="btn btn-custom text-white">
