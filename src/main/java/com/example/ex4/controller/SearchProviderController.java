@@ -26,17 +26,18 @@ public class SearchProviderController {
 
     @Autowired
     @Qualifier("sessionBeanCart")
-    private ShoppingCart shoppingCart;
+    private ShoppingCart sessionCart;
 
     @GetMapping
     public String searchProvidersPage(Model model) {
         model.addAttribute("providers", ProviderType.values());
-        model.addAttribute("shoppingCart", shoppingCart.getProducts());
+        model.addAttribute("shoppingCart", planPackageService.findAllProducts(sessionCart.getProducts()));
         return "user/search-providers";
     }
 
     @PostMapping
     public String searchService(@RequestParam String providerCategory, RedirectAttributes redirectAttributes) {
+        System.out.println(providerCategory);
         List<PlanPackage> results = planPackageService.getAllPackagesByCategory(providerCategory);
         redirectAttributes.addFlashAttribute("results", results);
         return "redirect:/user/search-providers";

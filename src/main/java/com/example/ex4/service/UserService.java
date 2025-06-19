@@ -57,4 +57,8 @@ public class UserService{
     public String findUserRole(String username) {
         return userRepository.findByUserName(username).getRole();
     }
+
+    public Integer findUserBalance(String username) {
+        return userRepository.findByUserName(username).getBalance();
+    }
 }

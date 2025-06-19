@@ -33,4 +33,8 @@ public class ShoppingCart implements Serializable {
     }
     public List<Long> getProducts() { return List.copyOf(productsIds); }
     public void clear() { productsIds.clear(); }
+
+    public Integer getProductsAmount() {
+        return productsIds.size();
+    }
 }
