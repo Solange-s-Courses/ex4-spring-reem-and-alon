@@ -2,10 +2,10 @@ package com.example.ex4.entity;
 
 import com.example.ex4.constants.TransactionType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,7 +22,8 @@ public class Transaction {
     @ManyToOne
     private Subscription subscription;
 
-    private BigDecimal amount;
+    @Min(1)
+    private int amount;
 
     @LastModifiedDate
     private LocalDateTime timestamp;

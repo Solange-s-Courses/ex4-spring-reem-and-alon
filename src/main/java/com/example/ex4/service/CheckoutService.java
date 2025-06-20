@@ -42,10 +42,10 @@ public class CheckoutService {
         });
     }
 
-    private void validateCheckout(BigDecimal userCredit, List<PlanPackage> plans) {
-        BigDecimal totalCost = plans.stream().map(PlanPackage::getMonthlyCost).reduce(BigDecimal.ZERO, BigDecimal::add);
+    private void validateCheckout(int userCredit, List<PlanPackage> plans) {
+        int totalCost = plans.stream().map(PlanPackage::getMonthlyCost).reduce(0, Integer::sum);
 
-        if (totalCost.compareTo(userCredit) > 0) {
+        if (totalCost > userCredit) {
             throw new RuntimeException("not enough credit balance to proceed checkout");
         }
     }

@@ -8,6 +8,7 @@
 <body>
 
 <div class="container mt-5 d-flex justify-content-center">
+  <span class="alert-danger" th:if="${errorMessage != null}" th:text="${errorMessage}"></span>
   <form th:action="@{/register-admin}" th:object="${admin}" method="post" enctype="multipart/form-data"
         class="p-4 rounded-4 shadow-lg bg-white w-100" style="max-width: 600px;">
     <div class="mb-4 text-center">

@@ -8,46 +8,54 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container mt-5 d-flex justify-content-center">
-    <form id="pkg-form" th:action="@{/admin/add-package}" method="post"
-          class="p-4 rounded-4 shadow-lg bg-white">
+    <form id="pkg-form" th:object="${planPackage}" th:action="@{/admin/add-package}" method="post" class="p-4 rounded-4 shadow-lg bg-white">
         <div class="mb-4 text-center">
             <div class="rounded-4 py-3 mb-3 bg-info-subtle">
                 <i class="bi bi-person-circle fs-1"></i>
-                <h4 class="fw-bold mb-0 mt-2"> No packages </h4>
+                <h4 class="fw-bold mb-0 mt-2">Create New Package</h4>
             </div>
         </div>
+
         <div class="mb-3">
             <label for="title" class="form-label fw-semibold">Title</label>
-            <textarea class="form-control rounded-3" id="title" rows="3"
-                      placeholder="Tell something about yourself" name="title"></textarea>
-            <div class="invalid-feedback d-block"></div>
+            <input type="text" th:field="*{title}" class="form-control rounded-3" id="title" placeholder="Title" required>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label fw-semibold">Plan Description</label>
-            <input type="text" class="form-control rounded-3"  id="description" name="description"/>
-            <div class="invalid-feedback d-block"></div>
+            <label for="description" class="form-label fw-semibold">Description</label>
+            <input type="text" th:field="*{description}" class="form-control rounded-3" id="description" placeholder="Description" required>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
         </div>
 
-        <div class="mb-4">
-            <label for="price" class="form-label fw-semibold">Price</label>
-            <input type="text" class="form-control rounded-3"  id="price" name="price"/>
-            <div class="invalid-feedback d-block"></div>
-        </div>
-
-        <div class="mb-4">
+        <div class="mb-3">
             <label for="packageType" class="form-label fw-semibold">Type</label>
             <select id="packageType" class="form-select rounded-3" name="packageType">
                 <option value="" selected>Select package type</option>
                 <option th:each="type : ${planPackageTypes}" th:value="${type.displayName}" th:text="${type.displayName}"></option>
             </select>
-            <div  class="invalid-feedback d-block"></div>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('packageType')}" th:errors="*{packageType}"></div>
         </div>
+
+        <div class="mb-3">
+            <label for="monthlyCost" class="form-label fw-semibold">Monthly Cost</label>
+            <input type="number" th:field="*{monthlyCost}" class="form-control rounded-3" id="monthlyCost" min="1" required>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('monthlyCost')}" th:errors="*{monthlyCost}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="expiryDate" class="form-label fw-semibold">Expiry Date</label>
+            <input type="date" th:field="*{expiryDate}" class="form-control rounded-3" id="expiryDate" required>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('expiryDate')}" th:errors="*{expiryDate}"></div>
+        </div>
+
+        <input type="hidden" th:field="*{providerProfileId}" />
+
 
         <div class="d-flex gap-4">
             <button type="submit" class="btn btn-success btn-lg rounded-3 flex-fill">
                 <i class="bi bi-person-check me-2"></i>
-                Add package
+                Add Package
             </button>
             <a th:href="@{/admin}"
                class="btn btn-secondary btn-lg rounded-3 shadow-sm flex-fill">

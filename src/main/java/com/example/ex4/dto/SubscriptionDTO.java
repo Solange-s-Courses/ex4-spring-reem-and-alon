@@ -16,7 +16,7 @@ public class SubscriptionDTO {
     private LocalDate startDate;
 
     private String planDescription;
-    private BigDecimal monthlyCost;
+    private int monthlyCost;
 
     private Long providerId;
     private String providerName;

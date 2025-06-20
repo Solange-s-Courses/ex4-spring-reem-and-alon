@@ -1,6 +1,7 @@
 package com.example.ex4.service;
 
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.dto.PlanPackageDTO;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
@@ -24,9 +25,16 @@ public class PlanPackageService {
         return planPackageRepository.findAllByProviderProfile(profile).orElse(null);
     }
 
-    @Transactional
-    public void saveNewPackage(ProviderProfile providerProfile,PlanPackage newPackage){
-        newPackage.setProviderProfile(providerProfile);
+    public void saveNewPackage(ProviderProfile providerProfile, PlanPackageDTO packageDTO) {
+        PlanPackage newPackage = PlanPackage.builder()
+                .packageType(packageDTO.getPackageType())
+                .title(packageDTO.getTitle())
+                .description(packageDTO.getDescription())
+                .monthlyCost(packageDTO.getMonthlyCost())
+                .expiryDate(packageDTO.getExpiryDate())
+                .providerProfile(providerProfile)
+                .build();
+
         planPackageRepository.save(newPackage);
     }
 

@@ -18,7 +18,7 @@
         </p>
 
         <div class="product-price">
-            <span th:text="${pkg.price}">299</span>
+            <span th:text="${pkg.monthlyCost}">299</span>
             <span class="currency">₪</span>
         </div>
 
@@ -27,10 +27,10 @@
         <div class="product-buttons flex-fill" th:data-pkg-id="${pkg.id}" sec:authorize="hasRole('USER')">
             <div th:switch="${page}">
                 <div th:case="'search'">
-                    <button type="button" class="btn w-100 btn-add" th:classappend="${#lists.contains(shoppingCart, pkg.id)} ? 'd-none' : ''">
+                    <button type="button" class="btn w-100 btn-add" th:classappend="${#sets.contains(shoppingCart, pkg.id)} ? 'd-none' : ''">
                         <i class="bi bi-cart-plus me-1"></i> Add to Cart
                     </button>
-                    <button type="button" class="btn w-100 btn-remove" th:classappend="${#lists.contains(shoppingCart, pkg.id)} ? '' : 'd-none'">
+                    <button type="button" class="btn w-100 btn-remove" th:classappend="${#sets.contains(shoppingCart, pkg.id)} ? '' : 'd-none'">
                         Remove from <i class="bi bi-cart-dash me-1"></i>
                     </button>
                 </div>

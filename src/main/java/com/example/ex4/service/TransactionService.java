@@ -13,7 +13,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepo;
 
-    public void createTransaction(Subscription subscriber, BigDecimal monthlyCost) {
+    public void createTransaction(Subscription subscriber, int monthlyCost) {
         Transaction transaction = Transaction.builder().subscription(subscriber).amount(monthlyCost).build();
         transactionRepo.save(transaction);
     }

@@ -30,14 +30,12 @@ public class AppUser implements Serializable {
     @Email(message = "Email is mandatory")
     private String email;
 
-    @ColumnDefault("USER")
-    private String role;
+    private String role = "USER";
 
     @Column(nullable = false)
     private String password;
 
-    @ColumnDefault("0")
-    private BigDecimal creditBalance;
+    private int creditBalance = 0;
 
     public AppUser(String userName, String email, String password) {
         this.userName = userName;

@@ -30,13 +30,13 @@ public class UserController {
 
     @GetMapping
     public String userIndex(Model model) {
-        model.addAttribute("userName", userHolder.getUser());
+        model.addAttribute("userName", userHolder.getUser().getUserName());
         model.addAttribute("subscriptions",subscriptionService.findUserSubscriptions(userHolder.getUser()));
         return "user/index";
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@RequestParam BigDecimal amount, Principal principal) {
+    public String depositCredit(@RequestParam int amount, Principal principal) {
         userService.depositToBalance(userHolder.getUser(), amount);
         return "redirect:/user";
     }

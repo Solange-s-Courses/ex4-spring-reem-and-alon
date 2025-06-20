@@ -6,7 +6,6 @@ import com.example.ex4.constants.ProviderType;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.service.PlanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ public class SearchProviderController {
     private PlanPackageService planPackageService;
 
     @Autowired
-    @Qualifier("sessionBeanCart")
     private ShoppingCart sessionCart;
 
     @GetMapping

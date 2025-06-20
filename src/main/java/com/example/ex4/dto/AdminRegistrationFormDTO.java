@@ -24,9 +24,6 @@ public class AdminRegistrationFormDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
-    @NotBlank(message = "City is required")
-    private String contactInfo;
-
     @ValidImage
     private MultipartFile imageFile;
 
@@ -50,8 +47,6 @@ public class AdminRegistrationFormDTO {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-    public String getContactInfo() { return contactInfo; }
-    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPassword() { return password; }

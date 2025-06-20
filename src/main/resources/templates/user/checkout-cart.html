@@ -19,8 +19,8 @@
 </div>
 <div class="container py-5">
   <h1 class="text-center mb-5 fw-bold">Current Packages in Cart</h1>
-  <div th:if= "${#lists.size(shoppingCart) > 0}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${shoppingCart}, page='cart')}"></div>
-  <div th:unless="${#lists.size(shoppingCart) > 0}" >
+  <div th:if= "${#sets.size(shoppingCart) > 0}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${shoppingCart}, page='cart')}"></div>
+  <div th:unless="${#sets.size(shoppingCart) > 0}" >
     <h3>Your cart is empty!</h3>
     <p>Return to search provider page</p><i class="bi bi-search"></i>
   </div>
