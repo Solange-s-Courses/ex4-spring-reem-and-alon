@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,12 +20,9 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    private AppUser fromUser;
+    private Subscription subscription;
 
-    @ManyToOne
-    private AppUser toProvider;
-
-    private int amount;
+    private BigDecimal amount;
 
     @LastModifiedDate
     private LocalDateTime timestamp;
@@ -32,4 +30,3 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 }
-

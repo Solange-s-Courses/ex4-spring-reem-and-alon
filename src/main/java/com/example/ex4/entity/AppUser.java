@@ -22,7 +22,6 @@ public class AppUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotEmpty
     @Pattern(regexp = "^[A-Za-z]+$")
     @Column(unique = true)
     private String userName;
@@ -31,17 +30,16 @@ public class AppUser implements Serializable {
     @Email(message = "Email is mandatory")
     private String email;
 
-    @Column(nullable = false)
+    @ColumnDefault("USER")
     private String role;
 
     @Column(nullable = false)
     private String password;
 
     @ColumnDefault("0")
-    private int balance;
+    private BigDecimal creditBalance;
 
     public AppUser(String userName, String email, String password) {
-        this.role = "USER";
         this.userName = userName;
         this.email = email;
         this.password = password;

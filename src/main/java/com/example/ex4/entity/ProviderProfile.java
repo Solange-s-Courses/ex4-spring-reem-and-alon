@@ -20,8 +20,6 @@ public class ProviderProfile {
 
     private String category;
 
-    private String contactInfo;
-
     private boolean approved = false;
 
     @Lob
@@ -31,6 +29,5 @@ public class ProviderProfile {
     private AppUser appUser;
 
     @OneToMany(mappedBy = "providerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-    //   @JoinColumn(name = "app_user_id", unique = true)
     private List<PlanPackage> planPackage;
 }

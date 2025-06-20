@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.repository.UserRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,9 +36,9 @@ public class UserService{
         return userRepository.findById(id);
     }
 
-    public void depositToBalance(String username, int amount) {
+    public void depositToBalance(String username, BigDecimal amount) {
         AppUser user = userRepository.findByUserName(username);
-        user.setBalance(user.getBalance() + amount);
+        user.setCreditBalance(user.getCreditBalance().add(amount));
         userRepository.save(user);
     }
 

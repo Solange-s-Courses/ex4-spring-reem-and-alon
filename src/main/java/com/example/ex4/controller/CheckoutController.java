@@ -1,11 +1,15 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.components.CheckoutResult;
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.components.UserHolder;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.repository.PlanPackageRepository;
 import com.example.ex4.service.CheckoutService;
 import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.UserService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -41,9 +45,7 @@ public class CheckoutController {
 
     @PostMapping
     public String checkout(Principal principal) {
-        AppUser user = userService.findByUsername(principal.getName());
-        List<PlanPackage> plans = planPackageService.findAllProducts(sessionCart.getProducts());
-        checkoutService.processCheckout(user, plans);
+        checkoutService.processCheckout(principal.getName());
         sessionCart.clear();
         return "redirect:/user/checkout?success=true";
     }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 

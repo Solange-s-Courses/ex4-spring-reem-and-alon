@@ -31,7 +31,7 @@ public class SearchProviderController {
     @GetMapping
     public String searchProvidersPage(Model model) {
         model.addAttribute("providers", ProviderType.values());
-        model.addAttribute("shoppingCart", planPackageService.findAllProducts(sessionCart.getProducts()));
+        model.addAttribute("shoppingCart", sessionCart.getProducts());
         return "user/search-providers";
     }
 

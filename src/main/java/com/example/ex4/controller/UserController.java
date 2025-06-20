@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.security.Principal;
 
 @Controller
@@ -27,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@RequestParam int amount, Principal principal) {
+    public String depositCredit(@RequestParam BigDecimal amount, Principal principal) {
         userService.depositToBalance(principal.getName(), amount);
         return "redirect:/user";
     }

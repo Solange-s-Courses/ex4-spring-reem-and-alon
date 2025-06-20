@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PlanPackageService {
@@ -28,7 +30,7 @@ public class PlanPackageService {
         planPackageRepository.save(newPackage);
     }
 
-    public List<PlanPackage> findAllProducts(List<Long> products) {
+    public List<PlanPackage> findAllProducts(Set<Long> products) {
         return planPackageRepository.findAllById(products);
     }
 }

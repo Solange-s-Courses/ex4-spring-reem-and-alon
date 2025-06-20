@@ -16,9 +16,12 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    public void createSubscription(AppUser user, PlanPackage plan) {
+    public Subscription createSubscription(AppUser user, PlanPackage plan) {
+        if (plan.getExpiryDate().isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot subscribe service plan package. because its not available anymore.");
+        }
         Subscription sub = Subscription.builder().appUser(user).planPackage(plan).startDate(LocalDate.now()).build();
-        subscriptionRepository.save(sub);
+        return subscriptionRepository.save(sub);
     }
 
     public List<Subscription> findUserSubscriptions(String username) {
