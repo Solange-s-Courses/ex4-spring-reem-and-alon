@@ -1,6 +1,10 @@
 package com.example.ex4.controller;
+import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
+import com.example.ex4.entity.Transaction;
 import com.example.ex4.service.ProviderProfileService;
+import com.example.ex4.service.TransactionService;
+import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +24,15 @@ public class SuperAdminController {
     @Autowired
     private ProviderProfileService providerProfileService;
 
+    @Autowired
+    private TransactionService transactionService;
+
     @GetMapping
     public String landingPage(Model model) {
         List<ProviderProfile> pendingProfiles = providerProfileService.findAllPendingProfiles();
+        List<Transaction> transactionHistory = transactionService.findAll();
         model.addAttribute("pendingProfiles", pendingProfiles);
+        model.addAttribute("transactions", transactionHistory);
         return "super_admin/index";
     }
 
