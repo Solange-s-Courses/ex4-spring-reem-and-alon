@@ -36,8 +36,7 @@ public class UserService{
         return userRepository.findById(id);
     }
 
-    public void depositToBalance(String username, BigDecimal amount) {
-        AppUser user = userRepository.findByUserName(username);
+    public void depositToBalance(AppUser user, BigDecimal amount) {
         user.setCreditBalance(user.getCreditBalance().add(amount));
         userRepository.save(user);
     }
@@ -59,7 +58,7 @@ public class UserService{
         return userRepository.findByUserName(username).getRole();
     }
 
-    public Integer findUserBalance(String username) {
-        return userRepository.findByUserName(username).getBalance();
+    public BigDecimal findUserBalance(String username) {
+        return userRepository.findByUserName(username).getCreditBalance();
     }
 }

@@ -2,6 +2,7 @@ package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.List;
 
 @Getter
@@ -20,6 +21,7 @@ public class ProviderProfile {
 
     private String category;
 
+    @Builder.Default
     private boolean approved = false;
 
     @Lob

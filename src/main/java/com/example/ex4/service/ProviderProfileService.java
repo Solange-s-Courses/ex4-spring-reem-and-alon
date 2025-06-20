@@ -39,7 +39,6 @@ public class ProviderProfileService {
         profile.setProfileImage(profileForm.getImageFile().getBytes());
         profile.setCategory(profileForm.getCategory());
         profile.setProviderName(profileForm.getProviderName());
-        profile.setContactInfo(profileForm.getContactInfo());
         profile.setAppUser(admin);
         profile.setApproved(false);
         repository.save(profile);

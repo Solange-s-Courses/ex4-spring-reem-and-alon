@@ -1,13 +1,16 @@
 package com.example.ex4.service;
 
+import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,11 +27,26 @@ public class SubscriptionService {
         return subscriptionRepository.save(sub);
     }
 
-    public List<Subscription> findUserSubscriptions(String username) {
-        return subscriptionRepository.getSubscriptionsByAppUser_UserName(username);
+    public List<SubscriptionDTO> findUserSubscriptions(AppUser user) {
+        List<Subscription> subscriptions = subscriptionRepository.findSubscriptionByAppUser(user);
+        return subscriptions.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     public void deleteSubscription(long id) {
         subscriptionRepository.deleteById(id);
+    }
+
+    private SubscriptionDTO toDto(Subscription subscription) {
+        PlanPackage plan = subscription.getPlanPackage();
+        ProviderProfile provider = plan.getProviderProfile();
+
+        return SubscriptionDTO.builder()
+                .status(subscription.getStatus())
+                .startDate(subscription.getStartDate())
+                .planDescription(plan.getDescription())
+                .monthlyCost(plan.getMonthlyCost())
+                .providerId(provider.getId())
+                .providerName(provider.getProviderName())
+                .build();
     }
 }

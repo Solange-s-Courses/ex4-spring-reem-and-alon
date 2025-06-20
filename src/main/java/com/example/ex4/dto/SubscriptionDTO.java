@@ -1,22 +1,25 @@
-//package com.example.ex4.dto;
-//
-//import com.example.ex4.entity.Subscription;
-//
-//public class SubscriptionDTO {
-//    private long id;
-//    private String planTitle;
-//    private String userName;
-//
-//    public SubscriptionDTO(Subscription s) {
-//        this.id = s.getId();
-//        this.planTitle = s.getPlanPackage().getTitle();
-//        this.userName = s.getAppUser().getUserName();
-//    }
-//
-//    public long getId() {return id;}
-//    public String getPlanTitle() {return planTitle;}
-//    public String getUserName() {return userName;}
-//    public void setPlanTitle(String planTitle) {this.planTitle = planTitle;}
-//    public void setUserName(String userName) {this.userName = userName;}
-//}
-//
+package com.example.ex4.dto;
+
+import lombok.*;
+
+import java.awt.image.PixelGrabber;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+public class SubscriptionDTO {
+    private String status;
+    private LocalDate startDate;
+
+    private String planDescription;
+    private BigDecimal monthlyCost;
+
+    private Long providerId;
+    private String providerName;
+
+}
+

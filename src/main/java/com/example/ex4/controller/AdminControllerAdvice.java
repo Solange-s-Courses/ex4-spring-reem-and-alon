@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 
 @ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class})
 public class AdminControllerAdvice {
 
     @Autowired
-    @Qualifier("sessionBeanCart")
     private ShoppingCart sessionCart;
 
     @Autowired
@@ -30,7 +30,7 @@ public class AdminControllerAdvice {
     }
 
     @ModelAttribute("balance")
-    public Integer balance(Principal principal) {
+    public BigDecimal balance(Principal principal) {
         return userService.findUserBalance(principal.getName());
     }
 }

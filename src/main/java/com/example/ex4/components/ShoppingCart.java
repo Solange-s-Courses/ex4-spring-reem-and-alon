@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@SessionScope
 public class ShoppingCart implements Serializable {
     private Set<Long> productsIds = new HashSet<>();
 

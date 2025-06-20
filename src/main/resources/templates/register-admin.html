@@ -53,12 +53,6 @@
     </div>
 
     <div class="mb-3">
-      <label for="contactInfo" class="form-label fw-semibold">Contact Info</label>
-      <input type="text" th:field="*{contactInfo}" id="contactInfo" class="form-control rounded-3"/>
-      <div th:if="${#fields.hasErrors('contactInfo')}" th:errors="*{contactInfo}" class="invalid-feedback d-block"></div>
-    </div>
-
-    <div class="mb-3">
       <label for="imageFile" class="form-label fw-semibold">Upload company image</label>
       <input type="file" class="form-control rounded-3" th:field="*{imageFile}" id="imageFile" accept="image/*"/>
       <div th:if="${#fields.hasErrors('imageFile')}" th:errors="*{imageFile}" class="invalid-feedback d-block"></div>

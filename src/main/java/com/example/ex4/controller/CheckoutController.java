@@ -1,17 +1,10 @@
 package com.example.ex4.controller;
 
-import com.example.ex4.components.CheckoutResult;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.UserHolder;
-import com.example.ex4.entity.AppUser;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.repository.PlanPackageRepository;
 import com.example.ex4.service.CheckoutService;
 import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.UserService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +18,6 @@ import java.util.List;
 public class CheckoutController {
 
     @Autowired
-    @Qualifier("sessionBeanCart")
     private ShoppingCart sessionCart;
 
     @Autowired
@@ -33,9 +25,6 @@ public class CheckoutController {
 
     @Autowired
     private PlanPackageService planPackageService;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping
     public String cartPage(Model model) {

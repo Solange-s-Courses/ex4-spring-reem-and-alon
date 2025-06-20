@@ -25,12 +25,11 @@
         No pending provider profiles.
     </div>
 
-    <ul class="list-group shadow" th:if="${not #lists.isEmpty(pendingProfiles)}">
+    <ul class="list-group shadow" th:if="${#lists.size(pendingProfiles) > 0}">
         <li class="list-group-item" th:each="profile : ${pendingProfiles}">
             <div>
                 <strong th:text="${profile.providerName}">Provider Name</strong>
                 <small class="d-block text-muted" th:text="'Category: ' + ${profile.category}"></small>
-                <small class="d-block text-muted" th:text="'Contact Info: ' + ${profile.contactInfo}"></small>
             </div>
             <div class="btn-group">
             <form th:action="@{/super-admin/approve/{id}(id=${profile.id})}" method="post" style="display: inline;">
