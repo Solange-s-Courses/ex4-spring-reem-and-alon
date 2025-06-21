@@ -1,17 +1,20 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.components.UserHolder;
-import com.example.ex4.entity.Subscription;
+import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.service.SubscriptionService;
-import com.example.ex4.service.TransactionService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/user")
@@ -28,9 +31,10 @@ public class UserController {
 
     @GetMapping
     public String userIndex(Model model) {
+        List<SubscriptionDTO> subscriptions = subscriptionService.findUserSubscriptions(userHolder.getUser());
         model.addAttribute("userName", userHolder.getUser().getUserName());
         model.addAttribute("userName", userHolder.getUser().getUserName());
-        model.addAttribute("subscriptions",subscriptionService.findUserSubscriptions(userHolder.getUser()));
+        model.addAttribute("subscriptions", subscriptions);
         return "user/index";
     }
 

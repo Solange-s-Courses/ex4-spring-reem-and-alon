@@ -1,9 +1,6 @@
 package com.example.ex4.dto;
 
 import lombok.*;
-
-import java.awt.image.PixelGrabber;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @NoArgsConstructor
