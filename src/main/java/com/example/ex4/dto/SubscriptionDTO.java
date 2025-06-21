@@ -16,10 +16,12 @@ public class SubscriptionDTO {
     private LocalDate startDate;
 
     private String planDescription;
+    private String planName;
     private int monthlyCost;
 
     private Long providerId;
     private String providerName;
+    private String category;
 
 }
 

@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +22,10 @@ public class Subscription {
 
     @ManyToOne
     private PlanPackage planPackage;
+//
+//    @Transient
+//    @OneToMany(mappedBy = "subscription")
+//    private List<Transaction> transactions;
 
     @ManyToOne
     private AppUser appUser;

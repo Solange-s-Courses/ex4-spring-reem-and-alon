@@ -31,7 +31,7 @@ public class ApplicationConfig {
                         .requestMatchers( "/css/**", "/login", "/register","/register-admin").permitAll()
                         .requestMatchers("/user/**", "/cart/**","/api/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -1,13 +1,14 @@
 package com.example.ex4.service;
 
 import com.example.ex4.constants.TransactionType;
+import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.entity.Transaction;
+import com.example.ex4.repository.SubscriptionRepository;
 import com.example.ex4.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 

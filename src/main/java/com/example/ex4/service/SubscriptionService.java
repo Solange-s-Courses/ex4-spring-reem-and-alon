@@ -44,9 +44,11 @@ public class SubscriptionService {
                 .status(subscription.getStatus())
                 .startDate(subscription.getStartDate())
                 .planDescription(plan.getDescription())
+                .planName(plan.getTitle())
                 .monthlyCost(plan.getMonthlyCost())
                 .providerId(provider.getId())
                 .providerName(provider.getProviderName())
+                .category(provider.getCategory())
                 .build();
     }
 }

@@ -9,33 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .header-section {
-            background: linear-gradient(135deg, #212529 0%, #495057 100%);
-            color: white;
-            padding: 30px 0;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            transition: all 0.2s ease;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-        }
-
-        .btn-custom {
-            background-color: #212529;
-            border: 1px solid #212529;
-            color: white;
-        }
-
-        .btn-custom:hover {
-            background-color: #495057;
-            border-color: #495057;
-            color: white;
         }
 
         .approval-status {
@@ -46,49 +20,10 @@
             display: inline-block;
         }
 
-        .status-pending {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .status-approved {
-            background: #28a745;
-        }
-
-        .status-rejected {
-            background: #dc3545;
-        }
-
-        .transaction-type {
-            font-size: 13px;
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .type-payment {
-            background: #28a745;
-        }
-
-        .type-refund {
-            background: #dc3545;
-        }
-
-        .type-deposit {
-            background: #007bff;
-        }
-
         .section-title {
             padding-bottom: 10px;
             border-bottom: 2px solid #212529;
             color: #212529;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #495057 0%, #212529 100%);
-            color: white;
-            border: none;
         }
 
         .profile-img {
@@ -103,19 +38,6 @@
             padding: 4px 8px;
             border-radius: 4px;
             display: inline-block;
-        }
-
-        .priority-high {
-            background: #dc3545;
-        }
-
-        .priority-medium {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .priority-low {
-            background: #28a745;
         }
 
         .table-responsive {
@@ -135,10 +57,6 @@
             border-color: #dee2e6;
         }
 
-        .action-buttons .btn {
-            margin: 2px;
-        }
-
         @media (max-width: 768px) {
             .table-responsive {
                 font-size: 14px;
@@ -155,68 +73,57 @@
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <!-- Header Section -->
-<div class="header-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="fs-2 fw-bold"><i class="bi bi-shield-check me-2"></i>Super Admin Dashboard</h1>
-                <p class="mb-0">Manage admin approvals, transactions, and reports</p>
-            </div>
-            <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <span class="badge bg-light text-dark fs-6 px-3 py-2">
-                    <i class="bi bi-calendar3 me-1"></i>
-                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}">21/06/2025 14:30</span>
-                </span>
-            </div>
+<!--<div class="header-section">-->
+<!--    <div class="container">-->
+<!--        <div class="row align-items-center">-->
+<!--            <div class="col-md-8">-->
+<!--                <h1 class="fs-2 fw-bold"><i class="bi bi-shield-check me-2"></i>Super Admin Dashboard</h1>-->
+<!--                <p class="mb-0">Manage admin approvals, transactions, and reports</p>-->
+<!--            </div>-->
+<!--            <div class="col-md-4 text-md-end mt-3 mt-md-0">-->
+<!--                <span class="badge bg-light text-dark fs-6 px-3 py-2">-->
+<!--                    <i class="bi bi-calendar3 me-1"></i>-->
+<!--                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}">21/06/2025 14:30</span>-->
+<!--                </span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="container pb-4">
+    <div class="row rounded-3 py-4 mb-4 justify-content-center" style="color: #495057">
+        <div class="col-md-8 fs-4 fw-bold text-center">
+            <h1 class="fs-1"><i class="bi bi-shield-check"></i>Super Admin Dashboard</h1>
+            <p class="mb-0">Manage admin approvals, transactions, and reports</p>
         </div>
     </div>
-</div>
-
-<!-- Dashboard Section -->
-<div class="container pb-4">
 
     <!-- Statistics Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card stats-card text-center">
-                <div class="card-body">
-                    <i class="bi bi-person-check fs-1 mb-2"></i>
-                    <h3 class="fs-4 fw-bold" th:text="${pendingApprovals != null ? pendingApprovals : '0'}">5</h3>
-                    <p class="mb-0">Pending Approvals</p>
-                </div>
-            </div>
+    <div class="row mb-4 align-items-center">
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3" style="background-color: #495057">
+            <i class="bi bi-person-check fs-1 mb-2 text-center"></i>
+            <h3 class="fs-4 fw-bold" th:text="${pendingProfiles != null ? #lists.size(pendingProfiles) : '0'}">5</h3>
+            <p>Pending Approvals</p>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stats-card text-center">
-                <div class="card-body">
-                    <i class="bi bi-cash-coin fs-1 mb-2"></i>
-                    <h3 class="fs-4 fw-bold" th:text="${transactions != null ? #lists.size(transactions) : '0'}">127</h3>
-                    <p class="mb-0">Total Transactions</p>
-                </div>
-            </div>
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3" style="background-color: #495057">
+            <i class="bi bi-cash-coin fs-1 mb-2"></i>
+            <h3 class="fs-4 fw-bold" th:text="${transactions != null ? #lists.size(transactions) : '0'}">127</h3>
+            <p >Total Transactions</p>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stats-card text-center">
-                <div class="card-body">
-                    <i class="bi bi-flag fs-1 mb-2"></i>
-                    <h3 class="fs-4 fw-bold" th:text="${openReports != null ? openReports : '0'}">3</h3>
-                    <p class="mb-0">Open Reports</p>
-                </div>
-            </div>
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3" style="background-color: #495057">
+            <i class="bi bi-flag fs-1 mb-2"></i>
+            <h3 class="fs-4 fw-bold" th:text="${openReports != null ? openReports : '0'}">3</h3>
+            <p >Open Reports</p>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stats-card text-center">
-                <div class="card-body">
-                    <i class="bi bi-people fs-1 mb-2"></i>
-                    <h3 class="fs-4 fw-bold" th:text="${totalProviders != null ? totalProviders : '0'}">42</h3>
-                    <p class="mb-0">Active Providers</p>
-                </div>
-            </div>
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3" style="background-color: #495057">
+            <i class="bi bi-people fs-1 mb-2"></i>
+            <h3 class="fs-4 fw-bold" th:text="${totalProviders != null ? totalProviders : '0'}">42</h3>
+            <p>Active Providers</p>
         </div>
     </div>
 
     <!-- Provider Approval Requests -->
-    <div class="row mb-4">
+    <div class="row mb-4 align-items-center">
         <div class="col-12">
             <h2 class="section-title fs-4 fw-semibold mb-4">
                 <i class="bi bi-person-plus me-2"></i> Provider Approval Requests
@@ -224,20 +131,19 @@
 
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <div th:if="${providerRequests != null and !providerRequests.isEmpty()}">
+                    <div th:if="${pendingProfiles != null and !pendingProfiles.isEmpty()}">
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
+                            <table class="table mb-0">
+                                <thead style="background-color: #495057">
                                 <tr>
                                     <th>Provider</th>
                                     <th>Category</th>
                                     <th>Status</th>
-                                    <th>Registration Date</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="provider : ${providerRequests}">
+                                <tr th:each="provider : ${pendingProfiles}">
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img th:src="@{/provider-image/{id}(id=${provider.id})}"
@@ -253,19 +159,19 @@
                                         <span class="badge bg-secondary" th:text="${provider.category}">Web Development</span>
                                     </td>
                                     <td>
-                                            <span class="approval-status"
-                                                  th:classappend="${provider.approved ? 'status-approved' : 'status-pending'}"
-                                                  th:text="${provider.approved ? 'Approved' : 'Pending'}">Pending</span>
+                                            <span class="approval-status fw-semibold p-2"
+                                                  th:classappend="${provider.approved ? 'bg-success text-white' : 'bg-warning text-body-emphasis'}"
+                                                  th:text="${provider.approved ? 'Active' : 'Pending'}"></span>
                                     </td>
-                                    <td th:text="${provider.appUser.createdAt != null ? #temporals.format(provider.appUser.createdAt, 'dd/MM/yyyy') : 'N/A'}">20/06/2025</td>
+<!--                                    <td th:text="${provider.appUser. != null ? #temporals.format(provider.appUser.createdAt, 'dd/MM/yyyy') : 'N/A'}">20/06/2025</td>-->
                                     <td>
-                                        <div class="action-buttons" th:if="${!provider.approved}">
-                                            <form th:action="@{/super-admin/approve-provider/{id}(id=${provider.id})}" method="post" style="display: inline;">
+                                        <div class="action-buttons m-2" th:if="${!provider.approved}">
+                                            <form th:action="@{/super-admin/approve/{id}(id=${provider.id})}" method="post" style="display: inline;">
                                                 <button type="submit" class="btn btn-success btn-sm">
                                                     <i class="bi bi-check-circle me-1"></i>Approve
                                                 </button>
                                             </form>
-                                            <form th:action="@{/super-admin/reject-provider/{id}(id=${provider.id})}" method="post" style="display: inline;">
+                                            <form th:action="@{/super-admin/reject/{id}(id=${provider.id})}" method="post" style="display: inline;">
                                                 <button type="submit" class="btn btn-danger btn-sm">
                                                     <i class="bi bi-x-circle me-1"></i>Reject
                                                 </button>
@@ -282,7 +188,7 @@
                             </table>
                         </div>
                     </div>
-                    <div th:unless="${providerRequests != null and !providerRequests.isEmpty()}" class="text-center py-4">
+                    <div th:unless="${pendingProfiles != null and !pendingProfiles.isEmpty()}" class="text-center py-4">
                         <i class="bi bi-person-plus fs-1 text-muted mb-3 d-block"></i>
                         <p class="text-muted">No pending approval requests</p>
                     </div>
@@ -297,54 +203,45 @@
             <h2 class="section-title fs-4 fw-semibold mb-4">
                 <i class="bi bi-credit-card me-2"></i> Recent Transactions
             </h2>
+        </div>
 
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div th:if="${transactions != null and !transactions.isEmpty()}">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User</th>
-                                    <th>Service</th>
-                                    <th>Amount</th>
-                                    <th>Type</th>
-                                    <th>Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="transaction : ${transactions}">
-                                    <td>
-                                        <code th:text="${'#' + transaction.id}">#12345</code>
-                                    </td>
-                                    <td>
-                                        <div class="fw-semibold" th:text="${transaction.subscription.appUser.userName}">user@example.com</div>
-                                    </td>
-                                    <td>
-                                        <div th:text="${transaction.subscription.planPackage.providerProfile.providerName}">Web Design Service</div>
-                                        <small class="text-muted" th:text="${transaction.subscription.planPackage.title}">Premium Plan</small>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold" th:text="${transaction.amount + ' ₪'}">150 ₪</span>
-                                    </td>
-                                    <td>
-                                            <span class="transaction-type"
-                                                  th:classappend="${transaction.type.name() == 'PAYMENT' ? 'type-payment' :
-                                                                  (transaction.type.name() == 'REFUND' ? 'type-refund' : 'type-deposit')}"
-                                                  th:text="${transaction.type}">PAYMENT</span>
-                                    </td>
-                                    <td th:text="${transaction.timestamp != null ? #temporals.format(transaction.timestamp, 'dd/MM/yyyy HH:mm') : 'N/A'}">20/06/2025 14:30</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div th:unless="${transactions != null and !transactions.isEmpty()}" class="text-center py-4">
-                        <i class="bi bi-credit-card fs-1 text-muted mb-3 d-block"></i>
-                        <p class="text-muted">No transactions found</p>
+        <div class="col-12 card card-body shadow-sm mx-2">
+            <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group">
+                <div class="list-group-item" style="background-color: #495057">
+                    <div class="row fw-semibold text-center align-items-center text-white">
+                        <div class="col">Transaction ID</div>
+                        <div class="col">User</div>
+                        <div class="col">Provider name</div>
+                        <div class="col">Amount</div>
+                        <div class="col">Type</div>
+                        <div class="col">Date</div>
                     </div>
                 </div>
+                <div class="list-group-item" th:each="transaction : ${transactions}">
+                    <!--                                fregmant for each list group!-->
+                    <div class="row fw-semibold text-center align-items-center">
+                        <div class="col" th:text="${'#' + transaction.id}"></div>
+                        <div class="col" th:text="${transaction.subscription.appUser.userName}"></div>
+                        <div class="col" th:text="${transaction.subscription.planPackage.providerProfile.providerName}"></div>
+                        <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
+                        <div class="col fw-normal">
+                            <span class="badge px-2 py-2"
+                                  th:text="${transaction.type.name()}"
+                                  th:classappend="' bg-success'" th:if="${transaction.type.name() == 'TRANSFER'}"></span>
+                            <span class="badge"
+                                  th:text="${transaction.type.name()}"
+                                  th:classappend="' bg-warning'" th:if="${transaction.type.name() == 'FEE'}"></span>
+                            <span class="badge"
+                                  th:text="${transaction.type.name()}"
+                                  th:classappend="' bg-danger'" th:if="${transaction.type.name() == 'REJECT'}"></span>
+                        </div>
+                        <div class="col" th:text="${transaction.timestamp != null ? #temporals.format(transaction.timestamp, 'dd/MM/yyyy HH:mm') : 'N/A'}"></div>
+                    </div>
+                </div>
+            </div>
+            <div th:unless="${transactions != null and !transactions.isEmpty()}" class="text-center py-4">
+                <i class="bi bi-credit-card fs-1 text-muted mb-3 d-block"></i>
+                <p class="text-muted">No transactions found</p>
             </div>
         </div>
     </div>
@@ -357,80 +254,67 @@
             </h2>
 
             <div class="card shadow-sm">
-                <div class="card-body">
+                <div class="card-body p-0">
                     <div th:if="${reports != null and !reports.isEmpty()}">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Report ID</th>
-                                    <th>Reporter</th>
-                                    <th>Reported Provider</th>
-                                    <th>Reason</th>
-                                    <th>Priority</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="report : ${reports}">
-                                    <td>
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item" th:each="report : ${reports}">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2">
                                         <code th:text="${'#R' + report.id}">#R001</code>
-                                    </td>
-                                    <td>
+                                        <div>
+                                            <span class="report-priority"
+                                                  th:classappend="${report.priority == 'HIGH' ? 'priority-high' :
+                                                                  (report.priority == 'MEDIUM' ? 'priority-medium' : 'priority-low')}"
+                                                  th:text="${report.priority}">MEDIUM</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
                                         <div class="fw-semibold" th:text="${report.reporterUser.username}">reporter@example.com</div>
-                                    </td>
-                                    <td>
+                                        <small class="text-muted" th:text="${report.createdAt != null ? #temporals.format(report.createdAt, 'dd/MM/yyyy') : 'N/A'}">19/06/2025</small>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="d-flex align-items-center">
                                             <img th:src="@{/provider-image/{id}(id=${report.reportedProvider.id})}"
-                                                 class="rounded-circle me-2 profile-img"
+                                                 class="rounded-circle me-2"
+                                                 style="width: 40px; height: 40px; object-fit: cover;"
                                                  alt="Provider">
                                             <div>
                                                 <div class="fw-semibold" th:text="${report.reportedProvider.providerName}">Service Provider</div>
                                                 <small class="text-muted" th:text="${report.reportedProvider.category}">Web Development</small>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
+                                    </div>
+                                    <div class="col-md-2">
                                         <div th:text="${report.reason}">Poor service quality</div>
-                                        <small class="text-muted" th:text="${report.description}">Additional details...</small>
-                                    </td>
-                                    <td>
-                                            <span class="report-priority"
-                                                  th:classappend="${report.priority == 'HIGH' ? 'priority-high' :
-                                                                  (report.priority == 'MEDIUM' ? 'priority-medium' : 'priority-low')}"
-                                                  th:text="${report.priority}">MEDIUM</span>
-                                    </td>
-                                    <td th:text="${report.createdAt != null ? #temporals.format(report.createdAt, 'dd/MM/yyyy') : 'N/A'}">19/06/2025</td>
-                                    <td>
-                                            <span class="approval-status"
-                                                  th:classappend="${report.status == 'RESOLVED' ? 'status-approved' :
-                                                                  (report.status == 'INVESTIGATING' ? 'status-pending' : 'status-rejected')}"
-                                                  th:text="${report.status}">OPEN</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons" th:if="${report.status == 'OPEN'}">
-                                            <form th:action="@{/super-admin/investigate-report/{id}(id=${report.id})}" method="post" style="display: inline;">
-                                                <button type="submit" class="btn btn-warning btn-sm">
-                                                    <i class="bi bi-search me-1"></i>Investigate
+                                        <small class="text-muted text-truncate d-block" style="max-width: 150px;" th:text="${report.description}">Additional details...</small>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <span class="approval-status"
+                                              th:classappend="${report.status == 'RESOLVED' ? 'status-approved' :
+                                                              (report.status == 'INVESTIGATING' ? 'status-pending' : 'status-rejected')}"
+                                              th:text="${report.status}">OPEN</span>
+                                    </div>
+                                    <div class="col-md-1 text-end">
+                                        <div th:if="${report.status == 'OPEN'}">
+                                            <form th:action="@{/super-admin/investigate-report/{id}(id=${report.id})}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-warning btn-sm me-1">
+                                                    <i class="bi bi-search"></i>
                                                 </button>
                                             </form>
-                                            <form th:action="@{/super-admin/resolve-report/{id}(id=${report.id})}" method="post" style="display: inline;">
+                                            <form th:action="@{/super-admin/resolve-report/{id}(id=${report.id})}" method="post" class="d-inline">
                                                 <button type="submit" class="btn btn-success btn-sm">
-                                                    <i class="bi bi-check-circle me-1"></i>Resolve
+                                                    <i class="bi bi-check-circle"></i>
                                                 </button>
                                             </form>
                                         </div>
                                         <div th:if="${report.status != 'OPEN'}">
                                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" th:data-bs-target="${'#reportModal' + report.id}">
-                                                <i class="bi bi-eye me-1"></i>View
+                                                <i class="bi bi-eye"></i>
                                             </button>
                                         </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div th:unless="${reports != null and !reports.isEmpty()}" class="text-center py-4">
@@ -481,12 +365,12 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <div th:if="${report.status == 'OPEN'}">
-                    <form th:action="@{/super-admin/investigate-report/{id}(id=${report.id})}" method="post" style="display: inline;">
+                    <form th:action="@{/super-admin/investigate-report/{id}(id=${report.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-warning">
                             <i class="bi bi-search me-1"></i>Start Investigation
                         </button>
                     </form>
-                    <form th:action="@{/super-admin/resolve-report/{id}(id=${report.id})}" method="post" style="display: inline;">
+                    <form th:action="@{/super-admin/resolve-report/{id}(id=${report.id})}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-check-circle me-1"></i>Mark as Resolved
                         </button>
@@ -496,7 +380,5 @@
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
