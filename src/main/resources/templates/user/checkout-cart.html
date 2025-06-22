@@ -10,16 +10,49 @@
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-<div id="main-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="toast-header">
-    <strong class="me-auto" id="toast-title"></strong>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="top-50 end-50 p-3" style="z-index: 9999;">
+  <div id="main-toast" class="toast align-items-center border-0 text-bg-success" data-bs-delay="5000">
+    <div class="toast-header">
+      <strong class="me-auto toast-title"></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body d-flex align-items-center">
+    </div>
   </div>
-  <div class="toast-body" id="toast-body"></div>
 </div>
-<div class="container py-5">
-  <h1 class="text-center mb-5 fw-bold">Current Packages in Cart</h1>
-  <div th:if= "${#sets.size(shoppingCart) > 0}" th:replace="~{fragments/plan-packages :: planPackages(planPackages=${shoppingCart}, page='cart')}"></div>
+<div class="container">
+  <h1 class="text-center fw-bold">Current Packages in Cart</h1>
+  <div th:if= "${#sets.size(shoppingCart) > 0}">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 align-items-start mb-4" th:fragment="planPackages(planPackages, page)">
+      <div th:each="pkg : ${shoppingCart}" class="col">
+        <div class="card shadow-sm h-100 border-2">
+          <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${pkg}, page='search')}"></div>
+          <form class="add-to-cart-form w-75 mx-auto justify-content-center" action="#" method="post">
+            <input type="hidden" name="pkgId" th:value="${pkg.id}">
+            <div class="d-flex gap-2 btn-in-cart">
+              <button type="submit" class="btn btn-remove mb-4">
+                Remove  <i class="bi bi-cart-dash"></i>
+              </button>
+              <button type="submit" class="btn btn-add mb-4">
+                <i class="bi bi-cash-stack me-1"></i> Pay
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+    <div class="row justify-content-center" th:if="${!#lists.isEmpty(shoppingCart)}">
+      <form class="col-12 justify-content-center mx-auto" th:action="@{/user/checkout}" method="post">
+        <button type="submit" class="btn btn-remove">
+          Continue to Payment <i class="bi bi-arrow-bar-right ms-2"></i>
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <!--  </div>-->
   <div th:unless="${#sets.size(shoppingCart) > 0}" >
     <h3>Your cart is empty!</h3>
     <p>Return to search provider page</p><i class="bi bi-search"></i>
@@ -71,7 +104,7 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="/js/planPackages.js"></script>
+<script type="module" src="/js/messageToast.js"></script>
 
 </body>
 </html>

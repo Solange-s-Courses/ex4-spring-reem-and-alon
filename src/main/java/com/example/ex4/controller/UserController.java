@@ -1,20 +1,20 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.components.SubscriptionMapper;
 import com.example.ex4.components.UserHolder;
+import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.dto.SubscriptionDTO;
+import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.Subscription;
 import com.example.ex4.service.SubscriptionService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-
-
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/user")
@@ -24,22 +24,25 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private SubscriptionService subscriptionService;
+    private UserHolder userHolder;
 
     @Autowired
-    private UserHolder userHolder;
+    private UserSessionSubscriptions userSubscriptions;
+
+    @Autowired
+    private SubscriptionMapper subscriptionMapper;
 
     @GetMapping
     public String userIndex(Model model) {
-        List<SubscriptionDTO> subscriptions = subscriptionService.findUserSubscriptions(userHolder.getUser());
+        if (!userSubscriptions.isEmpty()){
+            model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
+        }
         model.addAttribute("userName", userHolder.getUser().getUserName());
-        model.addAttribute("userName", userHolder.getUser().getUserName());
-        model.addAttribute("subscriptions", subscriptions);
         return "user/index";
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@RequestParam int amount, Principal principal) {
+    public String depositCredit(@RequestParam int amount) {
         userService.depositToBalance(userHolder.getUser(), amount);
         return "redirect:/user";
     }

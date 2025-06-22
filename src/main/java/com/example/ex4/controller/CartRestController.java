@@ -1,6 +1,7 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.dto.CartRequestDTO;
 import com.example.ex4.repository.PlanPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,16 +19,15 @@ public class CartRestController {
     private ShoppingCart sessionCart;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addToCart(@RequestBody Map<String,Object> data) {
-        long pkgId = Long.parseLong(data.get("pkgId").toString());
-        if (!sessionCart.addProduct(pkgId)){
+    public ResponseEntity<String> addToCart(@RequestBody CartRequestDTO request) {
+        if (!sessionCart.addProduct(request.getPkgId())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product already exists in the cart!");
         }
         return ResponseEntity.accepted().body("Package added to cart successfully!");
     }
-    @DeleteMapping("/remove/{pkgId}")
-    public ResponseEntity<String> removeFromCart(@PathVariable Long pkgId) {
-        if (!sessionCart.removeProduct(pkgId)){
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeFromCart(@RequestBody CartRequestDTO request) {
+        if (!sessionCart.removeProduct(request.getPkgId())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product does not exists in the cart!");
         }
         return ResponseEntity.ok().body("Package removed from cart successfully!");

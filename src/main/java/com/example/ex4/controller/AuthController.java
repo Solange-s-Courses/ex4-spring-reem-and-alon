@@ -34,7 +34,7 @@ public class AuthController {
                 return profile.isApproved() ? "redirect:/admin" : "redirect:/login?pending";
 
             case "USER":
-                return "redirect:/user";
+                return "redirect:/user/init-session";
 
             case "SUPER_ADMIN":
                 return "redirect:/super-admin";

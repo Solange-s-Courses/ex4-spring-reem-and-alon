@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PlanPackageService {
     @Autowired
     private PlanPackageRepository planPackageRepository;
 
-    public List<PlanPackage> getAllPackagesByCategory(String category) {
+    public List<PlanPackage> getAllPackagesByCategory(String category){
         return planPackageRepository.findPlanPackagesByProviderProfile_Category(category).orElse(null);
     }
 

@@ -8,9 +8,8 @@ import com.example.ex4.dto.PlanPackageDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.service.PlanPackageService;
-import com.example.ex4.service.ProviderProfileService;
-import com.example.ex4.service.UserService;
+import com.example.ex4.entity.Transaction;
+import com.example.ex4.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +32,11 @@ public class AdminController {
     private PlanPackageService planPackageService;
 
     @Autowired
+    private TransactionService transactionService;
+
+
+
+    @Autowired
     private UserHolder userHolder;
 
     @GetMapping
@@ -41,10 +45,12 @@ public class AdminController {
         AppUser admin = adminService.findByUsername(principal.getName());
         ProviderProfile providerProfile = profileService.findProviderProfile(admin);
         List<PlanPackage> plans = planPackageService.getAllProviderPackages(providerProfile);
+        List<Transaction> transactions = transactionService.findAllProviderTransactions(plans);
 
         model.addAttribute("admin", admin);
         model.addAttribute("profile", providerProfile);
         model.addAttribute("plans", plans);
+        model.addAttribute("transactions", transactions);
         return "admin/index";
     }
 

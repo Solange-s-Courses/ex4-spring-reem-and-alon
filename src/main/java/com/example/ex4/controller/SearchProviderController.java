@@ -1,20 +1,28 @@
 package com.example.ex4.controller;
 
 
+import com.example.ex4.components.RequestCartAction;
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.components.UserHolder;
+import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.constants.ProviderType;
+import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.Subscription;
 import com.example.ex4.service.PlanPackageService;
+import com.example.ex4.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user/search-providers")
@@ -26,6 +34,9 @@ public class SearchProviderController {
     @Autowired
     private ShoppingCart sessionCart;
 
+    @Autowired
+    private UserSessionSubscriptions userSubscriptions;
+
     @GetMapping
     public String searchProvidersPage(Model model) {
         model.addAttribute("providers", ProviderType.values());
@@ -33,11 +44,18 @@ public class SearchProviderController {
         return "user/search-providers";
     }
 
+
     @PostMapping
-    public String searchService(@RequestParam String providerCategory, RedirectAttributes redirectAttributes) {
-        System.out.println(providerCategory);
-        List<PlanPackage> results = planPackageService.getAllPackagesByCategory(providerCategory);
+    public String searchProviders(@RequestParam String providerCategory, RedirectAttributes redirectAttributes) {
+        List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
+        Set<Long> packageIds = allPackages.stream().map(PlanPackage::getId).collect(Collectors.toSet());
+
+        List<PlanPackage> results = allPackages.stream()
+                .filter(planPackage -> packageIds.contains(planPackage.getId()))
+                .toList();
+
         redirectAttributes.addFlashAttribute("results", results);
+        redirectAttributes.addFlashAttribute("selectedCategory", providerCategory);
         return "redirect:/user/search-providers";
     }
 }
