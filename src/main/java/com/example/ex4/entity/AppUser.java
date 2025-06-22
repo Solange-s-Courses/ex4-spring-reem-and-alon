@@ -5,12 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DialectOverride;
-
-
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Getter
 @Entity

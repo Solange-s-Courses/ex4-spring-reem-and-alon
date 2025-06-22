@@ -1,10 +1,7 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter

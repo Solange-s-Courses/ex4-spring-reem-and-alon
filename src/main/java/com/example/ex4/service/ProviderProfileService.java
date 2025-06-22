@@ -7,11 +7,9 @@ import com.example.ex4.repository.ProviderProfileRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class ProviderProfileService {

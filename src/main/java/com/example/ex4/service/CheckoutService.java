@@ -5,11 +5,8 @@ import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service

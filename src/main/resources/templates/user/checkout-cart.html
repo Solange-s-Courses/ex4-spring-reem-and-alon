@@ -49,58 +49,12 @@
         </button>
       </form>
     </div>
-
   </div>
-
-  <!--  </div>-->
   <div th:unless="${#sets.size(shoppingCart) > 0}" >
     <h3>Your cart is empty!</h3>
     <p>Return to search provider page</p><i class="bi bi-search"></i>
   </div>
   <div th:if="${error}" class="alert alert-success" th:text="${error}"></div>
-
-  <!--  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">-->
-<!--    <div class="col" th:each="pkg : ${shoppingCart}">-->
-<!--      <div class="card cart-card">-->
-<!--        &lt;!&ndash; כפתור מחיקה &ndash;&gt;-->
-<!--        <form th:action="@{/user/cart/remove}" method="post">-->
-<!--          <input type="hidden" name="pkgId" th:value="${pkg.id}"/>-->
-<!--          <button class="remove-btn" type="submit" title="Remove from cart">-->
-<!--            <i class="bi bi-trash"></i>-->
-<!--          </button>-->
-<!--        </form>-->
-<!--        <div class="card-header">-->
-<!--          <img th:src="@{/provider-image/{id}(id=${pkg.providerProfile.id})}"-->
-<!--               alt="Profile"-->
-<!--               class="profile-img me-2"-->
-<!--               th:alt="${pkg.providerProfile.providerName}" />-->
-<!--          <div>-->
-<!--            <div th:text="${pkg.providerProfile.providerName}" class="fw-bold fs-5"></div>-->
-<!--            <div th:text="${pkg.providerProfile.category}" class="small"></div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="card-body pb-1">-->
-<!--          <p class="card-text mb-2 fw-semibold" th:text="${pkg.description}"></p>-->
-<!--          <span class="badge bg-secondary" th:text="${pkg.packageType}"></span>-->
-<!--        </div>-->
-<!--        <div class="card-footer">-->
-<!--          <span class="fs-5 fw-bold text-dark">-->
-<!--            <span th:text="${pkg.price}">0</span>₪-->
-<!--          </span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <div th:if="${#lists.isEmpty(shoppingCart)}" class="text-center mt-5">-->
-<!--    <h4 class="text-muted">Your cart is empty!</h4>-->
-<!--  </div>-->
-<!--  <div class="d-flex justify-content-center" th:if="${!#lists.isEmpty(shoppingCart)}">-->
-<!--    <form th:action="@{/user/cart/checkout}" method="post">-->
-<!--      <button type="submit" class="pay-btn">-->
-<!--        Continue to Payment <i class="bi bi-arrow-bar-right ms-2"></i>-->
-<!--      </button>-->
-<!--    </form>-->
-<!--  </div>-->
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

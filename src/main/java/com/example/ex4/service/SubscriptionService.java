@@ -2,19 +2,15 @@ package com.example.ex4.service;
 
 import com.example.ex4.components.RequestCartAction;
 import com.example.ex4.components.UserHolder;
-import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class SubscriptionService {

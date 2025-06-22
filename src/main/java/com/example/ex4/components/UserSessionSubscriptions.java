@@ -1,7 +1,6 @@
 package com.example.ex4.components;
 
 import com.example.ex4.dto.SubscriptionDTO;
-import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

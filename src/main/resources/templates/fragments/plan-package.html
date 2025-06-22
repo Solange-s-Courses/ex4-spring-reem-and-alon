@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
 
-<!-- הקונטיינר החיצוני: 4 בשורה -->
 <div th:fragment="planPackage(planPackage, page)">
-    <!-- Header Section with Image and Provider Info -->
     <div class="card-header bg-white border-0 p-3">
         <div class="row g-3 align-items-center">
             <div class="col">
@@ -19,7 +17,6 @@
         </div>
     </div>
 
-    <!-- Package Details Section -->
     <div class="card-body pt-2 pb-2">
         <!-- Package Details Section -->
         <div class="card-body pt-2 pb-2">
@@ -27,7 +24,6 @@
             <span class="badge bg-secondary bg-opacity-10 text-secondary mb-2" th:text="${planPackage.packageType}">סוג החבילה</span>
         </div>
 
-        <!-- Footer Section with Price and Reviews -->
         <div class="card-footer bg-white border-0 pt-0">
             <!-- Price Section -->
             <div class="d-flex justify-content-between align-items-center mb-3">

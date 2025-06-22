@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
@@ -23,19 +23,6 @@
         .btn-custom:hover {
             background-color: #5855eb;
             border-color: #5855eb;
-        }
-
-        @media (max-width: 768px) {
-            .packages-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 15px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .packages-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
     </style>

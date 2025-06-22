@@ -2,14 +2,11 @@ package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.dto.CartRequestDTO;
-import com.example.ex4.repository.PlanPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cart")

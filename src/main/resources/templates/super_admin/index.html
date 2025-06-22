@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
@@ -71,24 +71,6 @@
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
-<!-- Header Section -->
-<!--<div class="header-section">-->
-<!--    <div class="container">-->
-<!--        <div class="row align-items-center">-->
-<!--            <div class="col-md-8">-->
-<!--                <h1 class="fs-2 fw-bold"><i class="bi bi-shield-check me-2"></i>Super Admin Dashboard</h1>-->
-<!--                <p class="mb-0">Manage admin approvals, transactions, and reports</p>-->
-<!--            </div>-->
-<!--            <div class="col-md-4 text-md-end mt-3 mt-md-0">-->
-<!--                <span class="badge bg-light text-dark fs-6 px-3 py-2">-->
-<!--                    <i class="bi bi-calendar3 me-1"></i>-->
-<!--                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}">21/06/2025 14:30</span>-->
-<!--                </span>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div class="container pb-4">
     <div class="row rounded-3 py-4 mb-4 justify-content-center" style="color: #495057">
