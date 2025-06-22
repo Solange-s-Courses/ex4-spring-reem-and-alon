@@ -219,8 +219,20 @@
                     <span th:text="${#lists.size(results)}">0</span> results found
                 </div>
             </div>
-            <div th:replace="~{fragments/plan-packages :: planPackages(planPackages=${results}, page='search')}"></div>
-
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 align-items-start" th:fragment="planPackages(planPackages, page)">
+                <div th:each="pkg : ${results}" class="col">
+                    <div class="card shadow-sm h-100 border-2">
+                        <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${pkg}, page='search')}"></div>
+                        <button type="button" class="btn btn-add w-75 mx-auto mb-4" th:classappend="${#sets.contains(shoppingCart, pkg.id)} ? 'd-none' : ''">
+                            <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                        </button>
+                        <button type="button" class="btn btn-remove w-75 mx-auto mb-4" th:classappend="${#sets.contains(shoppingCart, pkg.id)} ? '' : 'd-none'">
+                            Remove from <i class="bi bi-cart-dash me-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div th:unless="${results != null}" class="no-results">
             <i class="bi bi-search"></i>
             <h3>No results found</h3>
@@ -228,7 +240,6 @@
         </div>
         </div>
     </div>
-</div>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="/js/planPackages.js"></script>
