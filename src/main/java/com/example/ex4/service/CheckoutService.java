@@ -1,6 +1,7 @@
 package com.example.ex4.service;
 
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.entity.AppUser;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
@@ -16,6 +17,9 @@ public class CheckoutService {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+    @Autowired
+    private UserSessionSubscriptions userSessionSubscriptions;
 
     @Autowired
     private ShoppingCart sessionCart;

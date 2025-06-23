@@ -28,8 +28,14 @@ public class UserController {
     @GetMapping
     public String userIndex(Model model) {
         if (!userSubscriptions.isEmpty()){
+            System.out.println("Hellloooooo");
             model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
         }
+        else {
+            System.out.println("byeeeeeee");
+
+        }
+
         model.addAttribute("userName", userHolder.getUser().getUserName());
         return "user/index";
     }
