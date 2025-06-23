@@ -3,6 +3,9 @@ package com.example.ex4.controller;
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.SubscriptionMapper;
 import com.example.ex4.components.UserSessionSubscriptions;
+import com.example.ex4.entity.ProviderProfile;
+import com.example.ex4.repository.ProviderProfileRepository;
+import com.example.ex4.service.ReviewService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,10 +21,17 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
     private UserSessionSubscriptions userSubscriptions;
 
     @Autowired
     private SubscriptionMapper subscriptionMapper;
+
+    @Autowired
+    private ProviderProfileRepository providerProfileRepository;
+
 
     @GetMapping
     public String userIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
@@ -42,5 +52,12 @@ public class UserController {
     public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal,@RequestParam int amount) {
         userService.depositToBalance(userPrincipal.getUser(), amount);
         return "redirect:/user";
+    }
+
+    @GetMapping("/reviews/{providerProfileId}")
+    public String getReviews(@PathVariable Long providerProfileId, Model model) {
+        ProviderProfile providerProfile=providerProfileRepository.findById(providerProfileId).orElse(null);
+        model.addAttribute("reviews",reviewService.getAllReviews(providerProfile));
+        return "reviews";
     }
 }
