@@ -1,13 +1,15 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.constants.ProviderType;
 import com.example.ex4.dto.AdminRegistrationFormDTO;
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.service.ProviderProfileService;
 import com.example.ex4.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,12 +26,11 @@ public class AuthController {
     private ProviderProfileService providerProfileService;
 
     @GetMapping("/")
-    public String redirectAfterLogin(Principal principal) {
-        AppUser user = userService.findByUsername(principal.getName());
-        String role = user.getRole();
+    public String redirectAfterLogin(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        String role = userPrincipal.getUser().getRole();
         switch (role) {
             case "ADMIN":
-                ProviderProfile profile = providerProfileService.findProviderProfile(user);
+                ProviderProfile profile = providerProfileService.findProviderProfile(userPrincipal.getUser());
                 return profile.isApproved() ? "redirect:/admin" : "redirect:/login?pending";
 
             case "USER":
@@ -50,12 +51,12 @@ public class AuthController {
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("user" , new AppUser());
+        model.addAttribute("user" , new User());
         return "register";
     }
 
     @PostMapping("/register")
-    public String processRegister(@Valid @ModelAttribute("user") AppUser user, Model model, RedirectAttributes redirectAttributes) {
+    public String processRegister(@Valid @ModelAttribute("user") User user, Model model, RedirectAttributes redirectAttributes) {
         try {
             userService.addNewUser(user,"USER");
             redirectAttributes.addFlashAttribute("message", "Registration successful. Please login.");

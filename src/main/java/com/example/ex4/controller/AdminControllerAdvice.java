@@ -1,10 +1,11 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.service.PlanPackageService;
-import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
@@ -15,9 +16,6 @@ public class AdminControllerAdvice {
 
     @Autowired
     private ShoppingCart sessionCart;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private PlanPackageService planPackageService;
@@ -33,7 +31,7 @@ public class AdminControllerAdvice {
     }
 
     @ModelAttribute("balance")
-    public int balance(Principal principal) {
-        return userService.findUserBalance(principal.getName());
+    public int balance(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        return userPrincipal.getUser().getCreditBalance();
     }
 }

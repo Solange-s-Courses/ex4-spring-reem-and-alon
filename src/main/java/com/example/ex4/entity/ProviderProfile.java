@@ -27,7 +27,7 @@ public class ProviderProfile {
     private byte[] profileImage;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private AppUser appUser;
+    private User user;
 
     @OneToMany(mappedBy = "providerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanPackage> planPackage;

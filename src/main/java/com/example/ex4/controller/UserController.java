@@ -1,10 +1,11 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.SubscriptionMapper;
-import com.example.ex4.components.UserHolder;
 import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,13 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private UserHolder userHolder;
-
-    @Autowired
     private UserSessionSubscriptions userSubscriptions;
 
     @Autowired
     private SubscriptionMapper subscriptionMapper;
 
     @GetMapping
-    public String userIndex(Model model) {
+    public String userIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
         if (!userSubscriptions.isEmpty()){
             System.out.println("Hellloooooo");
             model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
@@ -36,13 +34,13 @@ public class UserController {
 
         }
 
-        model.addAttribute("userName", userHolder.getUser().getUserName());
+        model.addAttribute("userName", userPrincipal.getUser().getUserName());
         return "user/index";
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@RequestParam int amount) {
-        userService.depositToBalance(userHolder.getUser(), amount);
+    public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal,@RequestParam int amount) {
+        userService.depositToBalance(userPrincipal.getUser(), amount);
         return "redirect:/user";
     }
 }

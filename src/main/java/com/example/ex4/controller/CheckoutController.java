@@ -1,18 +1,17 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.UserHolder;
 import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.service.CheckoutService;
 import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.SubscriptionService;
-import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("user/checkout")
@@ -33,9 +32,6 @@ public class CheckoutController {
     @Autowired
     private SubscriptionService subscriptionService;
 
-    @Autowired
-    private UserHolder userHolder;
-
     @GetMapping
     public String cartPage(Model model) {
         model.addAttribute("shoppingCart", planPackageService.findAllProducts(sessionCart.getProducts()));
@@ -43,9 +39,9 @@ public class CheckoutController {
     }
 
     @PostMapping
-    public String checkout(Principal principal) {
-        checkoutService.processCheckout(principal.getName());
-        userSubscriptions.setSubscriptions(subscriptionService.findUserSubscriptions(userHolder.getUser()));
+    public String checkout( @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        checkoutService.processCheckout(userPrincipal.getUser());
+        userSubscriptions.setSubscriptions(subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
         sessionCart.clear();
         return "redirect:/user/checkout?success=true";
     }

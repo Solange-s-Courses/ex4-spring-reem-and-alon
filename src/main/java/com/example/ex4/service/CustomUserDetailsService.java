@@ -1,34 +1,29 @@
+/*
 package com.example.ex4.service;
 
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.MyUserPrincipal;
+import com.example.ex4.entity.User;
+import com.example.ex4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
-    private final UserService userService;
-
+public class CustomUserDetails {
     @Autowired
-    public CustomUserDetailsService(UserService userService) {
-        this.userService = userService;
-    }
+    private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser user = userService.findByUsername(username);
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByUserName(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+            throw new UsernameNotFoundException(username);
         }
-        return User.withUsername(user.getUserName())
-                .password(user.getPassword())
-                .roles(user.getRole())
-                .build();
-
+        return new MyUserPrincipal(user);
     }
 }
 
 
+*/

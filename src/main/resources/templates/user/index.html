@@ -153,7 +153,7 @@
                     <!--                                fregmant for each list group!-->
                     <div class="row fw-semibold text-center align-items-center">
                         <div class="col" th:text="${'#' + transaction.id}"></div>
-                        <div class="col" th:text="${transaction.subscription.appUser.userName}"></div>
+                        <div class="col" th:text="${transaction.subscription.user.userName}"></div>
                         <div class="col" th:text="${transaction.subscription.planPackage.providerProfile.providerName}"></div>
                         <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
                         <div class="col fw-normal">

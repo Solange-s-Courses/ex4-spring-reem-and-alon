@@ -20,7 +20,7 @@ public class Subscription {
     private PlanPackage planPackage;
 
     @ManyToOne
-    private AppUser appUser;
+    private User user;
 
     @NotNull(message = "Start date is required")
     private LocalDate startDate;

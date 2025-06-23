@@ -1,20 +1,20 @@
 package com.example.ex4.controller;
 
-import com.example.ex4.components.UserHolder;
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.constants.PlanPackageTypes;
 import com.example.ex4.dto.PlanPackageDTO;
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Transaction;
 import com.example.ex4.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -30,13 +30,10 @@ public class AdminController {
     @Autowired
     private TransactionService transactionService;
 
-    @Autowired
-    private UserHolder userHolder;
-
     @GetMapping
-    public String adminIndex(Model model, Principal principal) {
-        System.out.println(principal.getName());
-        AppUser admin = adminService.findByUsername(principal.getName());
+    public String adminIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal,Model model) {
+        User admin = userPrincipal.getUser();
+        System.out.println(admin.getUserName()+"LOOK AT THIS STATMENT");
         ProviderProfile providerProfile = profileService.findProviderProfile(admin);
         List<PlanPackage> plans = planPackageService.getAllProviderPackages(providerProfile);
         List<Transaction> transactions = transactionService.findAllProviderTransactions(plans);
@@ -57,10 +54,11 @@ public class AdminController {
 
     @PostMapping("/add-package")
     public String addPackage(
+            @AuthenticationPrincipal MyUserPrincipal userPrincipal,
             @Valid @ModelAttribute("planPackageDTO") PlanPackageDTO planPackageDTO,
             BindingResult result, Model model)
     {
-        ProviderProfile providerProfile = profileService.findProviderProfile(userHolder.getUser());
+        ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());
         if (result.hasErrors()) {
             model.addAttribute("planPackageTypes", PlanPackageTypes.values());
             return "admin/add-package-form";

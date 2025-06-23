@@ -1,6 +1,6 @@
 package com.example.ex4;
 
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -8,13 +8,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableMethodSecurity(prePostEnabled = true)
+
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+
 public class ApplicationConfig {
 
     @Bean
@@ -64,7 +68,7 @@ public class ApplicationConfig {
     {
         return args -> {
             if (userRepository.findByUserName(username) == null) {
-                AppUser admin = new AppUser(username, email, passwordEncoder.encode(password));
+                User admin = new User(username, email, passwordEncoder.encode(password));
                 admin.setRole("SUPER_ADMIN");
                 userRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);

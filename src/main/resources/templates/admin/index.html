@@ -173,7 +173,7 @@
                 <div class="list-group-item" th:each="transaction : ${transactions}">
                     <div class="row fw-semibold text-center align-items-center">
                         <div class="col" th:text="${'#' + transaction.id}"></div>
-                        <div class="col" th:text="${transaction.subscription.appUser.userName}"></div>
+                        <div class="col" th:text="${transaction.subscription.user.userName}"></div>
                         <div class="col" th:text="${transaction.subscription.planPackage.title}"></div>
                         <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
                         <div class="col fw-normal">

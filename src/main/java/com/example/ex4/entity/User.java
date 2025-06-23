@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Entity
 @Setter
 @NoArgsConstructor
-public class AppUser implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class AppUser implements Serializable {
 
     private int creditBalance = 0;
 
-    public AppUser(String userName, String email, String password) {
+    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;

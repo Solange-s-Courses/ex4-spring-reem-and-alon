@@ -1,7 +1,7 @@
 package com.example.ex4.service;
 
 import com.example.ex4.dto.AdminRegistrationFormDTO;
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.ProviderProfileRepository;
 import jakarta.transaction.Transactional;
@@ -18,8 +18,8 @@ public class ProviderProfileService {
     @Autowired
     private UserService userService;
 
-    public ProviderProfile findProviderProfile(AppUser admin) {
-        return repository.findByAppUser(admin);
+    public ProviderProfile findProviderProfile(User admin) {
+        return repository.findByUser(admin);
     }
 
     public void activateAdminAccount(long id) {
@@ -30,14 +30,14 @@ public class ProviderProfileService {
 
     @Transactional
     public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws IOException {
-        AppUser admin = new AppUser(profileForm.getUserName(), profileForm.getEmail(), profileForm.getPassword());
+        User admin = new User(profileForm.getUserName(), profileForm.getEmail(), profileForm.getPassword());
         userService.addNewUser(admin, "ADMIN");
 
         ProviderProfile profile = new ProviderProfile();
         profile.setProfileImage(profileForm.getImageFile().getBytes());
         profile.setCategory(profileForm.getCategory());
         profile.setProviderName(profileForm.getProviderName());
-        profile.setAppUser(admin);
+        profile.setUser(admin);
         profile.setApproved(false);
         repository.save(profile);
     }

@@ -1,48 +1,52 @@
 package com.example.ex4.service;
 
+import com.example.ex4.MyUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.repository.UserRepository;
 import java.util.Optional;
 
 @Service
-public class UserService{
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveUser(AppUser user) {userRepository.save(user);}
+    public void saveUser(User user) {userRepository.save(user);}
 
     public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 
-    public void deleteUser(AppUser u) {
+    public void deleteUser(User u) {
         userRepository.delete(u);
     }
 
-    public void updateUser(AppUser user) {
+    public void updateUser(User user) {
         userRepository.save(user);
     }
 
-    public Optional<AppUser> getUser(long id) {
+    public Optional<User> getUser(long id) {
         return userRepository.findById(id);
     }
 
-    public void depositToBalance(AppUser user, int amount) {
+    public void depositToBalance(User user, int amount) {
         user.setCreditBalance(user.getCreditBalance() + amount);
         userRepository.save(user);
     }
 
-    public AppUser findByUsername(String username) {
+    public User findByUsername(String username) {
         return userRepository.findByUserName(username);
     }
 
-    public void addNewUser(AppUser user,String role) {
+    public void addNewUser(User user, String role) {
         if (userRepository.findByUserName(user.getUserName()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }
@@ -51,11 +55,12 @@ public class UserService{
         userRepository.save(user);
     }
 
-    public String findUserRole(String username) {
-        return userRepository.findByUserName(username).getRole();
-    }
-
-    public int findUserBalance(String username) {
-        return userRepository.findByUserName(username).getCreditBalance();
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByUserName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new MyUserPrincipal(user);
     }
 }

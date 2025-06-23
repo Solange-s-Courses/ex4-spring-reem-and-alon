@@ -2,7 +2,7 @@ package com.example.ex4.service;
 
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.components.UserSessionSubscriptions;
-import com.example.ex4.entity.AppUser;
+import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,7 @@ public class CheckoutService {
     private PlanPackageService planPackageService ;
 
     @Transactional
-    public void processCheckout(String username) {
-        AppUser user = userService.findByUsername(username);
+    public void processCheckout(User user) {
         List<PlanPackage> plans = planPackageService.findAllProducts(sessionCart.getProducts());
 
         validateCheckout(user.getCreditBalance(), plans);

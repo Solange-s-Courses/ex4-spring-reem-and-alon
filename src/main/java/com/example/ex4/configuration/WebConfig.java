@@ -1,3 +1,4 @@
+/*
 package com.example.ex4.configuration;
 
 import com.example.ex4.components.UserContextInterceptor;
@@ -17,3 +18,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**"); // על כל ה־routes
     }
 }
+*/
