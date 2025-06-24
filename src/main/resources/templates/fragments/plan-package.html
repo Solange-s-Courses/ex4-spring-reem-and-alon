@@ -3,20 +3,6 @@
 <body>
 
 <div th:fragment="planPackage(planPackage, page)">
-    <div class="card-header bg-white border-0 p-3">
-        <div class="row g-3 align-items-center">
-            <div class="col">
-                <img th:src="@{/provider-image/{id}(id=${planPackage.providerProfile.id})}"
-                     class="img-fluid object-fit-cover"
-                     alt="Provider Image"/>
-            </div>
-            <div class="col d-flex flex-column">
-                <span class="badge bg-primary bg-opacity-10 text-primary small mb-1 text-center" th:text="${planPackage.providerProfile.category}"></span>
-                <h6 class="mb-0 fw-semibold text-center" th:text="${'provider: ' +planPackage.providerProfile.providerName}"></h6>
-            </div>
-        </div>
-    </div>
-
     <div class="card-body pt-2 pb-2">
         <!-- Package Details Section -->
         <div class="card-body pt-2 pb-2">

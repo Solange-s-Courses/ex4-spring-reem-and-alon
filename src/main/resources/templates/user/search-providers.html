@@ -218,20 +218,23 @@
 </div>
 
 <!-- Results Section -->
-<div class="results-section">
-    <div class="container">
-        <div th:if="${groupedResult != null}" th:each="entry, stat : ${groupedResult.entrySet()}">
-            <div class="row row pb-2 border-bottom border-2 border-dark text-dark fs-4 fw-semibold mb-4">
-                <div class="col-4">
+<div class="container results-section">
+    <div class="results-info mb-4">
+        <div class="results-count">
+            <span th:text="${#lists.size(groupedResult)}">0</span> results found
+        </div>
+    </div>
+    <div class="row row-cols-1">
+        <div th:if="${groupedResult != null}" th:each="entry, stat : ${groupedResult.entrySet()}" class="card col shadow-sm mb-5">
+            <div class="row my-auto card-header text-dark mb-4 align-content-center">
+                <div class="col-2 d-flex justify-content-center">
                     <img th:src="@{/provider-image/{id}(id=${entry.key})}"
-                         class="img-fluid img-thumbnail" alt="Provider Image"/>
+                         class="img-thumbnail img-fluid object-fit-cover" style="width: 120px" alt="Provider Image"/>
                 </div>
-                <div class="col-8">
-                    <h2 th:text="${'Provider Name: ' + entry.value[0].providerProfile.providerName}">
-                        <i class="bi bi-box me-2"></i>
-                    </h2>
-                    <div class="me-auto d-flex justify-content-between align-items-center border-top pt-3">
-                        <div class="d-flex align-items-center">
+                <div class="col-4 justify-content-start my-auto">
+                    <h4 th:text="${entry.value[0].providerProfile.providerName}" class="text-center"></h4>
+                    <div class="d-flex justify-content-center align-items-center pt-3">
+                        <div class="d-flex align-items-center text-center">
                             <div class="d-flex text-warning me-2">
                                 <i class="bi bi-star-fill"></i>
                                 <i class="bi bi-star-fill"></i>
@@ -241,71 +244,72 @@
                             </div>
                             <span class="fw-semibold me-1">4.5</span>
                         </div>
-                        <small class="fw-bolder"><a th:href="@{/user/reviews/{providerProfileId}(providerProfileId=${entry.value[0].providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover">(1,679 ביקורות)</a></small>
+                        <small class="fw-bolder"><a th:href="@{/user/reviews/{providerProfileId}(providerProfileId=${entry.value[0].providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">(1,679 ביקורות)</a></small>
                     </div>
                 </div>
             </div>
             <div class="row row-cols-1">
-                <div class="col">
-                    <div th:with="planPackages=${entry.value}, carouselId=${'carousel_' + stat.index}">
-                        <div th:attr="id=${carouselId}" class="carousel slide mb-4">
-                            <div class="carousel-inner">
-                                <!-- פיצות של 4 פריטים ב־slide -->
-                                <div th:each="pkg, iterStat : ${planPackages}"
-                                     th:if="${iterStat.index % 4 == 0}"
-                                     class="carousel-item"
-                                     th:classappend="${iterStat.index == 0} ? ' active'">
-                                    <div class="row">
-                                        <div th:each="i : ${#numbers.sequence(0, 3)}"
-                                             th:if="${iterStat.index + i < planPackages.size()}"
-                                             th:with="currentPkg=${planPackages[iterStat.index + i]}"
-                                             class="col-12 col-md-6 col-lg-3">
-                                            <!-- הכרטיס של החבילה -->
-                                            <div class="card shadow p-2 mx-2">
-                                                <div class="card-header d-flex justify-content-between align-items-center">
-                                                    <small class="bg-success-subtle text-success-emphasis p-1 rounded-3"
-                                                           th:text="${currentPkg.expiryDate}">
-                                                        <i class="bi bi-check-circle"></i>
-                                                    </small>
-                                                    <span class="product-rating"><i class="bi bi-star-fill"></i> 4.5</span>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mt-2">
-                                                        <p class="product-description mb-2" th:text="${currentPkg.description}">Description</p>
-                                                        <div class="mb-2">
-                                                            <span class="fw-bold" th:text="${currentPkg.monthlyCost}">299</span>
-                                                            <span class="currency">₪</span>
-                                                            <span class="product-type ms-2">per month</span>
-                                                        </div>
-                                                        <div class="d-flex gap-2">
-                                                            <button type="button" class="btn btn-add flex-fill">
-                                                                <i class="bi bi-chat-dots me-1"></i> Contact
-                                                            </button>
-                                                            <button type="button" class="btn btn-remove flex-fill">
-                                                                <i class="bi bi-x-circle me-1"></i> Cancel
-                                                            </button>
-                                                        </div>
+                <div th:with="planPackages=${entry.value}, carouselId=${'carousel_' + stat.index}">
+                    <div th:attr="id=${carouselId}" class="carousel carousel-dark slide mb-4">
+                        <div class="carousel-inner">
+                            <!-- פיצות של 4 פריטים ב־slide -->
+                            <div th:each="pkg, iterStat : ${planPackages}"
+                                 th:if="${iterStat.index % 4 == 0}"
+                                 class="carousel-item"
+                                 th:classappend="${iterStat.index == 0} ? ' active'">
+                                <div class="row">
+                                    <div th:each="i : ${#numbers.sequence(0, 3)}"
+                                         th:if="${iterStat.index + i < planPackages.size()}"
+                                         th:with="currentPkg=${planPackages[iterStat.index + i]}"
+                                         class="col-12 col-md-6 col-lg-3">
+                                        <!-- הכרטיס של החבילה -->
+                                        <div class="card shadow p-2 mx-2 h-100">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1 ms-0" th:text="${pkg.title}">Category</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mt-2">
+                                                    <p class="product-description mb-2" th:text="${currentPkg.description}">Description</p>
+                                                    <div class="mb-2">
+                                                        <span class="fw-bold" th:text="${currentPkg.monthlyCost}">299</span>
+                                                        <span class="currency">₪</span>
+                                                        <span class="product-type ms-2">per month</span>
+                                                        <small class="bg-success-subtle text-success-emphasis p-1 rounded-3 me-auto"
+                                                               th:text="${#temporals.format(pkg.expiryDate, 'dd/MM/yyyy')}">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </small>
                                                     </div>
+
                                                 </div>
                                             </div>
-                                            <!-- /כרטיס -->
+                                            <form class="add-to-cart-form w-75 mx-auto justify-content-center" action="#" method="post">
+                                                <input type="hidden" name="pkgId" th:value="${pkg.id}">
+                                                <div class="d-flex gap-2 btn-in-cart">
+                                                    <button type="submit" class="btn btn-remove d-none mb-4">
+                                                        Remove from <i class="bi bi-cart-dash"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-add mb-4">
+                                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button"
-                                    th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                    th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="next">
-                                <span class="carousel-control-next-icon"></span>
-                            </button>
                         </div>
+                        <button class="carousel-control-prev" type="button"
+                                th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon text-dark"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button"
+                                th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon text-dark"></span>
+                        </button>
                     </div>
                 </div>
-                </div>
             </div>
+        </div>
         <div th:unless="${groupedResult != null}" class="no-results">
             <i class="bi bi-search"></i>
             <h3>No results found</h3>
