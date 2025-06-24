@@ -27,23 +27,14 @@ public class UserController {
     private UserSessionSubscriptions userSubscriptions;
 
     @Autowired
-    private SubscriptionMapper subscriptionMapper;
-
-    @Autowired
     private ProviderProfileRepository providerProfileRepository;
 
 
     @GetMapping
     public String userIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
         if (!userSubscriptions.isEmpty()){
-            System.out.println("Hellloooooo");
             model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
         }
-        else {
-            System.out.println("byeeeeeee");
-
-        }
-
         model.addAttribute("userName", userPrincipal.getUser().getUserName());
         return "user/index";
     }

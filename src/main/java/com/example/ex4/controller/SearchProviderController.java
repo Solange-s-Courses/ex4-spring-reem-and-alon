@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,22 +31,37 @@ public class SearchProviderController {
     private UserSessionSubscriptions userSubscriptions;
 
     @GetMapping
-    public String searchProvidersPage(Model model) {
+    public String searchProvidersPage(
+            @RequestParam(value = "providerCategory", required = false) String providerCategory,
+            Model model) {
         model.addAttribute("providers", ProviderType.values());
         model.addAttribute("shoppingCart", sessionCart.getProducts());
+        model.addAttribute("selectedCategory", providerCategory);
+
+        if (providerCategory != null && !providerCategory.isBlank()) {
+            List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
+            Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
+                    .collect(Collectors.groupingBy(
+                            planPackage -> planPackage.getProviderProfile().getId(),
+                            LinkedHashMap::new,
+                            Collectors.toList()));
+            model.addAttribute("groupedResult", groupedResult);
+        } else {
+            model.addAttribute("groupedResult", Collections.emptyMap());
+        }
+
         return "user/search-providers";
     }
+
+
 
     @PostMapping
     public String searchProviders(@RequestParam String providerCategory, RedirectAttributes redirectAttributes) {
         List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
-        Set<Long> packageIds = allPackages.stream().map(PlanPackage::getId).collect(Collectors.toSet());
+        Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
+                        .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(), LinkedHashMap::new, Collectors.toList()));
 
-        List<PlanPackage> results = allPackages.stream()
-                .filter(planPackage -> packageIds.contains(planPackage.getId()))
-                .toList();
-
-        redirectAttributes.addFlashAttribute("results", results);
+        redirectAttributes.addFlashAttribute("groupedResult", groupedResult);
         redirectAttributes.addFlashAttribute("selectedCategory", providerCategory);
         return "redirect:/user/search-providers";
     }
