@@ -46,6 +46,9 @@ public class SearchProviderController {
                             LinkedHashMap::new,
                             Collectors.toList()));
             model.addAttribute("groupedResult", groupedResult);
+            System.out.println("allPackages size = " + allPackages.size());
+            System.out.println("groupedResult = " + groupedResult);
+
         } else {
             model.addAttribute("groupedResult", Collections.emptyMap());
         }
