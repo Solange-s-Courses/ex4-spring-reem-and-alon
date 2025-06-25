@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<!-- ═══ Review Card Fragment ═══ -->
+<div th:fragment="reviewCard(review)">
+  <article class="review-card h-100">
+    <!-- header -->
+    <header class="review-header">
+      <h6 class="review-title" th:text="${review.title}">Great service</h6>
+      <div class="review-rating">
+        <span th:each="i:${#numbers.sequence(1,5)}">
+          <i class="bi"
+             th:classappend="${i<=review.rating}? 'bi-star-fill' : 'bi-star'"></i>
+        </span>
+        <span class="text-muted"
+              th:text="${#numbers.formatDecimal(review.rating,1)}">4.7</span>
+      </div>
+    </header>
+
+    <!-- snippet -->
+    <p class="review-snippet" th:text="${review.reviewText}">
+      Preview of the review…
+    </p>
+
+    <!-- read-more -->
+    <button class="btn-readmore" data-bs-toggle="collapse"
+            th:data-bs-target="'#full-'+${review.id}">
+      Read full review
+    </button>
+
+    <div class="collapse mt-3" th:id="'full-'+${review.id}">
+      <div class="review-full" th:text="${review.reviewText}">
+        Full review…
+      </div>
+    </div>
+  </article>
+</div>
+</body>
+</html>

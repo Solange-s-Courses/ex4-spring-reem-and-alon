@@ -45,10 +45,5 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("/reviews/{providerProfileId}")
-    public String getReviews(@PathVariable Long providerProfileId, Model model) {
-        ProviderProfile providerProfile=providerProfileRepository.findById(providerProfileId).orElse(null);
-        model.addAttribute("reviews",reviewService.getAllReviews(providerProfile));
-        return "reviews";
-    }
+
 }
