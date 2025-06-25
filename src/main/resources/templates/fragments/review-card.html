@@ -1,39 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-<!-- ═══ Review Card Fragment ═══ -->
 <div th:fragment="reviewCard(review)">
-  <article class="review-card h-100">
-    <!-- header -->
-    <header class="review-header">
-      <h6 class="review-title" th:text="${review.title}">Great service</h6>
-      <div class="review-rating">
-        <span th:each="i:${#numbers.sequence(1,5)}">
-          <i class="bi"
-             th:classappend="${i<=review.rating}? 'bi-star-fill' : 'bi-star'"></i>
-        </span>
-        <span class="text-muted"
-              th:text="${#numbers.formatDecimal(review.rating,1)}">4.7</span>
+  <div class="card shadow-sm h-100">
+    <div class="card-body">
+
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <h6 class="card-title mb-0 fw-semibold" th:text="${review.title}"></h6>
+
+        <div class="d-flex align-items-center gap-1">
+          <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="bi"
+               th:classappend="${i <= review.stars} ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
+          </span>
+          <span class="text-muted ms-1" th:text="${review.stars}">4</span>
+        </div>
       </div>
-    </header>
 
-    <!-- snippet -->
-    <p class="review-snippet" th:text="${review.reviewText}">
-      Preview of the review…
-    </p>
+      <p class="card-text" th:text="${review.reviewText}">
+        Full review goes here…
+      </p>
 
-    <!-- read-more -->
-    <button class="btn-readmore" data-bs-toggle="collapse"
-            th:data-bs-target="'#full-'+${review.id}">
-      Read full review
-    </button>
-
-    <div class="collapse mt-3" th:id="'full-'+${review.id}">
-      <div class="review-full" th:text="${review.reviewText}">
-        Full review…
-      </div>
     </div>
-  </article>
+  </div>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.dto.ReviewDTO;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.Review;
 import com.example.ex4.repository.ReviewRepository;
@@ -14,9 +15,14 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public Review saveReview(Review review) {
-        review.setCreatedAt(LocalDateTime.now());
-        return reviewRepository.save(review);
+    public void saveReview(ReviewDTO review,ProviderProfile provider) {
+        Review newReview = new Review();
+        newReview.setTitle(review.getTitle());
+        newReview.setStars(review.getStars());
+        newReview.setReviewText(review.getReviewText());
+        newReview.setCreatedAt(LocalDateTime.now());
+        newReview.setProviderProfile(provider);
+        reviewRepository.save(newReview);
     }
 
     public List<Review> getAllReviews(ProviderProfile providerProfile) {

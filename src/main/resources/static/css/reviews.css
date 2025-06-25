@@ -31,11 +31,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     background:#495057;
     border-color:#495057
 }
-.btn-primary{
-    padding:12px 24px;
-    font-weight:600
-}
-
 /* ---------- Results info ---------- */
 .results-info{
     border-bottom:1px solid #dee2e6;
@@ -55,13 +50,8 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     background:#fff;
     display:flex;
     flex-direction:column;
-    box-shadow:0 0 8px rgba(0,0,0,.04);
-    transition:.2s
 }
-.review-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 4px 20px rgba(0,0,0,.08)
-}
+
 .review-header{
     display:flex;
     justify-content:space-between;
@@ -73,12 +63,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     font-weight:600;
     margin:0
 }
-.review-rating{
-    color:#ffc107;
-    display:flex;
-    gap:4px;
-    align-items:center
-}
+
 .review-snippet{
     -webkit-line-clamp:3;
     -webkit-box-orient:vertical;
@@ -86,16 +71,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     overflow:hidden;color:#495057;
     margin-bottom:16px
 }
-.btn-readmore{
-    background:#343a40;
-    border:none;
-    color:#fff;
-    border-radius:6px;
-    width:100%
-}
-.btn-readmore:hover{
-    background:#212529
-}
+
 .review-full{
     border-left:3px solid #adb5bd;
     background:#f8f9fa;
@@ -115,24 +91,34 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     margin-bottom:20px
 }
 
-.rating label {
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.rating input:checked ~ label,
-.rating label:hover,
-.rating label:hover ~ label {
-    color: #ffc107;
-}
-
-.rating label:hover ~ label {
-    color: #ddd;
-}
-
-
 .rating {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row-reverse; /* הופך סדר */
+    justify-content: flex-start;
     gap: 0.25rem;
+    user-select: none;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    cursor: pointer;
+    color: #ccc;
+    font-size: 2rem;
+    transition: color 0.3s ease;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #ffc107; /* צבע זהב בהובר */
+}
+
+.rating input:checked ~ label {
+    color: #ffc107; /* צבע זהב כשנבחר */
+}
+
+#reviewsList .card {
+    margin-bottom: 1rem;
 }

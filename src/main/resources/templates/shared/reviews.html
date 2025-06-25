@@ -16,23 +16,14 @@
     <link rel="stylesheet" th:href="@{/css/reviews.css}">
 </head>
 <body>
-
-<!-- ░░ Header ░░ -->
 <section class="header-section text-center">
     <h1>Provider Reviews</h1>
     <p>See what customers really think</p>
 </section>
-
-<!-- ░░ Filter & Write-review ░░ -->
 <section class="search-section">
     <div class="container">
-
-        <!-- filter row -->
-        <form class="row gx-3 gy-2 align-items-end"
-              method="get"
-              th:action="@{/providers/{id}/reviews(id=${provider.id})}">
-
-            <!-- select -->
+        <form class="row gx-3 gy-2 align-items-end" method="get">
+              <!--th:action="@{/providers/{id}/reviews(id=${provider.id})}"-->
             <div class="col-12 col-md-4">
                 <label class="form-label" for="minRating">Minimum rating</label>
                 <select id="minRating" name="minRating" class="form-select">
@@ -64,43 +55,54 @@
             </div>
         </form>
         <div id="writeReviewForm" class="collapse mt-4"
+             th:object="${reviewFields}"
+             th:classappend="${#fields.hasAnyErrors()} ? ' show' : ''"
              sec:authorize="!hasRole('ADMIN') and !hasRole('SUPER_ADMIN')">
+
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <form th:action="@{/reviews/add}" method="post">
-                        <input type="hidden" name="providerId" th:value="${provider.id}">
+                        <input type="hidden" th:field="*{providerId}">
                         <div class="row g-3 align-items-center mb-3">
-                            <label class="col-auto col-form-label fw-semibold" for="rating">Rating</label>
-                            <div class="col-auto">
-                                <div class="rating">
-                                    <input type="radio" id="star5" name="rating" value="5" hidden />
-                                    <label for="star5" class="bi bi-star fs-3 text-muted" title="5 stars"></label>
+                            <div class="col-auto position-relative">
+                                <div th:if="${#fields.hasErrors('stars')}" th:errors="*{stars}" class="invalid-feedback d-block"></div>
+                                    <div class="rating">
+                                        <input type="radio" th:field="*{stars}" id="star5"  value="5" hidden />
+                                        <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
 
-                                    <input type="radio" id="star4" name="rating" value="4" hidden />
-                                    <label for="star4" class="bi bi-star fs-3 text-muted" title="4 stars"></label>
+                                        <input type="radio" th:field="*{stars}" id="star4"  value="4" hidden />
+                                        <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
 
-                                    <input type="radio" id="star3" name="rating" value="3" hidden />
-                                    <label for="star3" class="bi bi-star fs-3 text-muted" title="3 stars"></label>
+                                        <input type="radio" th:field="*{stars}" id="star3"  value="3" hidden />
+                                        <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
 
-                                    <input type="radio" id="star2" name="rating" value="2" hidden />
-                                    <label for="star2" class="bi bi-star fs-3 text-muted" title="2 stars"></label>
+                                        <input type="radio" th:field="*{stars}" id="star2"  value="2" hidden />
+                                        <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
 
-                                    <input type="radio" id="star1" name="rating" value="1" hidden />
-                                    <label for="star1" class="bi bi-star fs-3 text-muted" title="1 star"></label>
+                                        <input type="radio" th:field="*{stars}" id="star1"  value="1" hidden />
+                                        <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-9">
                                 <label class="form-label" for="title">Review title</label>
-                                <input id="title" name="title" class="form-control" required
+                                <input id="title" th:field="*{title}" class="form-control" required
                                        placeholder="Summarise your experience">
+                                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback d-block"></div>
+
                             </div>
+
                             <div class="col-12">
                                 <label class="form-label" for="content">Your review</label>
-                                <textarea id="content" name="content" rows="5" class="form-control"
+                                <textarea id="content" th:field="*{reviewText}" rows="5" class="form-control"
                                           placeholder="Share details…" required></textarea>
+                                <div th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}" class="invalid-feedback d-block"></div>
                             </div>
-                        </div>
-                        <button class="btn btn-primary mt-3" type="submit">Submit review</button>
+                        <button class="btn btn-primary btn-md mt-3" type="submit">Submit review</button>
+                        <a th:href="@{/reviews/{providerProfileId}(providerProfileId=${provider.id})}"
+                           class="btn btn-secondary btn-md mt-3">
+                            Close & Reset
+                        </a>
                     </form>
                 </div>
             </div>
@@ -109,46 +111,16 @@
     </div>
 </section>
 
-<!-- ░░ Results ░░ -->
 <div class="container my-5">
 
-    <div class="results-info">
-    <span class="results-count"
-          th:text="${#lists.size(reviews)} + ' results found'">0 results found</span>
-    </div>
+    <ul class="list-group list-group-flush" id="reviewsList">
+        <li class="list-group-item p-0 border-0" th:each="review : ${reviews}">
+        <div th:insert="~{fragments/review-card :: reviewCard(review=${review})}"></div>
+        </li>
+    </ul>
 
-    <div id="reviewsCarousel" class="carousel slide carousel-dark" data-bs-ride="false">
-
-        <div class="carousel-inner">
-            <div th:each="review, stat : ${reviews}"
-                 th:if="${stat.index % 4 == 0}"
-                 class="carousel-item"
-                 th:classappend="${stat.index == 0} ? ' active'">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-
-                    <div th:each="i : ${#numbers.sequence(0,3)}"
-                         th:if="${stat.index + i < reviews.size()}"
-                         class="col h-100">
-                        <div th:insert="~{fragments/review-card :: reviewCard(review=${reviews[stat.index + i]})}"></div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <button class="carousel-control-prev" type="button"
-                data-bs-target="#reviewsCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button"
-                data-bs-target="#reviewsCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-    </div>
-
-    <div class="no-results" th:if="${#lists.isEmpty(reviews)}">
-        <i class="bi bi-emoji-frown mb-3"></i>
+    <div class="no-results text-center py-5" th:if="${#lists.isEmpty(reviews)}">
+        <i class="bi bi-emoji-frown fs-1 mb-3"></i>
         <h3>No reviews found</h3>
         <p>Be the first to review or adjust your filters.</p>
     </div>

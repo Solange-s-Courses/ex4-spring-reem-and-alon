@@ -1,6 +1,8 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +32,8 @@ public class Review {
     private String title;
 
     @Column(nullable = false)
+    @Min(1)
+    @Max(5)
     private double stars;
 
     @LastModifiedDate
