@@ -15,31 +15,26 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public void saveReview(ReviewDTO review,ProviderProfile provider) {
-        Review newReview = new Review();
-        newReview.setTitle(review.getTitle());
-        newReview.setStars(review.getStars());
-        newReview.setReviewText(review.getReviewText());
-        newReview.setCreatedAt(LocalDateTime.now());
-        newReview.setProviderProfile(provider);
-        reviewRepository.save(newReview);
+    public void saveReview(Review review) {
+        reviewRepository.save(review);
     }
 
-    public List<Review> getAllReviews(ProviderProfile providerProfile) {
-        return reviewRepository.findReviewsByProviderProfile(providerProfile);
+    public List<Review> getAllReviews(Long providerProfileId) {
+        return reviewRepository.findAllByProviderProfile_Id(providerProfileId);
     }
 
-/*    public List<Review> getReviewsSince(Long serviceId, Long lastId) {
-        return reviewRepository.findByServiceIdAndIdGreaterThan(serviceId, lastId);
+    public List<Review> getReviewsByProviderAndMinRating(Long providerProfileId, double minRating) {
+        return reviewRepository.findAllByProviderProfileIdAndStarsOrderByCreatedAtDesc(providerProfileId, minRating);
     }
 
-    public double getAverageStars(Long serviceId) {
-        Double avg = reviewRepository.findAverageStarsByServiceId(serviceId);
-        return avg != null ? avg : 0.0;
-    }
 
-    public long getReviewersCount(Long serviceId) {
-        Long cnt = reviewRepository.countByServiceId(serviceId);
-        return cnt != null ? cnt : 0;
-    }*/
+//    public double getAverageStars(Long serviceId) {
+//        Double avg = reviewRepository.findAverageStarsByServiceId(serviceId);
+//        return avg != null ? avg : 0.0;
+//    }
+//
+//    public long getReviewersCount(Long serviceId) {
+//        Long cnt = reviewRepository.countByServiceId(serviceId);
+//        return cnt != null ? cnt : 0;
+//    }*/
 }

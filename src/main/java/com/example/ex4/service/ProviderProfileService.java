@@ -55,8 +55,8 @@ public class ProviderProfileService {
         providerProfileRepository.save(profile);
     }
 
-    public List<ProviderProfile> findAllProvidersByCategory(String category) {
-        return providerProfileRepository.findAllByCategory(providerCategoryRepository.findByName(category));
+    public List<ProviderProfile> findAllProvidersByCategory(ProviderCategory category) {
+        return providerProfileRepository.findAllByCategory(category);
     }
 
     public byte[] findProfileImage(Long id) {

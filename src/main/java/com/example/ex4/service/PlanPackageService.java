@@ -25,7 +25,9 @@ public class PlanPackageService {
 
     @Transactional(readOnly = true)
     public List<PlanPackage> getAllPackagesByCategory(ProviderCategory providerCategory){
-        return planPackageRepository.findAllByProviderProfile_Category(providerCategory);
+        List<ProviderProfile> profiles = providerProfileService.findAllProvidersByCategory(providerCategory);
+
+        return planPackageRepository.findAllByProviderProfileIn(profiles);
     }
 
     public List<PlanPackage> getAllProviderPackages(ProviderProfile profile) {

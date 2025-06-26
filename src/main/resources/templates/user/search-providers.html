@@ -196,13 +196,13 @@
     <div class="container">
         <form class="search-form" th:action="@{/user/search-providers}" method="get">
             <div class="flex-grow-1">
-                <label for="providerCategory" class="form-label">Category</label>
-                <select id="providerCategory" class="form-select" name="providerCategory" required>
+                <label for="category" class="form-label">Category</label>
+                <select id="category" class="form-select" name="category" required>
                     <option value="" th:selected="${selectedCategory == null or selectedCategory == ''}" disabled>All Categories</option>
-                    <option th:each="type : ${providers}"
-                            th:value="${type.displayName}"
-                            th:text="${type.displayName}"
-                            th:selected="${selectedCategory == type.displayName}">
+                    <option th:each="category : ${providers}"
+                            th:value="${category}"
+                            th:text="${category}"
+                            th:selected="${selectedCategory == category}">
                     </option>
                 </select>
 
@@ -232,7 +232,7 @@
                          class="img-thumbnail img-fluid object-fit-cover" style="width: 120px" alt="Provider Image"/>
                 </div>
                 <div class="col-4 justify-content-start my-auto">
-                    <h4 th:text="${entry.value[0].providerProfile.providerName}" class="text-center"></h4>
+                    <h4 th:text="${entry.value[0].providerProfile.companyName}" class="text-center"></h4>
                     <div class="d-flex justify-content-center align-items-center pt-3">
                         <div class="d-flex align-items-center text-center">
                             <div class="d-flex text-warning me-2">
@@ -244,7 +244,7 @@
                             </div>
                             <span class="fw-semibold me-1">4.5</span>
                         </div>
-                        <small class="fw-bolder"><a th:href="@{/reviews/{providerProfileId}(providerProfileId=${entry.value[0].providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">(1,679 ביקורות)</a></small>
+                        <small class="fw-bolder"><a th:href="@{/reviews(providerProfileId=${entry.value[0].providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">(1,679 ביקורות)</a></small>
                     </div>
                 </div>
             </div>
