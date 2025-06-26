@@ -75,11 +75,11 @@
                          class="carousel-item"
                          th:classappend="${iterStat.index == 0} ? ' active'">
 
-                        <div class="row">
+                        <div class="row row-cols-4">
                             <div th:each="i : ${#numbers.sequence(0, 3)}"
                                  th:if="${iterStat.index + i < subscriptions.size()}"
                                  th:with="currentSub=${subscriptions[iterStat.index + i]}"
-                                 class="col-3">
+                                 class="col">
                                 <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
                             </div>
                         </div>
