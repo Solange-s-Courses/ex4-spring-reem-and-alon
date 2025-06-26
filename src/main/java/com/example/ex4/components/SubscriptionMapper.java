@@ -20,8 +20,8 @@ public class SubscriptionMapper {
                 .planName(plan.getTitle())
                 .monthlyCost(plan.getMonthlyCost())
                 .providerId(provider.getId())
-                .providerName(provider.getProviderName())
-                .category(provider.getCategory())
+                .providerName(provider.getCompanyName())
+                .category(provider.getCategory().getName())
                 .build();
     }
 }

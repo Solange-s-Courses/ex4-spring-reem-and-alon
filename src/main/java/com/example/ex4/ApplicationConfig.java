@@ -30,7 +30,7 @@ public class ApplicationConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers( "/css/**", "/login", "/register","/register-admin").permitAll()
+                        .requestMatchers( "/css/**", "/login", "/register/**").permitAll()
                         .requestMatchers("/user/**", "/cart/**","/api/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")
@@ -68,8 +68,7 @@ public class ApplicationConfig {
     {
         return args -> {
             if (userRepository.findByUserName(username) == null) {
-                User admin = new User(username, email, passwordEncoder.encode(password));
-                admin.setRole("SUPER_ADMIN");
+                User admin = User.builder().userName(username).email(email).password(passwordEncoder.encode(password)).role("SUPER_ADMIN").build();
                 userRepository.save(admin);
                 System.out.println("✅ Admin user created: " + username);
             } else {

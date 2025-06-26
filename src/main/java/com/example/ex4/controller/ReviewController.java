@@ -43,7 +43,7 @@ public class ReviewController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("reviews", reviewService.getAllReviews(provider));
             model.addAttribute("provider", provider);
-            return "shared/reviews";
+            return "shared/review-form";
         }
         try {
             reviewService.saveReview(reviewFields,provider);

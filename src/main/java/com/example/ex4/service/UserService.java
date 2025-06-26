@@ -46,12 +46,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUserName(username);
     }
 
-    public void addNewUser(User user, String role) {
-        if (userRepository.findByUserName(user.getUserName()) != null) {
-            throw new IllegalArgumentException("Username already exists");
-        }
+    public void addNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(role);
         userRepository.save(user);
     }
 

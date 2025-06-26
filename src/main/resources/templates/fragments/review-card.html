@@ -2,27 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
 <div th:fragment="reviewCard(review)">
-  <div class="card shadow-sm h-100">
-    <div class="card-body">
 
-      <div class="d-flex justify-content-between align-items-start mb-2">
-        <h6 class="card-title mb-0 fw-semibold" th:text="${review.title}"></h6>
-
-        <div class="d-flex align-items-center gap-1">
-          <span th:each="i : ${#numbers.sequence(1,5)}">
-            <i class="bi"
-               th:classappend="${i <= review.stars} ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
-          </span>
-          <span class="text-muted ms-1" th:text="${review.stars}">4</span>
-        </div>
-      </div>
-
-      <p class="card-text" th:text="${review.reviewText}">
-        Full review goes here…
-      </p>
-
-    </div>
-  </div>
 </div>
 </body>
 </html>

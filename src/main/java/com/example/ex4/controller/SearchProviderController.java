@@ -2,9 +2,10 @@ package com.example.ex4.controller;
 
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.components.UserSessionSubscriptions;
-import com.example.ex4.constants.ProviderType;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.service.PlanPackageService;
+import com.example.ex4.service.ProviderCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,47 +26,37 @@ public class SearchProviderController {
     private PlanPackageService planPackageService;
 
     @Autowired
-    private ShoppingCart sessionCart;
+    private ProviderCategoryService providerCategoryService;
 
     @Autowired
-    private UserSessionSubscriptions userSubscriptions;
+    private ShoppingCart sessionCart;;
 
     @GetMapping
-    public String searchProvidersPage(
-            @RequestParam(value = "providerCategory", required = false) String providerCategory,
-            Model model) {
-        model.addAttribute("providers", ProviderType.values());
+    public String initSearchFormData(@RequestParam(value = "category", required = false) String category, Model model) {
+        model.addAttribute("providers", providerCategoryService.findAllCategoryNames());
         model.addAttribute("shoppingCart", sessionCart.getProducts());
-        model.addAttribute("selectedCategory", providerCategory);
+        model.addAttribute("selectedCategory", category);
 
-        if (providerCategory != null && !providerCategory.isBlank()) {
-            List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
-            Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
-                    .collect(Collectors.groupingBy(
-                            planPackage -> planPackage.getProviderProfile().getId(),
-                            LinkedHashMap::new,
-                            Collectors.toList()));
-            model.addAttribute("groupedResult", groupedResult);
-            System.out.println("allPackages size = " + allPackages.size());
-            System.out.println("groupedResult = " + groupedResult);
-
-        } else {
-            model.addAttribute("groupedResult", Collections.emptyMap());
+        if (category != null && !category.isBlank()) {
+           return "forward:/user/search-providers/result";
         }
 
+        model.addAttribute("groupedResult", Collections.emptyMap());
         return "user/search-providers";
     }
 
+    @GetMapping("/result")
+    public String groupedByProviderResult(Model model) {
+        String category = (String)model.getAttribute("selectedCategory");
 
-
-    @PostMapping
-    public String searchProviders(@RequestParam String providerCategory, RedirectAttributes redirectAttributes) {
+        ProviderCategory providerCategory = providerCategoryService.findByName(category);
         List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
-        Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
-                        .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(), LinkedHashMap::new, Collectors.toList()));
 
-        redirectAttributes.addFlashAttribute("groupedResult", groupedResult);
-        redirectAttributes.addFlashAttribute("selectedCategory", providerCategory);
-        return "redirect:/user/search-providers";
+        Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
+                .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(),
+                        LinkedHashMap::new, Collectors.toList()));
+
+        model.addAttribute("groupedResult", groupedResult);
+        return "user/search-providers";
     }
 }

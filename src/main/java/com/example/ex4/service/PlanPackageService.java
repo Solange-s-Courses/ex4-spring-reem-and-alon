@@ -2,20 +2,30 @@ package com.example.ex4.service;
 
 import com.example.ex4.dto.PlanPackageDTO;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
+import com.example.ex4.repository.ProviderCategoryRepository;
+import com.example.ex4.repository.ProviderProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PlanPackageService {
     @Autowired
     private PlanPackageRepository planPackageRepository;
 
-    public List<PlanPackage> getAllPackagesByCategory(String category){
-        return planPackageRepository.findPlanPackagesByProviderProfile_Category(category).orElse(null);
+    @Autowired
+    private ProviderProfileService providerProfileService;
+
+    @Transactional(readOnly = true)
+    public List<PlanPackage> getAllPackagesByCategory(ProviderCategory providerCategory){
+        return planPackageRepository.findAllByProviderProfile_Category(providerCategory);
     }
 
     public List<PlanPackage> getAllProviderPackages(ProviderProfile profile) {
@@ -38,4 +48,5 @@ public class PlanPackageService {
     public List<PlanPackage> findAllProducts(Set<Long> products) {
         return planPackageRepository.findAllById(products);
     }
+
 }

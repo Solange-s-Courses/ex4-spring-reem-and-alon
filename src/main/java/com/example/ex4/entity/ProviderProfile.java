@@ -1,5 +1,6 @@
 package com.example.ex4.entity;
 
+import com.example.ex4.validator.ValidImage;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
@@ -16,9 +17,10 @@ public class ProviderProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String providerName;
+    private String companyName;
 
-    private String category;
+    @ManyToOne
+    private ProviderCategory category;
 
     @Builder.Default
     private boolean approved = false;

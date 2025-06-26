@@ -11,18 +11,21 @@
       <h2 class="mb-4">Register</h2>
       <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-      <form th:action="@{/register}" method="post" th:object="${user}">
+      <form th:action="@{/register/user}" method="post" th:object="${user}">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input id="username" th:field="*{userName}" type="text" class="form-control" required autofocus/>
+          <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="invalid-feedback d-block"></div>
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input id="email" th:field="*{email}" type="email" class="form-control" required/>
+          <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback d-block"></div>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input id="password" th:field="*{password}" type="password" class="form-control" required/>
+          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback d-block"></div>
         </div>
         <button type="submit" class="btn btn-primary w-100">Add user</button>
       </form>

@@ -33,7 +33,6 @@ public class AdminController {
     @GetMapping
     public String adminIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal,Model model) {
         User admin = userPrincipal.getUser();
-        System.out.println(admin.getUserName()+"LOOK AT THIS STATMENT");
         ProviderProfile providerProfile = profileService.findProviderProfile(admin);
         List<PlanPackage> plans = planPackageService.getAllProviderPackages(providerProfile);
         List<Transaction> transactions = transactionService.findAllProviderTransactions(plans);

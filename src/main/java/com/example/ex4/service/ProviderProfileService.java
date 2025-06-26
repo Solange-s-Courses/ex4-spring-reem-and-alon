@@ -1,10 +1,13 @@
 package com.example.ex4.service;
 
 import com.example.ex4.dto.AdminRegistrationFormDTO;
+import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
+import com.example.ex4.repository.ProviderCategoryRepository;
 import com.example.ex4.repository.ProviderProfileRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -14,39 +17,53 @@ import java.util.List;
 @Service
 public class ProviderProfileService {
     @Autowired
-    private ProviderProfileRepository repository;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private ProviderProfileRepository providerProfileRepository;
+    @Autowired
+    private ProviderCategoryRepository providerCategoryRepository;
 
     public ProviderProfile findProviderProfile(User admin) {
-        return repository.findByUser(admin);
+        return providerProfileRepository.findByUser(admin);
     }
 
     public void activateAdminAccount(long id) {
-        ProviderProfile profile = repository.findById(id).orElseThrow(() -> new RuntimeException("Provider profile not found"));
+        ProviderProfile profile = providerProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("Provider profile not found"));
         profile.setApproved(true);
-        repository.save(profile);
+        providerProfileRepository.save(profile);
     }
 
     @Transactional
     public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws IOException {
-        User admin = new User(profileForm.getUserName(), profileForm.getEmail(), profileForm.getPassword());
-        userService.addNewUser(admin, "ADMIN");
 
-        ProviderProfile profile = new ProviderProfile();
-        profile.setProfileImage(profileForm.getImageFile().getBytes());
-        profile.setCategory(profileForm.getCategory());
-        profile.setProviderName(profileForm.getProviderName());
-        profile.setUser(admin);
-        profile.setApproved(false);
-        repository.save(profile);
+
+        User admin = User.builder().userName(profileForm.getUserName())
+                .email(profileForm.getEmail())
+                .password(profileForm.getPassword())
+                .role("ADMIN")
+                .build();
+
+        userService.addNewUser(admin);
+
+        ProviderCategory category = providerCategoryRepository.findByName(profileForm.getCategory());
+
+        ProviderProfile profile = ProviderProfile.builder()
+                .companyName(profileForm.getCompanyName())
+                .profileImage(profileForm.getImageFile().getBytes())
+                .category(category)
+                .user(admin).build();
+        providerProfileRepository.save(profile);
+    }
+
+    public List<ProviderProfile> findAllProvidersByCategory(String category) {
+        return providerProfileRepository.findAllByCategory(providerCategoryRepository.findByName(category));
     }
 
     public byte[] findProfileImage(Long id) {
-        ProviderProfile profile = repository.findById(id).orElseThrow(()-> new RuntimeException("No profile found"));
+        ProviderProfile profile = providerProfileRepository.findById(id).orElseThrow(()-> new RuntimeException("No profile found"));
         return profile.getProfileImage();
     }
 
-    public List<ProviderProfile> findAllPendingProfiles(){ return repository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
-    public void removeProviderProfile(long id) {repository.deleteById(id);}
+    public List<ProviderProfile> findAllPendingProfiles(){ return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
+    public void removeProviderProfile(long id) {providerProfileRepository.deleteById(id);}
 }

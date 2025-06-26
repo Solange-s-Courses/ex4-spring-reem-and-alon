@@ -2,22 +2,23 @@ package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.io.Serializable;
 
 @Getter
-@Entity
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
 public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Pattern(regexp = "^[A-Za-z]+$")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "username can contain letters only!")
     @Column(unique = true)
     private String userName;
 
@@ -25,16 +26,12 @@ public class User implements Serializable {
     @Email(message = "Email is mandatory")
     private String email;
 
+    @Builder.Default
     private String role = "USER";
 
     @Column(nullable = false)
     private String password;
 
+    @Builder.Default
     private int creditBalance = 0;
-
-    public User(String userName, String email, String password) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-    }
 }
