@@ -1,56 +1,155 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<!--    <style>-->
+<!--        .description-fixed {-->
+<!--            height: 2.4em;-->
+<!--            overflow: hidden;-->
+<!--            display: -webkit-box;-->
+<!--            -webkit-line-clamp: 2;-->
+<!--            -webkit-box-orient: vertical;-->
+<!--            line-height: 1.2em;-->
+<!--        }-->
+<!--        .subscription-option {-->
+<!--            min-height: 230px;-->
+<!--            padding: 2rem;-->
+<!--            box-sizing: border-box;-->
+<!--            border-radius: 18px;-->
+<!--            background: #f8f9fa;-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            align-items: center;-->
+<!--            justify-content: space-between;-->
+<!--            width: 100%;-->
+<!--            position: relative;-->
+<!--        }-->
+<!--        .subscription-option .badge {-->
+<!--            margin-bottom: 0.7rem;-->
+<!--        }-->
+<!--        .subscription-option:hover {-->
+<!--            box-shadow: 0 0 0 6px #0d6efd22;-->
+<!--            z-index: 2;-->
+<!--        }-->
+<!--        @media (max-width: 767.98px) {-->
+<!--            .subscription-option {-->
+<!--                min-height: 0;-->
+<!--                padding: 1.2rem 0.6rem 1rem 0.6rem;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+</head>
 <body>
+<div th:fragment="planPackage(planPackage, pageName)">
+    <div class="card h-100 shadow align-items-stretch">
 
-<div th:fragment="planPackage(planPackage, page)">
-    <div class="card-body pt-2 pb-2">
-        <!-- Package Details Section -->
-        <div class="card-body pt-2 pb-2">
-            <h5 class="card-title mb-2 fw-bold" th:text="${planPackage.title}">כותרת החבילה</h5>
-            <span class="badge bg-secondary bg-opacity-10 text-secondary mb-2" th:text="${planPackage.packageType}">סוג החבילה</span>
+        <div class="card-header bg-light border-0 py-2 text-center">
+            <span class="badge bg-secondary text-white small"
+                  th:if="${planPackage.expiryDate}">
+                <i class="bi bi-calendar-event me-1"></i>
+                Available until: <span th:text="${#temporals.format(planPackage.expiryDate, 'dd/MM/yyyy')}">31/12</span>
+            </span>
         </div>
 
-        <div class="card-footer bg-white border-0 pt-0">
-            <!-- Price Section -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <span class="h5 mb-0 fw-bold text-success" th:text="${planPackage.monthlyCost + '₪'}">299₪</span>
-                    <small class="text-muted d-block">לחודש</small>
-                </div>
-                <div class="text-end">
-                    <small class="text-muted" th:text="${planPackage.packageType}">Package Type</small>
-                </div>
-            </div>
+        <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="fw-bold text-primary text-center mb-2" th:text="${planPackage.title}">Package Name</h5>
 
-            <!-- Reviews Section - Only for Users -->
-            <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                <div class="d-flex align-items-center">
-                    <div class="d-flex text-warning me-2">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-half"></i>
+                <div class="justify-content-center mb-3">
+                    <p class="text-muted fw-bolder small description-fixed" th:text="${planPackage.description}" th:title="${planPackage.description}">Package description that might be longer</p>
+                </div>
+
+                <!-- Begin grid layout for options -->
+                <div class="row g-3 justify-content-center align-items-center text-center mt-5">
+                    <!-- 3 Months -->
+                    <div class="col-12 col-md-4">
+                        <div class="subscription-option border align-items-center border-2 border-primary bg-light shadow-sm position-relative">
+                            <div class="justify-content-center mt-4">
+                                <span class="badge bg-warning text-dark position-absolute top-0 start-50 translate-middle" th:text="${planPackage.threeMonthDiscount + '% OFF'}">10% OFF</span>
+                                <div class="fw-bold text-primary">3 Months</div>
+                                <div class="fw-bolder text-dark"
+                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.threeMonthDiscount/100.0), 1, 1) + '₪/month'}">
+                                    224.0₪/month
+                                </div>
+
+                                <small class="text-muted">
+                                    Total: <span class="fw-semibold" th:text="${planPackage.monthlyCost * (1 - planPackage.threeMonthDiscount/100) * 3 + '₪'}">807₪</span>
+                                </small>
+                            </div>
+                            <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
+                                <input type="hidden" name="pkgId" th:value="${planPackage.id}">
+                                <div th:if="${pageName == 'search'}">
+                                    <button class="btn btn-outline-primary btn-sm mt-3" type="submit">
+                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                    </button>
+                                </div>
+                                <div th:unless="${pageName == 'search'}">
+                                    <button type="submit" class="btn btn-outline-primary mt-3">
+                                        Remove from <i class="bi bi-cart-dash"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <span class="fw-semibold me-1">4.5</span>
-                </div>
-                <small class="fw-bolder"><a th:href="@{/user/reviews/{providerProfileId}(providerProfileId=${planPackage.providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover">(1,679 ביקורות)</a></small>
-            </div>
+                    <!-- 6 Months -->
+                    <div class="col-12 col-md-4">
+                        <div class="subscription-option border border-2 border-warning bg-light shadow-sm position-relative">
+                            <div class="justify-content-center mt-4">
+                                <span class="badge bg-info text-dark position-absolute top-0 start-50 translate-middle" th:text="${planPackage.halfYearlyDiscount + '% OFF'}">15% OFF</span>
+                                <div class="fw-bold" style="color: #d38933;">6 Months</div>
+                                <div class="fw-bolder text-dark"
+                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.halfYearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                    224.0₪/month
+                                </div>
 
-            <!-- Action Button -->
-            <div class="mt-3">
-                <button class="btn btn-outline-secondary btn-sm w-100" type="button"
-                        data-bs-toggle="collapse"
-                        th:data-bs-target="${'#collapse' + planPackage.title}"
-                        aria-expanded="false" aria-controls="multiCollapseExample2">
-                    <i class="bi bi-eye me-1"></i>
-                    See description
-                </button>
-            </div>
-            <div class="collapse multi-collapse" th:id="${'collapse' + planPackage.title}">
-                <div class="card card-body" th:text="${planPackage.description}">
-                    Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                                <small class="text-muted">
+                                    Total: <span class="fw-semibold" th:text="${planPackage.monthlyCost * (1 - planPackage.halfYearlyDiscount/100) * 6 + '₪'}">1,525₪</span>
+                                </small>
+                            </div>
+                            <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
+                                <input type="hidden" name="pkgId" th:value="${planPackage.id}">
+                                <div class="btn-in-cart">
+                                    <button class="btn btn-outline-warning btn-sm mt-3" type="submit" style="border-color: #d38933; color: #d38933;">
+                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                    </button>
+                                    <button type="submit" class="btn btn-outline-warning btn-sm mt-3 d-none">
+                                        Remove from <i class="bi bi-cart-dash"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 12 Months -->
+                    <div class="col-12 col-md-4">
+                        <div class="subscription-option border border-2 border-success bg-light shadow-sm position-relative">
+                            <div class="justify-content-center mt-4">
+                                <span class="badge bg-success text-white position-absolute top-0 start-50 translate-middle" th:text="${planPackage.yearlyDiscount + '% OFF'}">25% OFF</span>
+                                <div class="fw-bold text-success">12 Months</div>
+                                <div class="fw-bolder text-dark"
+                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.yearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                    224.0₪/month
+                                </div>
+
+                                <small class="text-muted">
+                                    Total: <span class="fw-semibold" th:text="${planPackage.monthlyCost * (1 - planPackage.yearlyDiscount/100) * 12 + '₪'}">2,691₪</span>
+                                </small>
+                            </div>
+                            <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto mb-2 justify-content-center" action="#" method="post">
+                                <input type="hidden" name="pkgId" th:value="${planPackage.id}">
+                                <div class="btn-in-cart">
+                                    <button class="btn btn-outline-success btn-sm mt-3" type="submit">
+                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                    </button>
+                                    <button type="submit" class="btn btn-outline-success btn-remove d-none btn-sm mt-3">
+                                        Remove from <i class="bi bi-cart-dash"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+                <!-- End grid -->
             </div>
         </div>
     </div>

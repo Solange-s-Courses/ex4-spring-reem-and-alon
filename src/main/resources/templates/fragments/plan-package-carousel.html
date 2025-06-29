@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="planCarousel(plans, pageName)">
+  <div class="carousel-inner">
+  <!-- Desktop view (3 cards per slide) -->
+    <div id="servicesCarouselDesktop" class="carousel slide d-none d-xl-block" data-bs-ride="false" data-bs-wrap="true">
+      <div th:each="service, iterStat : ${plans}"
+           th:if="${iterStat.index % 3 == 0}"
+           class="carousel-item"
+           th:classappend="${iterStat.index == 0} ? ' active'">
+
+        <div class="row align-items-stretch">
+          <div th:each="i : ${#numbers.sequence(0, 2)}"
+               th:if="${iterStat.index + i < #lists.size(plans)}"
+               th:with="currentService=${plans[iterStat.index + i]}"
+               class="col-4">
+            <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${currentService}, pageName=${pageName})}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tablet view (2 cards per slide) -->
+    <div id="servicesCarouselTablet" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false" data-bs-wrap="true">
+      <div th:each="service, iterStat : ${plans}"
+           th:if="${iterStat.index % 2 == 0}"
+           class="carousel-item"
+           th:classappend="${iterStat.index == 0} ? ' active'">
+
+        <div class="row align-items-stretch">
+          <div th:each="i : ${#numbers.sequence(0, 1)}"
+               th:if="${iterStat.index + i < #lists.size(plans)}"
+               th:with="currentService=${plans[iterStat.index + i]}"
+               class="col-6">
+            <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${currentService}, pageName=${pageName})}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile view (1 card per slide) -->
+    <div id="servicesCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="false" data-bs-wrap="true">
+      <div th:each="service, iterStat : ${plans}"
+           class="carousel-item"
+           th:classappend="${iterStat.index == 0} ? ' active'">
+        <div class="row align-items-stretch">
+          <div class="col-12">
+            <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${service}, pageName=${pageName})}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:if="${#lists.size(plans) > 1}" class="d-flex d-md-none justify-content-center gap-3 mt-3">
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselMobile" data-bs-slide="prev">
+      <i class="bi bi-chevron-left"></i> prev
+    </button>
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselMobile" data-bs-slide="next">
+      next <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+  <div th:if="${#lists.size(plans) > 2}" class="d-none d-md-flex d-lg-none justify-content-center gap-3 mt-3">
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselTablet" data-bs-slide="prev">
+      <i class="bi bi-chevron-left"></i> prev
+    </button>
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselTablet" data-bs-slide="next">
+      next <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+  <div th:if="${#lists.size(plans) > 3}" class="d-none d-lg-flex justify-content-center gap-3 mt-3">
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselDesktop" data-bs-slide="prev">
+      <i class="bi bi-chevron-left"></i> prev
+    </button>
+    <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselDesktop" data-bs-slide="next">
+      next <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</div>
+</body>
+</html>

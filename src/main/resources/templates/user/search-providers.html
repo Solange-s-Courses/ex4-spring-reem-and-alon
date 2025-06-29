@@ -248,66 +248,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row row-cols-1">
-                <div th:with="planPackages=${entry.value}, carouselId=${'carousel_' + stat.index}">
-                    <div th:attr="id=${carouselId}" class="carousel carousel-dark slide mb-4">
-                        <div class="carousel-inner">
-                            <div th:each="pkg, iterStat : ${planPackages}"
-                                 th:if="${iterStat.index % 4 == 0}"
-                                 class="carousel-item"
-                                 th:classappend="${iterStat.index == 0} ? ' active'">
-                                <div class="row">
-                                    <div th:each="i : ${#numbers.sequence(0, 3)}"
-                                         th:if="${iterStat.index + i < planPackages.size()}"
-                                         th:with="currentPkg=${planPackages[iterStat.index + i]}"
-                                         class="col-12 col-md-6 col-lg-3">
-                                        <!-- הכרטיס של החבילה -->
-                                        <div class="card shadow p-2 mx-2 h-100">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <h6 class="mb-1 ms-0" th:text="${pkg.title}">Category</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mt-2">
-                                                    <p class="product-description mb-2" th:text="${currentPkg.description}">Description</p>
-                                                    <div class="mb-2">
-                                                        <span class="fw-bold" th:text="${currentPkg.monthlyCost}">299</span>
-                                                        <span class="currency">₪</span>
-                                                        <span class="product-type ms-2">per month</span>
-                                                        <small class="bg-success-subtle text-success-emphasis p-1 rounded-3 me-auto"
-                                                               th:text="${#temporals.format(pkg.expiryDate, 'dd/MM/yyyy')}">
-                                                            <i class="bi bi-check-circle"></i>
-                                                        </small>
-                                                    </div>
+            <div th:replace="~{fragments/plan-package-carousel :: planCarousel(plans=${entry.value}, pageName=${'search'})}"></div>
 
-                                                </div>
-                                            </div>
-                                            <form class="add-to-cart-form w-75 mx-auto justify-content-center" action="#" method="post">
-                                                <input type="hidden" name="pkgId" th:value="${pkg.id}">
-                                                <div class="d-flex gap-2 btn-in-cart">
-                                                    <button type="submit" class="btn btn-remove d-none mb-4">
-                                                        Remove from <i class="bi bi-cart-dash"></i>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-add mb-4">
-                                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button"
-                                th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon text-dark"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button"
-                                th:attr="data-bs-target='#' + ${carouselId}" data-bs-slide="next">
-                            <span class="carousel-control-next-icon text-dark"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
         <div th:unless="${groupedResult != null}" class="no-results">
             <i class="bi bi-search"></i>

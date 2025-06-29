@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-4 align-items-center">
                     <img th:src="@{/provider-image/{id}(id=${subscription.providerId})}"
-                         class="img-fluid img-thumbnail w-100" alt="Provider Image"/>
+                         class="img-fluid img-thumbnail w-100" style="object-fit: contain; aspect-ratio: 1/1;"  alt="Provider Image"/>
                 </div>
                 <div class="col-8 align-items-center">
                     <h5 class="mb-1" th:text="${subscription.category}">Category</h5>

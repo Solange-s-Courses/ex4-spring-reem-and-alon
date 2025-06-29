@@ -20,7 +20,11 @@ public class PlanPackage {
 
     private String description;
 
-    private String packageType;
+    private Double yearlyDiscount;
+
+    private Double halfYearlyDiscount;
+
+    private Double threeMonthDiscount;
 
     private int monthlyCost;
 

@@ -25,19 +25,7 @@
   <div th:if= "${#sets.size(shoppingCart) > 0}">
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 align-items-start mb-4" th:fragment="planPackages(planPackages, page)">
       <div th:each="pkg : ${shoppingCart}" class="col">
-        <div class="card shadow-sm h-100 border-2">
-          <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${pkg}, page='search')}"></div>
-          <form class="add-to-cart-form w-75 mx-auto justify-content-center" action="#" method="post">
-            <input type="hidden" name="pkgId" th:value="${pkg.id}">
-            <div class="d-flex gap-2 btn-in-cart">
-              <button type="submit" class="btn btn-remove mb-4">
-                Remove  <i class="bi bi-cart-dash"></i>
-              </button>
-              <button type="submit" class="btn btn-add mb-4">
-                <i class="bi bi-cash-stack me-1"></i> Pay
-              </button>
-            </div>
-          </form>
+          <div th:replace="~{fragments/plan-package :: planPackage(planPackage=${pkg}, pageName='checkout')}"></div>
         </div>
       </div>
 

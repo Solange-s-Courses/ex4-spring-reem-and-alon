@@ -70,17 +70,52 @@
         <div th:if="${subscriptions != null and !subscriptions.isEmpty()}" class="col-12">
             <div id="subsCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <div th:each="subscribe, iterStat : ${subscriptions}"
-                         th:if="${iterStat.index % 4 == 0}"
-                         class="carousel-item"
-                         th:classappend="${iterStat.index == 0} ? ' active'">
+                    <!-- Desktop carousel - 4 items per slide -->
+                    <div class="d-none d-lg-block">
+                        <div th:each="subscribe, iterStat : ${subscriptions}"
+                             th:if="${iterStat.index % 4 == 0}"
+                             class="carousel-item"
+                             th:classappend="${iterStat.index == 0} ? ' active'">
 
-                        <div class="row row-cols-4">
-                            <div th:each="i : ${#numbers.sequence(0, 3)}"
-                                 th:if="${iterStat.index + i < subscriptions.size()}"
-                                 th:with="currentSub=${subscriptions[iterStat.index + i]}"
-                                 class="col">
-                                <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
+                            <div class="row row-cols-4">
+                                <div th:each="i : ${#numbers.sequence(0, 3)}"
+                                     th:if="${iterStat.index + i < subscriptions.size()}"
+                                     th:with="currentSub=${subscriptions[iterStat.index + i]}"
+                                     class="col">
+                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tablet carousel - 2 items per slide -->
+                    <div class="d-none d-md-block d-lg-none">
+                        <div th:each="subscribe, iterStat : ${subscriptions}"
+                             th:if="${iterStat.index % 2 == 0}"
+                             class="carousel-item"
+                             th:classappend="${iterStat.index == 0} ? ' active'">
+
+                            <div class="row row-cols-2">
+                                <div th:each="i : ${#numbers.sequence(0, 1)}"
+                                     th:if="${iterStat.index + i < subscriptions.size()}"
+                                     th:with="currentSub=${subscriptions[iterStat.index + i]}"
+                                     class="col">
+                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile carousel - 1 item per slide -->
+                    <div class="d-block d-md-none">
+                        <div th:each="subscribe, iterStat : ${subscriptions}"
+                             class="carousel-item"
+                             th:classappend="${iterStat.index == 0} ? ' active'">
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${subscribe})}"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -233,7 +233,7 @@
                     <div class="row fw-semibold text-center align-items-center">
                         <div class="col" th:text="${'#' + transaction.id}"></div>
                         <div class="col" th:text="${transaction.subscription.user.userName}"></div>
-                        <div class="col" th:text="${transaction.subscription.planPackage.providerProfile.providerName}"></div>
+                        <div class="col" th:text="${transaction.subscription.planPackage.providerProfile.companyName}"></div>
                         <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
                         <div class="col fw-normal">
                             <span class="badge px-2 py-2"
@@ -290,7 +290,7 @@
                                                  style="width: 40px; height: 40px; object-fit: cover;"
                                                  alt="Provider">
                                             <div>
-                                                <div class="fw-semibold" th:text="${report.reportedProvider.providerName}">Service Provider</div>
+                                                <div class="fw-semibold" th:text="${report.reportedProvider}">Service Provider</div>
                                                 <small class="text-muted" th:text="${report.reportedProvider.category}">Web Development</small>
                                             </div>
                                         </div>

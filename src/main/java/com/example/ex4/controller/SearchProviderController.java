@@ -1,5 +1,6 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.components.RequestUrlHolder;
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
@@ -31,7 +32,10 @@ public class SearchProviderController {
     private ProviderCategoryService providerCategoryService;
 
     @Autowired
-    private ShoppingCart sessionCart;;
+    private ShoppingCart sessionCart;
+
+    @Autowired
+    private RequestUrlHolder requestUrlHolder;
 
     @GetMapping
     public ModelAndView initSearchFormData(@RequestParam(value = "category", required = false) String category,
@@ -60,9 +64,9 @@ public class SearchProviderController {
                 .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(),
                         LinkedHashMap::new, Collectors.toList()));
 
-        System.out.println(groupedResult);
 
         model.addAttribute("groupedResult", groupedResult);
+        model.addAttribute("pageName", "search");
         return "user/search-providers";
     }
 }

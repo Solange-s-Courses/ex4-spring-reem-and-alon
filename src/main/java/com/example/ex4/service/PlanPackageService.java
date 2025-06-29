@@ -36,7 +36,9 @@ public class PlanPackageService {
 
     public void saveNewPackage(ProviderProfile providerProfile, PlanPackageDTO packageDTO) {
         PlanPackage newPackage = PlanPackage.builder()
-                .packageType(packageDTO.getPackageType())
+                .halfYearlyDiscount(packageDTO.getHalfYearlyDiscount())
+                .yearlyDiscount(packageDTO.getYearlyDiscount())
+                .threeMonthDiscount(packageDTO.getThreeMonthDiscount())
                 .title(packageDTO.getTitle())
                 .description(packageDTO.getDescription())
                 .monthlyCost(packageDTO.getMonthlyCost())

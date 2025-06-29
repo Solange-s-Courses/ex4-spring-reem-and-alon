@@ -1,14 +1,11 @@
 package com.example.ex4.components;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-@SessionScope
 public class ShoppingCart implements Serializable {
     private Set<Long> productsIds = new HashSet<>();
 

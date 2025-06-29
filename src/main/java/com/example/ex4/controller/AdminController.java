@@ -1,7 +1,7 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
-import com.example.ex4.constants.PlanPackageTypes;
+import com.example.ex4.constants.SubscriptionPeriod;
 import com.example.ex4.dto.PlanPackageDTO;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
@@ -20,8 +20,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private UserService adminService;
     @Autowired
     private ProviderProfileService profileService;
     @Autowired
@@ -47,7 +45,7 @@ public class AdminController {
     @GetMapping("/add-package")
     public String getPackageForm(Model model) {
         model.addAttribute("planPackage", new PlanPackageDTO());
-        model.addAttribute("planPackageTypes", PlanPackageTypes.values());
+        model.addAttribute("subscriptionPeriod", SubscriptionPeriod.values());
         return "admin/add-package-form";
     }
 
@@ -59,7 +57,7 @@ public class AdminController {
     {
         ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());
         if (result.hasErrors()) {
-            model.addAttribute("planPackageTypes", PlanPackageTypes.values());
+            model.addAttribute("subscriptionPeriod", SubscriptionPeriod.values());
             return "admin/add-package-form";
         }
         planPackageService.saveNewPackage(providerProfile, planPackageDTO);
