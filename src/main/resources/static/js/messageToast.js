@@ -32,7 +32,8 @@
                     [csrfHeader]: csrfToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({pkgId: form.querySelector("input[name='pkgId']").value})
+                body: JSON.stringify({pkgId: form.querySelector("input[name='pkgId']").value}),
+                                            // subType: form.querySelector("input[name='subType']").value})
             });
 
             if (!response.ok) throw new Error(await response.text());

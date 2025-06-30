@@ -50,9 +50,9 @@
               <div th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}" class="invalid-feedback d-block"></div>
             </div>
             <button class="btn btn-primary btn-md mt-3" type="submit">Submit review</button>
-            <a th:href="@{/reviews/{providerProfileId}(providerProfileId=${provider.id})}"
+            <a th:href="@{/reviews(providerProfileId=${provider.id})}"
                class="btn btn-secondary btn-md mt-3">
-              Close & Reset
+              Close
             </a>
           </form>
         </div>

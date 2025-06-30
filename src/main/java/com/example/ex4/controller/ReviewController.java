@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,16 +61,15 @@ public class ReviewController {
     public ModelAndView addReview(@AuthenticationPrincipal MyUserPrincipal userPrincipal,
                                   @Valid @ModelAttribute Review review,
                                   BindingResult bindingResult,
-                                  @RequestParam Long providerProfileId) {
+                                  @RequestParam Long providerProfileId, ModelMap model) {
 
         ProviderProfile provider = providerProfileRepository.findById(providerProfileId)
                 .orElseThrow(() -> new RuntimeException("No profile found"));
 
         if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("user/reviews-form");
-            modelAndView.addObject("review", review);
-            modelAndView.addObject("provider", provider);
-            return modelAndView;
+            model.addAttribute("review", review);
+            model.addAttribute("provider", provider);
+            return new ModelAndView("user/reviews-form", model);
         }
 
         review.setProviderProfile(provider);
@@ -77,6 +77,6 @@ public class ReviewController {
         review.setCreatedAt(LocalDateTime.now());
         reviewService.saveReview(review);
 
-        return new ModelAndView("redirect:/reviews/" + providerProfileId);
+        return new ModelAndView("redirect:/reviews?providerProfileId=" + providerProfileId);
     }
 }

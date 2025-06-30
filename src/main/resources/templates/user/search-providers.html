@@ -221,7 +221,7 @@
 <div class="container results-section">
     <div class="results-info mb-4">
         <div class="results-count">
-            <span th:text="${#lists.size(groupedResult)}">0</span> results found
+            <span th:text="${groupedResult.size()}">0</span> results found
         </div>
     </div>
     <div class="row row-cols-1">
@@ -244,7 +244,7 @@
                             </div>
                             <span class="fw-semibold me-1">4.5</span>
                         </div>
-                        <small class="fw-bolder"><a th:href="@{/reviews(providerProfileId=${entry.value[0].providerProfile.id})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">(1,679 ביקורות)</a></small>
+                        <small class="fw-bolder"><a th:href="@{/reviews(providerProfileId=${entry.key})}" class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">(1,679 ביקורות)</a></small>
                     </div>
                 </div>
             </div>

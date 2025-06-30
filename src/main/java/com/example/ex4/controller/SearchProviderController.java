@@ -57,16 +57,14 @@ public class SearchProviderController {
     public String groupedByProviderResult(Model model, HttpServletRequest request) {
         String category = (String)request.getAttribute("category");
         ProviderCategory providerCategory = providerCategoryService.findByName(category);
-        System.out.println(providerCategory);
         List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
-        System.out.println(allPackages);
+
         Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
                 .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(),
                         LinkedHashMap::new, Collectors.toList()));
 
 
         model.addAttribute("groupedResult", groupedResult);
-        model.addAttribute("pageName", "search");
         return "user/search-providers";
     }
 }

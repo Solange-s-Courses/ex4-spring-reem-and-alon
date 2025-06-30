@@ -2,6 +2,7 @@ package com.example.ex4.components;
 
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
