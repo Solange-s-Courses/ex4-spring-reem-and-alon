@@ -3,6 +3,7 @@
     const ERR_TITLE = "Error!"
 
     const addToCartForms = document.querySelectorAll(".add-to-cart-form")
+    const removeFromCartForms=document.querySelectorAll(".remove-from-cart-form")
     const isCartPage = window.location.pathname.includes('/checkout');
     const cartSizeEl = document.getElementById("cart-size")
 
@@ -32,8 +33,10 @@
                     [csrfHeader]: csrfToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({pkgId: form.querySelector("input[name='pkgId']").value}),
-                                            // subType: form.querySelector("input[name='subType']").value})
+                body: JSON.stringify({
+                        pkgId: form.querySelector("input[name='pkgId']").value,
+                        subPkgName: form.querySelector("input[name='subPkgName']").value
+                })
             });
 
             if (!response.ok) throw new Error(await response.text());
@@ -42,7 +45,7 @@
             showToast(SUCCESS_TITLE, data);
             cartSizeEl.innerText = String(parseInt(cartSizeEl.innerText) + 1);
 
-            // UI updates
+         // UI updates
             form.querySelector('.btn-add')?.classList.add('d-none');
             form.querySelector('.btn-remove')?.classList.remove('d-none');
         },
@@ -54,7 +57,10 @@
                     [csrfHeader]: csrfToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({pkgId: form.querySelector("input[name='pkgId']").value})
+                body: JSON.stringify({
+                    pkgId: form.querySelector("input[name='pkgId']").value,
+                    subPkgName: form.querySelector("input[name='subPkgName']").value
+                })
             });
 
             if (!response.ok) throw new Error(await response.text());
@@ -88,6 +94,9 @@
     document.addEventListener("DOMContentLoaded",()=>{
         addToCartForms.forEach(form => {
             form.addEventListener("submit",  (e)=> handleCartRequest(e))
+        })
+        removeFromCartForms.forEach(form=>{
+            form.addEventListener("submit",(e)=> handleCartRequest(e))
         })
     })
 })()

@@ -2,6 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.components.RequestUrlHolder;
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.ProviderProfile;
@@ -15,10 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -41,7 +39,10 @@ public class SearchProviderController {
     public ModelAndView initSearchFormData(@RequestParam(value = "category", required = false) String category,
                                            HttpServletRequest request, ModelMap model) {
         model.addAttribute("providers", providerCategoryService.findAllCategoryNames());
-        model.addAttribute("shoppingCart", sessionCart.getProducts());
+        Set<Long> pkgIds = sessionCart.getPkgIds();
+
+        model.addAttribute("cartItems", sessionCart.getItems());
+        //model.addAttribute("shoppingCart", pkgIds);
 
         if (category != null && !category.isBlank()) {
             request.setAttribute("category", category);

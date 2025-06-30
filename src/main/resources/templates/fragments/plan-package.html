@@ -40,7 +40,7 @@
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
-<!--                                <input type="hidden" name="subType" th:value="${'Three month'}">-->
+                                <input type="hidden" name="subPkgName"  value="Three Months">
                                 <div th:if="${pageName == 'search'}">
                                     <button class="btn btn-outline-primary btn-sm mt-3" type="submit">
                                         <i class="bi bi-cart-plus me-1"></i>Add to Cart
@@ -71,6 +71,7 @@
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
+                                <input type="hidden" name="subPkgName"  value="Six Months">
                                 <div th:if="${pageName == 'search'}">
                                     <button class="btn btn-outline-warning btn-sm mt-3" type="submit" style="border-color: #d38933; color: #d38933;">
                                         <i class="bi bi-cart-plus me-1"></i>Add to Cart
@@ -101,16 +102,10 @@
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto mb-2 justify-content-center" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
-                                <div th:if="${pageName == 'search'}">
-                                    <button class="btn btn-outline-success btn-sm mt-3" type="submit">
-                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
-                                    </button>
-                                </div>
-                                <div th:unless="${pageName == 'search'}">
-                                    <button type="submit" class="btn btn-outline-success btn-remove d-none btn-sm mt-3">
-                                        Remove from <i class="bi bi-cart-dash"></i>
-                                    </button>
-                                </div>
+                                <input type="hidden" name="subPkgName"  value="Twelve Months">
+                                <button class="btn btn-outline-success btn-sm mt-3" type="submit">
+                                    <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                </button>
                             </form>
                         </div>
                     </div>

@@ -1,34 +1,45 @@
 package com.example.ex4.components;
 
+import com.example.ex4.dto.CartItemDTO;
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ShoppingCart implements Serializable {
-    private Set<Long> productsIds = new HashSet<>();
+    private final List<CartItemDTO> items = new ArrayList<>();
 
 
     public ShoppingCart() {}
 
-    public boolean addProduct(long productId) {
-        if (productsIds.stream().anyMatch( pid-> pid == productId)) {
-            return false;
+    public boolean addProduct(CartItemDTO item) {
+        for (CartItemDTO existing : items) {
+            if (Objects.equals(existing.getPkgId(), item.getPkgId()) &&
+                    Objects.equals(existing.getSubPkgName(), item.getSubPkgName())) {
+                return false;
+            }
         }
-        productsIds.add(productId);
+        items.add(item);
         return true;
     }
-    public boolean removeProduct(long productId) {
-        return productsIds.removeIf( pid-> pid == productId);
+    public boolean removeProduct(long pkgId, String subPkgName) {
+        return items.removeIf(i -> i.getPkgId() == pkgId &&
+                Objects.equals(i.getSubPkgName(), subPkgName));
     }
 
-    public Set<Long> getProducts() { return productsIds; }
+    public List<CartItemDTO> getItems() {
+        return Collections.unmodifiableList(items);
+    }
 
-    public void clear() { productsIds.clear(); }
+    public void clear() { items.clear(); }
 
     public Integer getProductsAmount() {
-        return productsIds.size();
+        return items.size();
+    }
+    public Set<Long> getPkgIds() {
+        return items.stream()
+                .map(CartItemDTO::getPkgId)
+                .collect(Collectors.toSet());
     }
 }

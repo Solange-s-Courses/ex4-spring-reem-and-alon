@@ -1,6 +1,7 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
+import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.components.SubscriptionMapper;
 import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.entity.ProviderProfile;
@@ -27,8 +28,7 @@ public class UserController {
     private UserSessionSubscriptions userSubscriptions;
 
     @Autowired
-    private ProviderProfileRepository providerProfileRepository;
-
+    private ShoppingCart sessionCart;
 
     @GetMapping
     public String userIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
@@ -36,6 +36,7 @@ public class UserController {
             model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
         }
         model.addAttribute("userName", userPrincipal.getUser().getUserName());
+        model.addAttribute("cartItems",sessionCart.getItems());
         return "user/index";
     }
 
