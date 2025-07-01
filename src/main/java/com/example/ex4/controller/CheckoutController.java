@@ -59,6 +59,7 @@ public class CheckoutController {
         checkoutService.processCheckout(userPrincipal.getUser());
         userSubscriptions.setSubscriptions(subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
         sessionCart.clear();
+
         return "redirect:/user/checkout?success=true";
     }
 

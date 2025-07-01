@@ -28,7 +28,7 @@ public class CheckoutService {
     private ShoppingCart sessionCart;
 
     @Autowired
-    private UserService userService;
+    private ConversationService conversationService;
 
     @Autowired
     private PlanPackageService planPackageService ;
@@ -47,6 +47,12 @@ public class CheckoutService {
             Subscription newSubscription = subscriptionService.createSubscription(user, plan);
             transactionService.createTransaction(newSubscription, plan.getMonthlyCost());
         });
+        plans.stream()
+                .map(PlanPackage::getProviderProfile)
+                .distinct()
+                .forEach(provider ->
+                        conversationService.getOrCreate(user, provider)
+                );
     }
 
     private void validateCheckout(int userCredit, List<PlanPackage> plans) {

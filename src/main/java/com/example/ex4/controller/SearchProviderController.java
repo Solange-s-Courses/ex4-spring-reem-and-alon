@@ -34,10 +34,10 @@ public class SearchProviderController {
     @Autowired
     private ShoppingCart sessionCart;
 
-    @Autowired
+/*    @Autowired
     private ReviewService reviewService;
 
-/*    @Autowired
+    @Autowired
     private RequestUrlHolder requestUrlHolder;*/
 
     @GetMapping
