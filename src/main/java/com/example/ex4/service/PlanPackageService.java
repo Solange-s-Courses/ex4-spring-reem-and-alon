@@ -5,13 +5,15 @@ import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.PlanPackageRepository;
-import com.example.ex4.repository.ProviderCategoryRepository;
-import com.example.ex4.repository.ProviderProfileRepository;
+import java.util.LinkedHashMap;
+
+import com.example.ex4.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,9 @@ public class PlanPackageService {
 
     @Autowired
     private ProviderProfileService providerProfileService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Transactional(readOnly = true)
     public List<PlanPackage> getAllPackagesByCategory(ProviderCategory providerCategory){
@@ -52,5 +57,27 @@ public class PlanPackageService {
     public List<PlanPackage> findAllProducts(Set<Long> products) {
         return planPackageRepository.findAllById(products);
     }
+    
+    public Map<Long, List<PlanPackage>> groupPackagesWithReviewStats(List<PlanPackage> packages) {
 
+        Map<Long, List<PlanPackage>> grouped =
+                packages.stream().collect(Collectors.groupingBy(
+                        p -> p.getProviderProfile().getId(),
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        grouped.forEach((providerId, pkgList) -> {
+            long reviewersCount = reviewService.getReviewersCount(providerId);
+            double starsAvg   = reviewService.getAverageStars(providerId);
+            double roundedAvg = Math.round(starsAvg * 10) / 10.0;
+
+            pkgList.forEach(p -> {
+                p.setReviewCount(reviewersCount);
+                p.setAvgStars(roundedAvg);
+            });
+        });
+
+        return grouped;
+    }
 }
+

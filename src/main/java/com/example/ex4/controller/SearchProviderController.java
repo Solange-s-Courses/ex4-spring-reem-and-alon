@@ -8,6 +8,7 @@ import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.ProviderCategoryService;
+import com.example.ex4.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,16 +35,16 @@ public class SearchProviderController {
     private ShoppingCart sessionCart;
 
     @Autowired
-    private RequestUrlHolder requestUrlHolder;
+    private ReviewService reviewService;
+
+/*    @Autowired
+    private RequestUrlHolder requestUrlHolder;*/
 
     @GetMapping
     public ModelAndView initSearchFormData(@RequestParam(value = "category", required = false) String category,
                                            HttpServletRequest request, ModelMap model) {
         model.addAttribute("providers", providerCategoryService.findAllCategoryNames());
-        Set<Long> pkgIds = sessionCart.getPkgIds();
-
         model.addAttribute("cartItems", sessionCart.getItems());
-        //model.addAttribute("shoppingCart", pkgIds);
 
         if (category != null && !category.isBlank()) {
             request.setAttribute("category", category);
@@ -60,10 +62,7 @@ public class SearchProviderController {
         ProviderCategory providerCategory = providerCategoryService.findByName(category);
         List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
 
-        Map<Long, List<PlanPackage>> groupedResult = allPackages.stream()
-                .collect(Collectors.groupingBy(planPackage -> planPackage.getProviderProfile().getId(),
-                        LinkedHashMap::new, Collectors.toList()));
-
+        Map<Long, List<PlanPackage>> groupedResult = planPackageService.groupPackagesWithReviewStats(allPackages);
 
         model.addAttribute("groupedResult", groupedResult);
         return "user/search-providers";

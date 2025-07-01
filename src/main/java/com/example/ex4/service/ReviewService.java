@@ -1,13 +1,9 @@
 package com.example.ex4.service;
 
-import com.example.ex4.dto.ReviewDTO;
-import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.Review;
 import com.example.ex4.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,13 +24,27 @@ public class ReviewService {
     }
 
 
-//    public double getAverageStars(Long serviceId) {
-//        Double avg = reviewRepository.findAverageStarsByServiceId(serviceId);
-//        return avg != null ? avg : 0.0;
-//    }
-//
-//    public long getReviewersCount(Long serviceId) {
-//        Long cnt = reviewRepository.countByServiceId(serviceId);
-//        return cnt != null ? cnt : 0;
-//    }*/
+    public double getAverageStars(Long providerProfileId) {
+        List<Review> reviews = reviewRepository.findAllByProviderProfile_Id(providerProfileId);
+
+        if (reviews.isEmpty()) return 0.0;
+
+        double starsAvg = reviews.stream()
+                .mapToDouble(Review::getStars)
+                .average()
+                .orElse(0.0);
+        double epsilon = 1e-6;
+        double frac = starsAvg - Math.floor(starsAvg);
+
+        if (frac < epsilon) {
+            return Math.floor(starsAvg);
+        } else {
+            return Math.ceil(starsAvg * 2) / 2.0;
+        }
+    }
+
+    public long getReviewersCount(Long providerProfileId) {
+
+        return (long) reviewRepository.findAllByProviderProfile_Id(providerProfileId).size();
+    }
 }
