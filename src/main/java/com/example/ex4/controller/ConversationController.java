@@ -45,9 +45,8 @@ public class ConversationController {
     @GetMapping("{conversationId}")
     public String showConversation(@PathVariable Long conversationId,@AuthenticationPrincipal MyUserPrincipal user, Model model) {
         List<ChatMessageDTO> messages = messageService.getAllMesaggeHistory(conversationId);
-
         model.addAttribute("messages", messages);
-        model.addAttribute("userID", user.getUser().getId());
+        model.addAttribute("userId", user.getUser().getId());
         model.addAttribute("conversationId", conversationId);
         return "shared/conversation-chat-page";
     }

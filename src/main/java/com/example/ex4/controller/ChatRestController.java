@@ -32,16 +32,11 @@ public class ChatRestController {
     public ResponseEntity<Void> sendMessage(@AuthenticationPrincipal MyUserPrincipal user,
                                             @RequestBody ChatMessageDTO messageDTO) {
 
-        messageDTO.setSenderId(user.getUser().getId());
-        messageDTO.setSentAt(LocalDateTime.now());
-        Long senderId = user.getUser().getId();
 
-        ChatMessageDTO preparedMessage = messageService.sendMessage(
-                messageDTO.getConversationId(), senderId, messageDTO.getContent());
 
-        messageService.saveMessage(preparedMessage, senderId);
+        ChatMessageDTO preparedMessage = messageService.sendMessage(messageDTO);
 
-        // שולח לכל המנויים לשיחה הזו
+        // send the message to al the listeners on this conversation
         messagingTemplate.convertAndSend("/topic/conversation/" + messageDTO.getConversationId(), preparedMessage);
 
         return ResponseEntity.ok().build();

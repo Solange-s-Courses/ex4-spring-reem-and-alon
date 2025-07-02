@@ -52,7 +52,7 @@ public class AdminController {
     @PostMapping("/add-package")
     public String addPackage(
             @AuthenticationPrincipal MyUserPrincipal userPrincipal,
-            @Valid @ModelAttribute("planPackageDTO") PlanPackageDTO planPackageDTO,
+            @Valid @ModelAttribute("planPackage") PlanPackageDTO planPackageDTO,
             BindingResult result, Model model)
     {
         ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());

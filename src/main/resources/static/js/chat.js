@@ -14,7 +14,11 @@
                 [csrfHeader]: csrfToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ conversationId, content })
+            body: JSON.stringify({
+                conversationId: conversationId,
+                senderId: userId,
+                content: content,
+                sentAt: new Date().toISOString()})
         }).then(res => {
             if (!res.ok) throw new Error("Failed to send");
             return res;
@@ -45,15 +49,28 @@
     /* ========================== 3. messageRenderer ========================= */
     const messageRenderer = (() => {
         const messagesList = document.getElementById("messagesList");
+        const startMsg = document.getElementById("startMsg");
+
+        const formatDate = (isoString) => {
+            const date = new Date(isoString);
+            return date.toLocaleString('he-IL', {
+                hour: '2-digit',
+                minute: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        };
 
         const render = (dto, mine) => {
             const wrap = document.createElement("div");
             wrap.className = `message ${mine ? "sent" : "received"}`;
             wrap.innerHTML = `
-        <div>${dto.content}</div>
-        <div class="message-time">
-          ${new Date(dto.sentAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-        </div>`;
+                <div>${dto.content}</div>
+                <div class="message-time">
+                  ${formatDate(dto.sentAt)}
+                </div>`;
+            if (startMsg) startMsg.remove();
             messagesList.appendChild(wrap);
             messagesList.scrollTop = messagesList.scrollHeight;
         };

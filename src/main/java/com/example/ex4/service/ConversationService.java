@@ -22,23 +22,26 @@ public class ConversationService {
     private MessageRepository messageRepository;
 
 
-    @Transactional
     public void getOrCreate(User buyer, ProviderProfile provider){
         conversationRepository.findByBuyer_IdAndProvider_Id(buyer.getId(), provider.getId())
                 .orElseGet(() -> conversationRepository.save(
                         new Conversation(null, buyer, provider,
                                 LocalDateTime.now())));
     }
+
     public List<ConversationDTO> getConversationSnippets(Long userId, boolean admin) {
-        List<Conversation> convos = admin
+        List<Conversation> conversations = admin
                 ? conversationRepository.findByProvider_Id(userId)
                 : conversationRepository.findByBuyer_Id(userId);
 
-        return convos.stream()
+        return conversations.stream()
                 .map(c -> {
-                    String imgUrl = c.getProvider().getProfileImage() != null
-                            ? "/provider-image/" + c.getProvider().getId()
-                            : null;
+                    String imgUrl = null;
+                    if (!admin) { 
+                        imgUrl = c.getProvider().getProfileImage() != null
+                                ? "/provider-image/" + c.getProvider().getId()
+                                : null;
+                    }
 
                     return new ConversationDTO(
                             c.getId(),

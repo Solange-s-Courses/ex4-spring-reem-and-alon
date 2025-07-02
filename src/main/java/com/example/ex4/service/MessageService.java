@@ -19,13 +19,14 @@ public class MessageService {
     @Autowired
     private ConversationRepository conversationRepository;
 
-    @Transactional
-    public ChatMessageDTO sendMessage(Long convoId,Long senderID,String text){
-        Conversation conversation = conversationRepository.findById(convoId).orElseThrow();
-
-        Message message = new Message(null,senderID,text,LocalDateTime.now(),conversation);
+    public ChatMessageDTO sendMessage(ChatMessageDTO messageDTO){
+        Conversation conversation = conversationRepository.findById(messageDTO.getConversationId()).orElseThrow();
+        Message message = new Message();
+        message.setContent(messageDTO.getContent());
+        message.setSentAt(messageDTO.getSentAt());
+        message.setConversation(conversation);
+        message.setSenderID(messageDTO.getSenderId());
         messageRepository.save(message);
-        System.out.println(toDto(message));
         return toDto(message);
     }
 
@@ -49,11 +50,6 @@ public class MessageService {
         Conversation conversation = conversationRepository.findById(messageDTO.getConversationId())
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
 
-        Message message = new Message();
-        message.setContent(messageDTO.getContent());
-        message.setSentAt(messageDTO.getSentAt());
-        message.setConversation(conversation);
-        message.setSenderID(senderId);
-        messageRepository.save(message);
+
     }
 }
