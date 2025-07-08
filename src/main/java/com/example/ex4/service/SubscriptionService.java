@@ -30,6 +30,10 @@ public class SubscriptionService {
         return subscriptionRepository.findSubscriptionByUser(user);
     }
 
+    public List<Subscription> findPlanPackageSubscribers(PlanPackage plan) {
+        return subscriptionRepository.findAllByPlanPackage(plan);
+    }
+
     public void deleteSubscription(long id) {
         subscriptionRepository.deleteById(id);
     }

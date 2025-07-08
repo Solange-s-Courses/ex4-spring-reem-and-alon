@@ -29,6 +29,9 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime sentAt;
 
+    @Column(nullable = false)
+    private boolean isRead = false;
+
     @ManyToOne
-    private Conversation conversation;
+    private Chat chat;
 }

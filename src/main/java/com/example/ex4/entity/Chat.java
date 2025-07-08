@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Conversation {
+public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Conversation {
     private Long id;
 
     @ManyToOne
-    private User buyer;
+    private User client;
 
     @ManyToOne
     private ProviderProfile provider;

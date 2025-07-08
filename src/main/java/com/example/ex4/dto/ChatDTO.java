@@ -3,13 +3,11 @@ package com.example.ex4.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ConversationDTO {
+public class ChatDTO {
 
     @NotBlank(message = "userName is required")
     Long conversationId;

@@ -24,7 +24,7 @@ public class ProviderProfileService {
     private ProviderCategoryRepository providerCategoryRepository;
 
     public ProviderProfile findProviderProfile(User admin) {
-        return providerProfileRepository.findByUser(admin);
+        return providerProfileRepository.findByUser(admin).orElse(null);
     }
 
     public void activateAdminAccount(long id) {

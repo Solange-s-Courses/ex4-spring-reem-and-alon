@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ChatMessageDTO {
-    Long conversationId;
-
-    Long senderId;
+    Long chatId;
 
     @NotBlank(message = "content is required")
     String content;
 
-    LocalDateTime sentAt;
+    LocalDateTime sentAt = LocalDateTime.now();
+
+    Long senderId;
 }

@@ -28,7 +28,7 @@ public class CheckoutService {
     private ShoppingCart sessionCart;
 
     @Autowired
-    private ConversationService conversationService;
+    private ChatService chatService;
 
     @Autowired
     private PlanPackageService planPackageService ;
@@ -51,7 +51,7 @@ public class CheckoutService {
                 .map(PlanPackage::getProviderProfile)
                 .distinct()
                 .forEach(provider ->
-                        conversationService.getOrCreate(user, provider)
+                        chatService.getOrCreate(user, provider)
                 );
     }
 
