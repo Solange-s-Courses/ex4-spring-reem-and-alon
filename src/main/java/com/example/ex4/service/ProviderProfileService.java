@@ -66,4 +66,5 @@ public class ProviderProfileService {
 
     public List<ProviderProfile> findAllPendingProfiles(){ return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
     public void removeProviderProfile(long id) {providerProfileRepository.deleteById(id);}
+
 }

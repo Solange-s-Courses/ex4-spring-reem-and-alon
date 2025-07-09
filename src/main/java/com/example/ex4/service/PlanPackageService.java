@@ -58,7 +58,7 @@ public class PlanPackageService {
         return planPackageRepository.findAllById(products);
     }
     
-    public Map<Long, List<PlanPackage>> groupPackagesWithReviewStats(List<PlanPackage> packages) {
+/*    public Map<Long, List<PlanPackage>> groupPackagesWithReviewStats(List<PlanPackage> packages) {
 
         Map<Long, List<PlanPackage>> grouped =
                 packages.stream().collect(Collectors.groupingBy(
@@ -78,6 +78,6 @@ public class PlanPackageService {
         });
 
         return grouped;
-    }
+    }*/
 }
 

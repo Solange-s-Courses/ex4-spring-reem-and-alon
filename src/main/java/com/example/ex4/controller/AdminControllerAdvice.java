@@ -2,7 +2,6 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.service.PlanPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class})
 public class AdminControllerAdvice {

@@ -1,3 +1,4 @@
+/*
 package com.example.ex4.dto;
 
 import jakarta.validation.constraints.Max;
@@ -27,3 +28,4 @@ public class ReviewDTO {
     private long providerId;
 
 }
+*/
