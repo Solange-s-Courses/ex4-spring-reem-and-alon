@@ -108,21 +108,21 @@
 
     <div th:unless="${#lists.isEmpty(chats)}" class="row justify-content-center">
         <div class="col-3 list-group shadow-sm">
-            <a th:each="conv : ${chats}"
-               th:href="@{/chats/{id}(id=${conv.id})}"
-               th:data-chat-id="${conv.id}"
+            <a th:each="chat : ${chats}"
+               th:href="@{/chats/{id}(id=${chat.id})}"
+               th:data-chat-id="${chat.id}"
                class="list-group-item list-group-item-action d-flex align-items-center chat-item">
 
-                <img th:src="@{/provider-image/{id}(id=${conv.provider.id})}"
+                <img th:src="@{/provider-image/{id}(id=${chat.provider.id})}"
                      alt="avatar"
                      class="avatar me-3">
 
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-semibold" th:text="${conv.provider.companyName}"></span>
-                        <span th:if="${unreadMessages != null and unreadMessages.get(conv.id) > 0}"
+                        <span class="fw-semibold" th:text="${chat.provider.companyName}"></span>
+                        <span th:if="${unreadMessages != null and unreadMessages.get(chat.id) > 0}"
                               class="badge rounded-pill bg-danger unread-badge ms-2"
-                              th:text="${unreadMessages.getOrDefault(conv.id, 0)}"></span>
+                              th:text="${unreadMessages.getOrDefault(chat.id, 0)}"></span>
                     </div>
                 </div>
             </a>

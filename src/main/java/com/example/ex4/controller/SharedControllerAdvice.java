@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@ControllerAdvice(assignableTypes = ChatController.class)
 public class SharedControllerAdvice {
 
     @Autowired
@@ -18,14 +19,13 @@ public class SharedControllerAdvice {
 
     @ModelAttribute("userName")
     public String userName(Principal principal) {
-        return principal != null ? principal.getName() : "";
+        return principal.getName();
     }
 
     @ModelAttribute("unreadMessages")
     public Map<Long, Long> unreadMessages(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
-        if (userPrincipal == null) {
-            return Map.of();
-        }
-        return messageService.getUnreadMessagesCount(userPrincipal.getUser());
+        Map<Long, Long> unreadMessages = messageService.getUnreadMessagesCount(userPrincipal.getUser());
+        System.out.println(unreadMessages);
+        return unreadMessages;
     }
 }

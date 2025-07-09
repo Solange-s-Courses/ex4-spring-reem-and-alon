@@ -44,15 +44,8 @@ public class MessageService {
     }
 
     @Transactional
-    public List<ChatMessageDTO> getAllMessageHistory(Long chatId, Long userId) {
+    public List<ChatMessageDTO> getAllMessageHistory(Long chatId) {
         List<Message> messages = messageRepository.findByChat_IdOrderBySentAtAsc(chatId);
-
-        messages.forEach(message -> {
-            if (!message.isRead() && !message.getSenderID().equals(userId)) {
-                message.setRead(true);
-                messageRepository.save(message);
-            }
-        });
         return messages.stream().map(this::toDto).collect(Collectors.toList());
     }
 
@@ -69,6 +62,18 @@ public class MessageService {
         List<Chat> chats = Objects.equals(user.getRole(), "USER") ? chatRepository.findAllByClient(user):
                 chatRepository.findByProvider(providerProfileRepository.findByUser(user).orElse(null));
 
-        return chats.stream().collect(Collectors.toMap(Chat::getId, chat -> messageRepository.countByChatAndIsReadFalse(chat)));
+        return chats.stream().collect(Collectors.toMap(Chat::getId, chat -> messageRepository.countByChatAndSenderIDNotAndIsReadFalse(chat, user.getId())));
+    }
+
+    @Transactional
+    public void markAsRead(Long chatId, long id) {
+        List<Message> messages = messageRepository.findByChat_Id(chatId);
+
+        messages.forEach(message -> {
+            if (!message.isRead() && !message.getSenderID().equals(id)) {
+                message.setRead(true);
+                messageRepository.save(message);
+            }
+        });
     }
 }

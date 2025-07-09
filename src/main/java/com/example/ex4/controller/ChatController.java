@@ -36,19 +36,33 @@ public class ChatController {
     public String list(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
         User user = userPrincipal.getUser();
         ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
-        List<Chat> chats = providerProfile != null ? chatService.getAllChatsForProvider(providerProfile) : chatService.getAllChatsForClient(user);
+        List<Chat> chats = providerProfile != null ?
+                chatService.getAllChatsForProvider(providerProfile) :
+                chatService.getAllChatsForClient(user);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", user.getId());
         return "shared/chat";
     }
 
+    // עובר לשיחה מסוימת, טוען הודעות, עושה forward לרשימה עם Model מלא
     @GetMapping("/{chatId}")
-    public ModelAndView showConversation(@PathVariable Long chatId,
-                                         @AuthenticationPrincipal MyUserPrincipal userPrincipal,
-                                         ModelMap model) {
-        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId, userPrincipal.getUser().getId());
+    public String showConversation(@PathVariable Long chatId,
+                                   @AuthenticationPrincipal MyUserPrincipal userPrincipal,
+                                   Model model) {
+        User user = userPrincipal.getUser();
+        ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
+        messageService.markAsRead(chatId, user.getId());
+
+        List<Chat> chats = providerProfile != null ?
+                chatService.getAllChatsForProvider(providerProfile) :
+                chatService.getAllChatsForClient(user);
+
+        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId);
         model.addAttribute("messages", messages);
+        model.addAttribute("chats", chats);
         model.addAttribute("chatId", chatId);
-        return new ModelAndView("forward:/chats", model);
+        model.addAttribute("userId", user.getId());
+        return "shared/chat";
     }
+
 }
