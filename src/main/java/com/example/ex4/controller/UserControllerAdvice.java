@@ -2,7 +2,6 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.service.MessageService;
 import com.example.ex4.service.PlanPackageService;
@@ -14,7 +13,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class, ChatController.class})
 public class UserControllerAdvice {
