@@ -1,6 +1,5 @@
 package com.example.ex4.service;
 
-import com.example.ex4.dto.ChatDTO;
 import com.example.ex4.entity.Chat;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.User;
@@ -23,9 +22,7 @@ public class ChatService {
 
     public void getOrCreate(User client, ProviderProfile provider){
         chatRepository.findByClientAndProvider(client, provider)
-                .orElseGet(() -> chatRepository.save(
-                        new Chat(null, client, provider,
-                                LocalDateTime.now())));
+                .orElseGet(() -> chatRepository.save(new Chat(null, client, provider, LocalDateTime.now())));
     }
 
     public List<Chat> getAllChatsForProvider(ProviderProfile providerProfile) {

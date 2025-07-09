@@ -19,36 +19,33 @@ public class MessageService {
     @Autowired
     private ChatRepository conversationRepository;
 
-    public ChatMessageDTO sendMessage(ChatMessageDTO messageDTO, Long currentUserId){
-        Chat conversation = conversationRepository.findById(messageDTO.getChatId()).orElseThrow();
-        Message message = new Message();
-        message.setContent(messageDTO.getContent());
-        message.setSentAt(messageDTO.getSentAt());
-        message.setSenderID(currentUserId);
-        message.setChat(conversation);
+    public void saveMessage(ChatMessageDTO messageDTO){
+        Chat chat = conversationRepository.findById(messageDTO.getChatId())
+                .orElseThrow(() -> new RuntimeException("chat not found"));
+
+        Message message = Message.builder()
+                .content(messageDTO.getContent())
+                .sentAt(messageDTO.getSentAt())
+                .isRead(messageDTO.getIsRead())
+                .senderID(messageDTO.getSenderId())
+                .chat(chat)
+                .build();
+
         messageRepository.save(message);
-        return toDto(message);
     }
 
     public List<ChatMessageDTO> getAllMessageHistory(Long conversationId){
         List<Message> messages = messageRepository.findByChat_IdOrderBySentAtAsc(conversationId);
-        return messages.stream()
-                .map(this::toDto)
-                .toList();
+        return messages.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     private ChatMessageDTO toDto(Message message) {
-        return new ChatMessageDTO(
-                message.getChat().getId(),
-                message.getContent(),
-                message.getSentAt(),
-                message.getSenderID()
-        );
-    }
-
-    public void saveMessage(ChatMessageDTO messageDTO, Long senderId) {
-        Chat conversation = conversationRepository.findById(messageDTO.getChatId())
-                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+        return ChatMessageDTO.builder()
+                .sentAt(message.getSentAt())
+                .content(message.getContent())
+                .senderId(message.getSenderID())
+                .chatId(message.getChat().getId())
+                .build();
     }
 
     public Map<Long, Long> getUnreadMessagesCount(List<Chat> chats) {

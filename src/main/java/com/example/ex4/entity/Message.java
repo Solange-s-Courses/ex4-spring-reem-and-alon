@@ -1,10 +1,7 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Message {
 
@@ -29,7 +27,7 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime sentAt;
 
-    @Column(nullable = false)
+    @Builder.Default
     private boolean isRead = false;
 
     @ManyToOne

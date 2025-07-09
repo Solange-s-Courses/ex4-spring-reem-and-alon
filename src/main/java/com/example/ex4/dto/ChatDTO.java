@@ -1,7 +1,8 @@
 package com.example.ex4.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -9,12 +10,11 @@ import lombok.*;
 @Setter
 public class ChatDTO {
 
-    @NotBlank(message = "userName is required")
-    Long conversationId;
+    private Long chatId;
 
-    @NotBlank(message = "provider name is required")
-    String partnerName;
+    private String partnerName;
 
-    @NotBlank(message = "img is required")
-    private String partnerImgUrl;
+    private LocalDateTime sentAt;
+
+    private Integer unreadCount;
 }

@@ -1,24 +1,25 @@
 package com.example.ex4.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+import lombok.*;
+
+@Data
+@Builder
 public class ChatMessageDTO {
-    Long chatId;
+    @NotNull(message = "cannot find chat id")
+    private Long chatId;
 
     @NotBlank(message = "content is required")
-    String content;
+    private String content;
 
-    LocalDateTime sentAt = LocalDateTime.now();
+    private LocalDateTime sentAt;
 
-    Long senderId;
+    @NotNull(message = "cannot find the user sent the message")
+    private Long senderId;
+
+    private Boolean isRead;
 }
+

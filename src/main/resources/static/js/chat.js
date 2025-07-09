@@ -1,51 +1,41 @@
 (() => {
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-    const chatId = Number(document.querySelector('input[name="chatId"]').value);
-    const userId = Number(document.querySelector('input[name="userId"]').value);
-    const form = document.querySelector("form");
-    const input = form.querySelector(".chatInput");
 
-    /* ============================ 1. sendMessage ============================ */
-    const sendMessage = (chatId, content) =>
-        fetch("/api/chat/send", {
-            method: "POST",
-            headers: {
-                [csrfHeader]: csrfToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                chatId: chatId,
-                senderId: userId,
-                content: content,
-                sentAt: new Date().toISOString()})
-        }).then(res => {
-            if (!res.ok) throw new Error("Failed to send");
-            return res;
-        });
-
-    /* ========================= 2. connectToSocket ========================== */
-    const connectToSocket = (chatId, userId) => {
-        // חייבים להטעין sockjs-client ו stomp.js בסקריפט חיצוני בדף
+    const webSocket = (() =>{
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, () => {
-            console.log("STOMP connected");
+        /* ============================ 1. sendMessage ============================ */
+        const sendMessage = (content,chatId, userId) =>{
+            console.log(`chat id is: ${chatId}`)
+            console.log(`user id is: ${userId}`)
+            stompClient.send("/app/chat", {}, JSON.stringify({
+                chatId: chatId,
+                senderId: userId,
+                content: content
+            }))
+        };
 
-            stompClient.subscribe(`/topic/conversation/${chatId}`, (message) => {
-                try {
-                    const messageDTO = JSON.parse(message.body);
-                    if (messageDTO.chatId === chatId) {
 
-                        messageRenderer.render(messageDTO, messageDTO.senderId === userId);
+        /* ========================= 2. connectToSocket ========================== */
+        const connectToSocket = (chatId, userId) => {
+            console.log(`chat id is: ${chatId}`)
+            stompClient.connect({}, () => {
+                console.log("STOMP connected");
+                stompClient.subscribe(`/topic/messages`, (message) => {
+                    const msg = JSON.parse(message.body);
+                    if (msg.chatId === chatId) {
+                        messageRenderer.render(msg, msg.senderId === userId);
                     }
-                } catch (e) {
-                    console.error("Invalid STOMP message", e);
-                }
+                });
             });
-        });
-    };
+        };
+        return {
+            sendMessage,
+            connectToSocket
+        }
+    })()
 
     /* ========================== 3. messageRenderer ========================= */
     const messageRenderer = (() => {
@@ -81,28 +71,23 @@
         return { render };
     })();
 
-    /* ============================ 4. formHandler =========================== */
-    const formHandler = (() => {
-
-        const onSubmit = ev => {
-            ev.preventDefault();
-            const text = input.value.trim();
-            if (!text) return;
-
-            sendMessage(chatId, text)
-                .then(() => {
-                    input.value = "";
-                })
-                .catch(console.error);
-        };
-
-        return { onSubmit };
-    })();
-
     /* ========================== DOM Ready =========================== */
     document.addEventListener("DOMContentLoaded", () => {
-        form.addEventListener("submit", formHandler.onSubmit);
-        connectToSocket(chatId, userId);
-    });
+        const input = document.querySelector(".chatInput");
+        const chatIdInput = document.querySelector('input[name="chatId"]');
+        const userIdInput = document.querySelector('input[name="userId"]');
+        const form = document.querySelector("form");
 
+        if (chatIdInput){
+            webSocket.connectToSocket(Number(chatIdInput.value), Number(userIdInput.value));
+        }
+
+        form?.addEventListener("submit", e =>{
+            e.preventDefault()
+            const text = input.value.trim();
+            if (!text) return;
+            webSocket.sendMessage(text, Number(chatIdInput.value), Number(userIdInput.value))
+            input.value = "";
+        });
+    });
 })();
