@@ -1,9 +1,5 @@
 (() => {
-    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
     // ============ ניהול מונה הודעות שלא נקראו ============
-
     function renderUnreadBadge(chatId) {
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
         const count = unreadCounts[chatId] || 0;
@@ -24,35 +20,51 @@
     }
 
     // =============== WebSocket ניהול =================
-    const webSocket = (() =>{
+    const webSocket = (() => {
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
-        const sendMessage = (content,chatId, userId) =>{
+        let isConnected = false;
+
+        const sendMessage = (content, chatId, userId) => {
+            if (!isConnected) {
+                console.warn("WebSocket not connected yet");
+                return;
+            }
             stompClient.send("/app/chat", {}, JSON.stringify({
                 chatId: chatId,
                 senderId: userId,
                 content: content
-            }))
+            }));
         };
 
-        const connectToSocket = (chatId, userId) => {
+        const connectToSocket = (chatId, userId, onConnected) => {
             stompClient.connect({}, () => {
+                isConnected = true;
+
                 stompClient.subscribe(`/topic/messages`, (message) => {
                     const msg = JSON.parse(message.body);
+
                     if (msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
                     } else {
-                        unreadCounts[msg.chatId] = (unreadCounts[msg.chatId] || 0) + 1;
-                        renderUnreadBadge(msg.chatId);
+                        if (msg.senderId !== userId) {
+                            unreadCounts[msg.chatId] = (unreadCounts[msg.chatId] || 0) + 1;
+                            renderUnreadBadge(msg.chatId);
+                        }
                     }
                 });
+
+                if (typeof onConnected === "function") {
+                    onConnected();
+                }
             });
         };
+
         return {
             sendMessage,
             connectToSocket
-        }
+        };
     })();
 
     // =============== Renderer ===============
@@ -61,6 +73,7 @@
         const startMsg = document.getElementById("startMsg");
 
         const formatDate = (isoString) => {
+            if (!isoString) return "---";
             const date = new Date(isoString);
             return date.toLocaleString('he-IL', {
                 hour: '2-digit',
