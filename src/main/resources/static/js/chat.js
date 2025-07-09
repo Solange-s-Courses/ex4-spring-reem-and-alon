@@ -2,14 +2,33 @@
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+    // ============ ניהול מונה הודעות שלא נקראו ============
+
+    function renderUnreadBadge(chatId) {
+        const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
+        const count = unreadCounts[chatId] || 0;
+        if (chatItem) {
+            if (count > 0) {
+                chatItem.textContent = count;
+                chatItem.style.display = 'inline-block';
+            } else {
+                chatItem.textContent = '';
+                chatItem.style.display = 'none';
+            }
+        }
+    }
+
+    function resetUnread(chatId) {
+        unreadCounts[chatId] = 0;
+        renderUnreadBadge(chatId);
+    }
+
+    // =============== WebSocket ניהול =================
     const webSocket = (() =>{
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
-        /* ============================ 1. sendMessage ============================ */
         const sendMessage = (content,chatId, userId) =>{
-            console.log(`chat id is: ${chatId}`)
-            console.log(`user id is: ${userId}`)
             stompClient.send("/app/chat", {}, JSON.stringify({
                 chatId: chatId,
                 senderId: userId,
@@ -17,16 +36,15 @@
             }))
         };
 
-
-        /* ========================= 2. connectToSocket ========================== */
         const connectToSocket = (chatId, userId) => {
-            console.log(`chat id is: ${chatId}`)
             stompClient.connect({}, () => {
-                console.log("STOMP connected");
                 stompClient.subscribe(`/topic/messages`, (message) => {
                     const msg = JSON.parse(message.body);
                     if (msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
+                    } else {
+                        unreadCounts[msg.chatId] = (unreadCounts[msg.chatId] || 0) + 1;
+                        renderUnreadBadge(msg.chatId);
                     }
                 });
             });
@@ -35,9 +53,9 @@
             sendMessage,
             connectToSocket
         }
-    })()
+    })();
 
-    /* ========================== 3. messageRenderer ========================= */
+    // =============== Renderer ===============
     const messageRenderer = (() => {
         const messagesList = document.getElementById("messagesList");
         const startMsg = document.getElementById("startMsg");
@@ -54,8 +72,6 @@
         };
 
         const render = (dto, mine) => {
-            console.log(dto, mine);
-
             const wrap = document.createElement("div");
             wrap.className = `message ${mine ? "sent" : "received"}`;
             wrap.innerHTML = `
@@ -71,22 +87,26 @@
         return { render };
     })();
 
-    /* ========================== DOM Ready =========================== */
+    // ============== DOM Ready ==============
     document.addEventListener("DOMContentLoaded", () => {
         const input = document.querySelector(".chatInput");
         const chatIdInput = document.querySelector('input[name="chatId"]');
         const userIdInput = document.querySelector('input[name="userId"]');
         const form = document.querySelector("form");
 
+        let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
+        let currentUserId = userIdInput ? Number(userIdInput.value) : null;
+
         if (chatIdInput){
-            webSocket.connectToSocket(Number(chatIdInput.value), Number(userIdInput.value));
+            webSocket.connectToSocket(currentChatId, currentUserId);
+            resetUnread(currentChatId);
         }
 
         form?.addEventListener("submit", e =>{
             e.preventDefault()
             const text = input.value.trim();
             if (!text) return;
-            webSocket.sendMessage(text, Number(chatIdInput.value), Number(userIdInput.value))
+            webSocket.sendMessage(text, currentChatId, currentUserId)
             input.value = "";
         });
     });

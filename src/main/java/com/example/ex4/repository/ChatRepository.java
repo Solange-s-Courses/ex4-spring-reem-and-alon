@@ -13,4 +13,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findByProvider(ProviderProfile provider);
 
     Optional<Chat> findByClientAndProvider(User client, ProviderProfile provider);
+
+    List<Chat> findAllByClient(User client);
 }

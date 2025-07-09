@@ -37,18 +37,16 @@ public class ChatController {
         User user = userPrincipal.getUser();
         ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
         List<Chat> chats = providerProfile != null ? chatService.getAllChatsForProvider(providerProfile) : chatService.getAllChatsForClient(user);
-        if (!chats.isEmpty()) {
-            model.addAttribute("unreadCount",messageService.getUnreadMessagesCount(chats));
-        }
         model.addAttribute("chats", chats);
         model.addAttribute("userId", user.getId());
         return "shared/chat";
     }
 
-
     @GetMapping("/{chatId}")
-    public ModelAndView showConversation(@PathVariable Long chatId, ModelMap model) {
-        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId);
+    public ModelAndView showConversation(@PathVariable Long chatId,
+                                         @AuthenticationPrincipal MyUserPrincipal userPrincipal,
+                                         ModelMap model) {
+        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId, userPrincipal.getUser().getId());
         model.addAttribute("messages", messages);
         model.addAttribute("chatId", chatId);
         return new ModelAndView("forward:/chats", model);
