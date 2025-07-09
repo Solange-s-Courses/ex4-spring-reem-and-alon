@@ -20,9 +20,6 @@ public class UserSessionSubscriptions {
     @Autowired
     private SubscriptionMapper subscriptionMapper;
 
-    @Autowired
-    private SubscriptionRepository subscriptionRepository;
-
     public UserSessionSubscriptions() {
         subscriptions = new ArrayList<>();
     }

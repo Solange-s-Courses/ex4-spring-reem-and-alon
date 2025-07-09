@@ -34,9 +34,6 @@ public class ShoppingCart implements Serializable {
 
     public void clear() { items.clear(); }
 
-    public Integer getProductsAmount() {
-        return items.size();
-    }
     public Set<Long> getPkgIds() {
         return items.stream()
                 .map(CartItemDTO::getPkgId)

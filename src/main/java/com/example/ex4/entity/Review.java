@@ -34,7 +34,7 @@ public class Review {
     @Column(nullable = false)
     @Min(1)
     @Max(5)
-    private double stars;
+    private Double stars;
 
     @LastModifiedDate
     private LocalDateTime createdAt;

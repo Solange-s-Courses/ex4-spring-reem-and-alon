@@ -12,7 +12,7 @@ public enum SubscriptionPeriod {
         this.months = months;
         this.label = label;
     }
-    public int getMonths() { return months; }
+
     public String getLabel() { return label; }
 }
 
