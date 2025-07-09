@@ -28,4 +28,6 @@ public class Chat {
 
     private LocalDateTime createdAt;
 
+    @Transient
+    private long unreadCount;
 }

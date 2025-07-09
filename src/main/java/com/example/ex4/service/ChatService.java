@@ -22,7 +22,7 @@ public class ChatService {
 
     public void getOrCreate(User client, ProviderProfile provider){
         chatRepository.findByClientAndProvider(client, provider)
-                .orElseGet(() -> chatRepository.save(new Chat(null, client, provider, LocalDateTime.now())));
+                .orElseGet(() -> chatRepository.save(new Chat(null, client, provider, LocalDateTime.now(), 0)));
     }
 
     public List<Chat> getAllChatsForProvider(ProviderProfile providerProfile) {
