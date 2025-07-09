@@ -120,9 +120,9 @@
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="fw-semibold" th:text="${conv.provider.companyName}"></span>
-                        <span th:if="${unreadMessages != null and unreadMessages.get(conv.provider.id) > 0}"
+                        <span th:if="${unreadMessages != null and unreadMessages.get(conv.id) > 0}"
                               class="badge rounded-pill bg-danger unread-badge ms-2"
-                              th:text="${unreadMessages.getOrDefault(conv.provider.id, 0)}"></span>
+                              th:text="${unreadMessages.getOrDefault(conv.id, 0)}"></span>
                     </div>
                 </div>
             </a>

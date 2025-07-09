@@ -27,8 +27,7 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime sentAt;
 
-    @Builder.Default
-    private boolean isRead = false;
+    private boolean isRead;
 
     @ManyToOne
     private Chat chat;
