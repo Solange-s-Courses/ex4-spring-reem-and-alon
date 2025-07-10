@@ -26,7 +26,6 @@
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
-
         const sendMessage = (content, chatId, userId) => {
             stompClient.send("/app/chat", {}, JSON.stringify({
                 chatId: chatId,
@@ -37,7 +36,6 @@
 
         const connectToSocket = (chatId, userId) => {
             stompClient.connect({}, () => {
-
                 stompClient.subscribe(`/topic/messages`, (message) => {
                     const msg = JSON.parse(message.body);
 
@@ -61,9 +59,17 @@
             });
         };
 
+        const disconnectSocket = () => {
+            // קריאה נכונה לנתק את stomp
+            if (stompClient && stompClient.connected) {
+                stompClient.disconnect();
+            }
+        };
+
         return {
             sendMessage,
-            connectToSocket
+            connectToSocket,
+            disconnectSocket
         };
     })();
 
@@ -106,6 +112,11 @@
         const chatIdInput = document.querySelector('input[name="chatId"]');
         const userIdInput = document.querySelector('input[name="userId"]');
         const form = document.querySelector("form");
+
+        window.addEventListener("beforeunload", () => {
+            webSocket.disconnectSocket()
+        });
+
 
         const chatLinks = document.querySelectorAll('[data-chat-id]');
         chatLinks.forEach(link => {

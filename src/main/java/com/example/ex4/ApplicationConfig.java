@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -43,14 +45,16 @@ public class ApplicationConfig {
                         .permitAll()
                 )
                 .sessionManagement(session -> session
+                        .invalidSessionUrl("/login?error")
                         .maximumSessions(1)
                         .expiredUrl("/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID") // name of Spring cookie
                         .clearAuthentication(true)
+                        .invalidateHttpSession(true)
                         .permitAll()
                 )
                 .exceptionHandling(

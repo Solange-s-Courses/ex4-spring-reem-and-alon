@@ -4,6 +4,7 @@ import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
