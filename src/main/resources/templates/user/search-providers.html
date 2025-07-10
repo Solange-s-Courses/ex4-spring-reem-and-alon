@@ -254,12 +254,17 @@
                             </div>
                             <span class="fw-semibold me-1" th:text="${#numbers.formatDecimal(result.avgStars, 1, 1)}">0.0</span>
                         </div>
-                        <small class="fw-bolder">
-                            <a th:href="@{/reviews(providerProfileId=${result.planPackages[0].providerProfile.id})}"
-                               class="link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4">
+                        <form class="search-form d-inline" th:action="@{/reviews}" method="get" style="margin:0; padding:0; border:none;">
+                            <input type="hidden" name="category" th:value="${selectedCategory}"/>
+                            <input type="hidden" name="providerProfileId" th:value="${result.planPackages[0].providerProfile.id}"/>
+
+                            <button type="submit"
+                                    class="btn btn-link p-0 m-0 align-baseline
+                                            link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4 fw-bolder"
+                                    style="font-size: inherit;">
                                 <span th:text="${result.reviewCount}">0</span> reviews (click here to see reviews)
-                            </a>
-                        </small>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <div th:replace="~{fragments/plan-package-carousel :: planCarousel(plans=${result.planPackages}, pageName=${'search'})}"></div>

@@ -56,6 +56,14 @@
                         }
                     }
                 });
+
+                // האזנה להודעת ניתוק כשה-session נגמר
+                stompClient.subscribe('/topic/disconnect', (message) => {
+                    if (message.body === 'SESSION_EXPIRED') {
+                        console.log("Session expired, redirecting to login...");
+                        window.location.href = '/login?sessionExpired=true';
+                    }
+                });
             });
         };
 
@@ -124,16 +132,19 @@
             renderUnreadBadge(chatId); // מצייר את המונה מההתחלה
         });
 
-
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
         let currentUserId = userIdInput ? Number(userIdInput.value) : null;
-        webSocket.connectToSocket(currentChatId, currentUserId);
 
-        form?.addEventListener("submit", e =>{
-            e.preventDefault()
+        // התחבר ל-WebSocket רק אם יש ערכים תקינים
+        if (currentChatId && currentUserId) {
+            webSocket.connectToSocket(currentChatId, currentUserId);
+        }
+
+        form?.addEventListener("submit", e => {
+            e.preventDefault();
             const text = input.value.trim();
             if (!text) return;
-            webSocket.sendMessage(text, currentChatId, currentUserId)
+            webSocket.sendMessage(text, currentChatId, currentUserId);
             input.value = "";
         });
     });

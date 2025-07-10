@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Session Info</title>
+</head>
+<body>
+<h1>Session Information</h1>
+<ul>
+    <li><strong>Session ID:</strong> <span th:text="${sessionId}"></span></li>
+    <li><strong>Created:</strong> <span th:text="${#dates.format(creationTime, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+    <li><strong>Last Accessed:</strong> <span th:text="${#dates.format(lastAccessedTime, 'dd/MM/yyyy HH:mm:ss')}"></span></li>
+    <li><strong>Max Inactive Interval (sec):</strong> <span th:text="${maxInactiveInterval}"></span></li>
+    <li><strong>Idle (sec):</strong> <span th:text="${idleSeconds}"></span></li>
+    <li><strong>Seconds Left:</strong> <span th:text="${secondsLeft}"></span></li>
+</ul>
+</body>
+</html>

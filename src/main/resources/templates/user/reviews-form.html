@@ -8,11 +8,12 @@
   <link rel="stylesheet" th:href="@{/css/reviews.css}">
 </head>
 <body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
   <div class="container">
     <div class="row justify-content-center my-5">
       <div class="col card shadow-lg border-0 ">
         <div class="card-body">
-          <form th:action="@{/reviews/add}" method="post" th:object="${review}">
+          <form class="mg-3" th:action="@{/reviews/add}" method="post" th:object="${review}">
             <input type="hidden" th:value="${provider.id}" name="providerProfileId">
             <div class="row g-3 align-items-center mb-3">
               <div class="col-auto position-relative">
