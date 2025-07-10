@@ -43,14 +43,12 @@
 
                     if (chatId && msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
-                        if (msg.senderId !== userId) {
-                             fetch(`/chats/${chatId}/read`, {
-                                method: "POST",
-                                headers: {
-                                    [csrfHeader]: csrfToken
-                                }
-                            });
-                        }
+                        fetch(`/chats/${chatId}/read`, {
+                            method: "POST",
+                            headers: {
+                                [csrfHeader]: csrfToken
+                            }
+                        });
                         unreadCounts[msg.chatId] = 0;
                         renderUnreadBadge(msg.chatId);
                     } else {

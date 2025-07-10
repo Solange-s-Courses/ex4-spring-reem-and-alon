@@ -65,7 +65,7 @@ public class ChatController {
         return "shared/chat";
     }
 
-    @PostMapping("/chats/{chatId}/read")
+    @PostMapping("/{chatId}/read")
     public ResponseEntity<?> markChatAsRead(@PathVariable Long chatId,
                                             @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();
