@@ -1,6 +1,7 @@
 (() => {
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    const form = document.querySelector("form.chat-input");
     // ============ ניהול מונה הודעות שלא נקראו ============
     function renderUnreadBadge(chatId) {
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
@@ -41,12 +42,13 @@
 
                     if (chatId && msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
-                        fetch(`/chats/${chatId}/read`, {
-                            method: "POST",
-                            headers: {
-                                [csrfHeader]: csrfToken
-                            }
-                        });
+                        if (msg.senderId !== userId){
+                            fetch(`/api/chat/${msg.messageId}/read`, {
+                                method: "PUT",
+                            }).catch(err => {
+                                console.log(err.response.data)
+                            })
+                        }
                         unreadCounts[msg.chatId] = 0;
                         renderUnreadBadge(msg.chatId);
                     } else {
@@ -57,13 +59,17 @@
                     }
                 });
 
-                // האזנה להודעת ניתוק כשה-session נגמר
-                stompClient.subscribe('/topic/disconnect', (message) => {
-                    if (message.body === 'SESSION_EXPIRED') {
-                        console.log("Session expired, redirecting to login...");
-                        window.location.href = '/login?sessionExpired=true';
+                stompClient.subscribe("/user/queue/errors", (message) => {
+                    console.log(message.body)
+                    const msg = JSON.parse(message.body);
+                    console.log(msg.body)
+                    if (msg.body === "SESSION_EXPIRED") {
+                        window.location.href = "/login?expired";
+                    } else {
+                        alert("שגיאה: " + msg.body); // הצג שגיאת ולידציה או business
                     }
                 });
+
             });
         };
 
@@ -119,13 +125,6 @@
         const input = document.querySelector(".chatInput");
         const chatIdInput = document.querySelector('input[name="chatId"]');
         const userIdInput = document.querySelector('input[name="userId"]');
-        const form = document.querySelector("form");
-
-        window.addEventListener("beforeunload", () => {
-            webSocket.disconnectSocket()
-        });
-
-
         const chatLinks = document.querySelectorAll('[data-chat-id]');
         chatLinks.forEach(link => {
             const chatId = link.getAttribute('data-chat-id');
@@ -135,11 +134,7 @@
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
         let currentUserId = userIdInput ? Number(userIdInput.value) : null;
 
-        // התחבר ל-WebSocket רק אם יש ערכים תקינים
-        if (currentChatId && currentUserId) {
-            webSocket.connectToSocket(currentChatId, currentUserId);
-        }
-
+        webSocket.connectToSocket(currentChatId, currentUserId);
         form?.addEventListener("submit", e => {
             e.preventDefault();
             const text = input.value.trim();
