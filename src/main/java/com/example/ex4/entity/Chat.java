@@ -1,17 +1,16 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Chat {
 
@@ -25,6 +24,10 @@ public class Chat {
 
     @ManyToOne
     private ProviderProfile provider;
+
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
+
 
     private LocalDateTime createdAt;
 

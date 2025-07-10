@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class, MessageService.class})
+@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class})
 public class UserControllerAdvice {
 
     @Autowired
@@ -41,4 +42,8 @@ public class UserControllerAdvice {
         return userPrincipal.getUser().getCreditBalance();
     }
 
+    @ModelAttribute("unreadMessages")
+    public Map<Long, Long> unreadMessages(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        return messageService.getUnreadMessagesCount(userPrincipal.getUser());
+    }
 }

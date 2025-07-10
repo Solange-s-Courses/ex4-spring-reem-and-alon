@@ -1,4 +1,6 @@
 (() => {
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     // ============ ניהול מונה הודעות שלא נקראו ============
     function renderUnreadBadge(chatId) {
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
@@ -24,13 +26,8 @@
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
-        let isConnected = false;
 
         const sendMessage = (content, chatId, userId) => {
-            if (!isConnected) {
-                console.warn("WebSocket not connected yet");
-                return;
-            }
             stompClient.send("/app/chat", {}, JSON.stringify({
                 chatId: chatId,
                 senderId: userId,
@@ -38,15 +35,22 @@
             }));
         };
 
-        const connectToSocket = (chatId, userId, onConnected) => {
+        const connectToSocket = (chatId, userId) => {
             stompClient.connect({}, () => {
-                isConnected = true;
 
                 stompClient.subscribe(`/topic/messages`, (message) => {
                     const msg = JSON.parse(message.body);
 
-                    if (msg.chatId === chatId) {
+                    if (chatId && msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
+                        fetch(`/chats/${chatId}/read`, {
+                            method: "POST",
+                            headers: {
+                                [csrfHeader]: csrfToken
+                            }
+                        });
+                        unreadCounts[msg.chatId] = 0;
+                        renderUnreadBadge(msg.chatId);
                     } else {
                         if (msg.senderId !== userId) {
                             unreadCounts[msg.chatId] = (unreadCounts[msg.chatId] || 0) + 1;
@@ -54,10 +58,6 @@
                         }
                     }
                 });
-
-                if (typeof onConnected === "function") {
-                    onConnected();
-                }
             });
         };
 
@@ -107,13 +107,16 @@
         const userIdInput = document.querySelector('input[name="userId"]');
         const form = document.querySelector("form");
 
+        const chatLinks = document.querySelectorAll('[data-chat-id]');
+        chatLinks.forEach(link => {
+            const chatId = link.getAttribute('data-chat-id');
+            renderUnreadBadge(chatId); // מצייר את המונה מההתחלה
+        });
+
+
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
         let currentUserId = userIdInput ? Number(userIdInput.value) : null;
-
-        if (chatIdInput){
-            webSocket.connectToSocket(currentChatId, currentUserId);
-            resetUnread(currentChatId);
-        }
+        webSocket.connectToSocket(currentChatId, currentUserId);
 
         form?.addEventListener("submit", e =>{
             e.preventDefault()

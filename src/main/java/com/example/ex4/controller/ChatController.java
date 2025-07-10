@@ -9,13 +9,12 @@ import com.example.ex4.repository.ProviderProfileRepository;
 import com.example.ex4.service.ChatService;
 import com.example.ex4.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
@@ -36,19 +35,41 @@ public class ChatController {
     public String list(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
         User user = userPrincipal.getUser();
         ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
-        List<Chat> chats = providerProfile != null ? chatService.getAllChatsForProvider(providerProfile) : chatService.getAllChatsForClient(user);
+        List<Chat> chats = providerProfile != null ?
+                chatService.getAllChatsForProvider(providerProfile) :
+                chatService.getAllChatsForClient(user);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", user.getId());
+        model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
         return "shared/chat";
     }
 
     @GetMapping("/{chatId}")
-    public ModelAndView showConversation(@PathVariable Long chatId,
-                                         @AuthenticationPrincipal MyUserPrincipal userPrincipal,
-                                         ModelMap model) {
-        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId, userPrincipal.getUser().getId());
+    public String showConversation(@PathVariable Long chatId,
+                                   @AuthenticationPrincipal MyUserPrincipal userPrincipal,
+                                   Model model) {
+        User user = userPrincipal.getUser();
+        ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
+        messageService.markAsRead(chatId, user.getId());
+
+        List<Chat> chats = providerProfile != null ?
+                chatService.getAllChatsForProvider(providerProfile) :
+                chatService.getAllChatsForClient(user);
+
+        List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId);
         model.addAttribute("messages", messages);
+        model.addAttribute("chats", chats);
         model.addAttribute("chatId", chatId);
-        return new ModelAndView("forward:/chats", model);
+        model.addAttribute("userId", user.getId());
+        model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
+        return "shared/chat";
+    }
+
+    @PostMapping("/{chatId}/read")
+    public ResponseEntity<?> markChatAsRead(@PathVariable Long chatId,
+                                            @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        User user = userPrincipal.getUser();
+        messageService.markAsRead(chatId, user.getId());
+        return ResponseEntity.ok().build();
     }
 }

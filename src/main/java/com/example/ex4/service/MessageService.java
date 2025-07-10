@@ -35,7 +35,7 @@ public class MessageService {
         Message message = Message.builder()
                 .content(messageDTO.getContent())
                 .sentAt(messageDTO.getSentAt())
-                .isRead(messageDTO.getIsRead())
+                .isRead(false)
                 .senderID(messageDTO.getSenderId())
                 .chat(chat)
                 .build();
@@ -44,15 +44,8 @@ public class MessageService {
     }
 
     @Transactional
-    public List<ChatMessageDTO> getAllMessageHistory(Long chatId, Long userId) {
+    public List<ChatMessageDTO> getAllMessageHistory(Long chatId) {
         List<Message> messages = messageRepository.findByChat_IdOrderBySentAtAsc(chatId);
-
-        messages.forEach(message -> {
-            if (!message.isRead() && !message.getSenderID().equals(userId)) {
-                message.setRead(true);
-                messageRepository.save(message);
-            }
-        });
         return messages.stream().map(this::toDto).collect(Collectors.toList());
     }
 
@@ -69,6 +62,18 @@ public class MessageService {
         List<Chat> chats = Objects.equals(user.getRole(), "USER") ? chatRepository.findAllByClient(user):
                 chatRepository.findByProvider(providerProfileRepository.findByUser(user).orElse(null));
 
-        return chats.stream().collect(Collectors.toMap(Chat::getId, chat -> messageRepository.countByChatAndIsReadFalse(chat)));
+        return chats.stream().collect(Collectors.toMap(Chat::getId, chat -> messageRepository.countByChatAndSenderIDNotAndIsReadFalse(chat, user.getId())));
     }
+
+    @Transactional
+    public void markAsRead(Long chatId, long id) {
+        List<Message> messages = messageRepository.findByChat_IdAndSenderIDNotAndIsReadFalse(chatId, id);
+        System.out.println("messages found to mark as read: " + messages.size());
+        messages.forEach(message -> {
+            System.out.println("Marking message " + message.getId() + " as read");
+            message.setRead(true);
+            messageRepository.save(message);
+        });
+    }
+
 }
