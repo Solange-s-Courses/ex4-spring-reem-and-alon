@@ -1,12 +1,10 @@
 package com.example.ex4.service;
 
-import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,17 +28,4 @@ public class SubscriptionService {
         return subscriptionRepository.findSubscriptionByUser(user);
     }
 
-    public List<Subscription> findPlanPackageSubscribers(PlanPackage plan) {
-        return subscriptionRepository.findAllByPlanPackage(plan);
-    }
-
-    public void deleteSubscription(long id) {
-        subscriptionRepository.deleteById(id);
-    }
-
-
-    public List<PlanPackage> findUserSubscriptionPlans(User user) {
-        List<Subscription> subscriptions = subscriptionRepository.findSubscriptionByUser(user);
-        return subscriptions.stream().map(Subscription::getPlanPackage).collect(Collectors.toList());
-    }
 }

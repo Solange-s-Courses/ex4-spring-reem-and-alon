@@ -2,10 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.SubscriptionMapper;
 import com.example.ex4.components.UserSessionSubscriptions;
-import com.example.ex4.entity.ProviderProfile;
-import com.example.ex4.repository.ProviderProfileRepository;
 import com.example.ex4.service.ReviewService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

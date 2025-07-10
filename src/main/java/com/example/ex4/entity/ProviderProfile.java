@@ -1,6 +1,5 @@
 package com.example.ex4.entity;
 
-import com.example.ex4.validator.ValidImage;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;

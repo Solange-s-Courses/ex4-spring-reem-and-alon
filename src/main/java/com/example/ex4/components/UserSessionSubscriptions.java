@@ -2,7 +2,6 @@ package com.example.ex4.components;
 
 import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.Subscription;
-import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;

@@ -7,7 +7,6 @@ import com.example.ex4.entity.User;
 import com.example.ex4.repository.ChatRepository;
 import com.example.ex4.repository.MessageRepository;
 import com.example.ex4.repository.ProviderProfileRepository;
-import com.example.ex4.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

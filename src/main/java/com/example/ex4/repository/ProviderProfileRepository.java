@@ -1,6 +1,5 @@
 package com.example.ex4.repository;
 
-import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +11,5 @@ import java.util.Optional;
 public interface ProviderProfileRepository extends JpaRepository<ProviderProfile, Long> {
     Optional<ProviderProfile> findByUser(User appUser);
     Optional<List<ProviderProfile>> findAllByApprovedFalse();
-
-    List<ProviderProfile> findAllByCategory(ProviderCategory category);
 }
 

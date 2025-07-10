@@ -3,7 +3,6 @@ package com.example.ex4.dto;
 import com.example.ex4.validator.ValidImage;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor

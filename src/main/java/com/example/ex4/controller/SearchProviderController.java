@@ -1,13 +1,11 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.components.SearchCategoryHolder;
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.dto.SearchResultDTO;
-import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.ProviderProfile;
-import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.ProviderCategoryService;
-import com.example.ex4.service.ProviderProfileService;
 import com.example.ex4.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,6 @@ import java.util.*;
 @RequestMapping("/user/search-providers")
 public class SearchProviderController {
 
-    @Autowired
-    private PlanPackageService planPackageService;
 
     @Autowired
     private ProviderCategoryService providerCategoryService;
@@ -34,22 +30,18 @@ public class SearchProviderController {
     private ShoppingCart sessionCart;
     @Autowired
     private ReviewService reviewService;
-    @Autowired
-    private ProviderProfileService providerProfileService;
 
-    /*
-        @Autowired
-        private RequestUrlHolder requestUrlHolder;
-    */
+    @Autowired
+    private SearchCategoryHolder searchCategoryHolder;
 
     @GetMapping
     public ModelAndView initSearchFormData(@RequestParam(value = "category", required = false) String category,
-                                           HttpServletRequest request, ModelMap model) {
+                                           ModelMap model) {
         model.addAttribute("providers", providerCategoryService.findAllCategoryNames());
         model.addAttribute("cartItems", sessionCart.getItems());
 
         if (category != null && !category.isBlank()) {
-            request.setAttribute("category", category);
+            searchCategoryHolder.setCategory(category);
             model.addAttribute("selectedCategory", category);
             return new ModelAndView("forward:/user/search-providers/result", model);
         }
@@ -59,12 +51,10 @@ public class SearchProviderController {
     }
 
     @GetMapping("/result")
-    public String groupedByProviderResult(Model model, HttpServletRequest request) {
-        String category = (String)request.getAttribute("category");
+    public ModelAndView groupedByProviderResult(ModelMap model) {
+        String category = searchCategoryHolder.getCategory();
         ProviderCategory providerCategory = providerCategoryService.findByName(category);
-        List<PlanPackage> allPackages = planPackageService.getAllPackagesByCategory(providerCategory);
 
-        //Map<Long, List<PlanPackage>> groupedResult = planPackageService.groupPackagesWithReviewStats(allPackages);
         List<ProviderProfile> providers = providerCategory.getProviders();
         List<SearchResultDTO> results = new ArrayList<>();
         providers.forEach(provider -> {
@@ -74,9 +64,8 @@ public class SearchProviderController {
             searchResultDTO.setReviewCount(reviewService.getReviewersCount(provider));
             results.add(searchResultDTO);
         });
-        System.out.println(results);
 
         model.addAttribute("results", results);
-        return "user/search-providers";
+        return new ModelAndView("user/search-providers",model);
     }
 }

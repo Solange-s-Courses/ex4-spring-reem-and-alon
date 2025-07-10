@@ -33,9 +33,4 @@ public class PlanPackage {
     @ManyToOne
     private ProviderProfile providerProfile;
 
-/*    @Transient
-    private long reviewCount;
-
-    @Transient
-    private double avgStars;*/
 }

@@ -21,8 +21,6 @@ public class CheckoutService {
     @Autowired
     private SubscriptionService subscriptionService;
 
-    @Autowired
-    private UserSessionSubscriptions userSessionSubscriptions;
 
     @Autowired
     private ShoppingCart sessionCart;

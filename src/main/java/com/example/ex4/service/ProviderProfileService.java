@@ -7,7 +7,6 @@ import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.repository.ProviderCategoryRepository;
 import com.example.ex4.repository.ProviderProfileRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -53,10 +52,6 @@ public class ProviderProfileService {
                 .category(category)
                 .user(admin).build();
         providerProfileRepository.save(profile);
-    }
-
-    public List<ProviderProfile> findAllProvidersByCategory(ProviderCategory category) {
-        return providerProfileRepository.findAllByCategory(category);
     }
 
     public byte[] findProfileImage(Long id) {

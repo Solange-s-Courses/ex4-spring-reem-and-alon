@@ -1,6 +1,6 @@
 package com.example.ex4.configuration;
 
-import com.example.ex4.components.RequestUrlHolder;
+import com.example.ex4.components.SearchCategoryHolder;
 import com.example.ex4.components.ShoppingCart;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +19,8 @@ public class BeanConfiguration {
 
     @Bean
     @RequestScope
-    public RequestUrlHolder urlHolder() {
-        return new RequestUrlHolder();
+    public SearchCategoryHolder urlHolder() {
+        return new SearchCategoryHolder();
     }
 }
 
