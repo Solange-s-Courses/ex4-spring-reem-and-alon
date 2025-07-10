@@ -42,8 +42,9 @@ public class UserControllerAdvice {
         return userPrincipal.getUser().getCreditBalance();
     }
 
-    @ModelAttribute("unreadMessages")
-    public Map<Long, Long> unreadMessages(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
-        return messageService.getUnreadMessagesCount(userPrincipal.getUser());
+    @ModelAttribute("unreadMessagesCount")
+    public long unreadMessagesCount(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        Map<Long, Long> unreadMessages = messageService.getUnreadMessagesCount(userPrincipal.getUser());
+        return unreadMessages.values().stream().mapToLong(Long::longValue).sum();
     }
 }
