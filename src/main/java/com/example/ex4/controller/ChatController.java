@@ -9,13 +9,12 @@ import com.example.ex4.repository.ProviderProfileRepository;
 import com.example.ex4.service.ChatService;
 import com.example.ex4.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
@@ -41,10 +40,10 @@ public class ChatController {
                 chatService.getAllChatsForClient(user);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", user.getId());
+        model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
         return "shared/chat";
     }
 
-    // עובר לשיחה מסוימת, טוען הודעות, עושה forward לרשימה עם Model מלא
     @GetMapping("/{chatId}")
     public String showConversation(@PathVariable Long chatId,
                                    @AuthenticationPrincipal MyUserPrincipal userPrincipal,
@@ -62,7 +61,15 @@ public class ChatController {
         model.addAttribute("chats", chats);
         model.addAttribute("chatId", chatId);
         model.addAttribute("userId", user.getId());
+        model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
         return "shared/chat";
     }
 
+    @PostMapping("/chats/{chatId}/read")
+    public ResponseEntity<?> markChatAsRead(@PathVariable Long chatId,
+                                            @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        User user = userPrincipal.getUser();
+        messageService.markAsRead(chatId, user.getId());
+        return ResponseEntity.ok().build();
+    }
 }

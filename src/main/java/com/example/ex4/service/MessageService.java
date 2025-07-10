@@ -35,7 +35,7 @@ public class MessageService {
         Message message = Message.builder()
                 .content(messageDTO.getContent())
                 .sentAt(messageDTO.getSentAt())
-                .isRead(messageDTO.getIsRead())
+                .isRead(false)
                 .senderID(messageDTO.getSenderId())
                 .chat(chat)
                 .build();
@@ -67,13 +67,13 @@ public class MessageService {
 
     @Transactional
     public void markAsRead(Long chatId, long id) {
-        List<Message> messages = messageRepository.findByChat_Id(chatId);
-
+        List<Message> messages = messageRepository.findByChat_IdAndSenderIDNotAndIsReadFalse(chatId, id);
+        System.out.println("messages found to mark as read: " + messages.size());
         messages.forEach(message -> {
-            if (!message.isRead() && !message.getSenderID().equals(id)) {
-                message.setRead(true);
-                messageRepository.save(message);
-            }
+            System.out.println("Marking message " + message.getId() + " as read");
+            message.setRead(true);
+            messageRepository.save(message);
         });
     }
+
 }
