@@ -21,7 +21,11 @@
   <p>See what customers really think</p>
 </section>
   <div class="container search-section">
-    <form class="row gx-3 gy-2 align-items-end" th:action="@{/reviews}" method="get">
+    <form class="search-form d-inline" th:action="@{/user/search-providers}" method="get" style="margin:0; padding:0; border:none;">
+      <input type="hidden" name="category" th:value="${param.category}" />
+      <button class="btn btn-primary btn-md mt-3" type="submit">Back To Search</button>
+    </form>
+    <form class="row mt-3 gx-3 gy-2 align-items-end" th:action="@{/reviews}" method="get">
       <input type="hidden" name="providerProfileId" th:value="${provider.id}"/>
       <!--th:action="@{/providers/{id}/reviews(id=${provider.id})}"-->
       <div class="col-12 col-md-4">

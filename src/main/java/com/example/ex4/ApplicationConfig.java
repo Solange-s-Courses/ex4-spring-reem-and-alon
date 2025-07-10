@@ -9,9 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -31,7 +35,7 @@ public class ApplicationConfig {
         http.cors(withDefaults()).csrf(withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( "/css/**", "/login", "/register/**","/chats/**").permitAll()
-                        .requestMatchers("/user/**", "/cart/**","/api/cart/**").hasRole("USER")
+                        .requestMatchers("/user/**", "/cart/**","/api/cart/**","/session-info/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
@@ -44,6 +48,8 @@ public class ApplicationConfig {
                 )
                 .sessionManagement(session -> session
                         .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .sessionRegistry(sessionRegistry())
                         .expiredUrl("/login?error")
                 )
                 .logout(logout -> logout
@@ -60,6 +66,12 @@ public class ApplicationConfig {
 
         return http.build();
     }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
     @Bean
     public CommandLineRunner initAdmin(PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
@@ -76,4 +88,6 @@ public class ApplicationConfig {
             }
         };
     }
+
+
 }

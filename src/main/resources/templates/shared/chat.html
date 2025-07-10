@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="_csrf" th:content="${_csrf.token}">
@@ -97,9 +97,11 @@
 </head>
 
 <body class="bg-light">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
 <div class="container py-4">
 
-    <h3 class="mb-4 text-center"><i class="bi bi-chat-dots me-1"></i> Conversations</h3>
+    <h3 class="mb-4 text-center"><i class="bi bi-chat-dots me-1"></i>Conversations</h3>
 
     <div th:if="${#lists.isEmpty(chats)}" class="text-center text-muted">
         <p class="mt-5"><i class="bi bi-inbox fs-1"></i></p>
@@ -113,13 +115,21 @@
                th:data-chat-id="${chat.id}"
                class="list-group-item list-group-item-action d-flex align-items-center chat-item">
 
-                <img th:src="@{/provider-image/{id}(id=${chat.provider.id})}"
-                     alt="avatar"
-                     class="avatar me-3">
+
+                <div sec:authorize="hasRole('ADMIN')">
+                    <i class="bi bi-person-circle fs-1 avatar me-3" ></i>
+                </div>
+                <div sec:authorize="hasRole('USER')">
+                    <img th:src="@{/provider-image/{id}(id=${chat.provider.id})}"
+                         alt="avatar"
+                         class="avatar me-3">
+                </div>
+
 
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-semibold" th:text="${chat.provider.companyName}"></span>
+                        <span sec:authorize="hasRole('USER')" class="fw-semibold" th:text="${chat.provider.companyName}"></span>
+                        <span sec:authorize="hasRole('ADMIN')" class="fw-semibold" th:text="${chat.client.userName}"></span>
                         <span class="badge rounded-pill bg-danger unread-badge ms-2"
                               th:attr="style=${(unreadMessages[chat.id]?:0) > 0 ? '' : 'display:none'}"
 

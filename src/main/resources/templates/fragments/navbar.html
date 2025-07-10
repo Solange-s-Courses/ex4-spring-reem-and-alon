@@ -5,18 +5,22 @@
   <nav class="navbar navbar-expand navbar-dark bg-secondary p-0">
     <div class="collapse navbar-collapse justify-content-center ">
       <ul class="navbar-nav mx-auto">
-        <li class="nav-item me-5">
+        <li class="nav-item ms-4 pt-1">
           <a class="nav-link position-relative" href="/chats">
-            <i class="bi bi-chat-text fs-1"></i>
-            <span class="position-absolute my-3 translate-middle badge rounded-pill bg-danger" th:text="${unreadMessagesCount}">
+            <i class="bi bi-chat-text fs-1 text-center"></i>
+            <span class="position-absolute my-3 translate-middle badge rounded-pill bg-danger"
+              th:text="${unreadMessagesCount != null} ? ${unreadMessagesCount} : 0">
                 5
-              </span>
+            </span>
           </a>
         </li>
-        <li  class="nav-item" sec:authorize="hasRole('USER')">
+        <li  class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">
           <a class="nav-link position-relative" href="/user/checkout">
             <i class="bi bi-cart2 fs-1"></i>
-            <span id="cart-size" class="position-absolute my-3 translate-middle badge rounded-pill bg-danger" th:text="${#lists.size(cartItems)}"></span>
+            <span id="cart-size"
+                  class="position-absolute my-3 translate-middle badge rounded-pill bg-danger"
+                  th:text="${cartItems != null} ? ${#lists.size(cartItems)} : 0">
+            </span>
           </a>
         </li>
         <li  class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">
@@ -24,8 +28,15 @@
             <i class="bi bi-person fs-1"></i>
           </a>
         </li>
-        <li class="nav-item ms-4 pt-1 d-flex align-items-center gap-2" sec:authorize="hasRole('USER')">
-          <span class="nav-link position-relative d-flex align-items-center gap-2 p-0">
+
+        <li class="nav-item ms-4 pt-1" sec:authorize="hasRole('ADMIN')">
+          <a class="nav-link position-relative" href="/admin">
+            <i class="bi bi-person fs-1"></i>
+          </a>
+        </li>
+
+        <li class="nav-item ms-4 pt-1 d-flex align-items-center" sec:authorize="hasRole('USER')">
+          <span class="nav-link position-relative d-flex align-items-center gap-2 p-1">
             <i class="bi bi-cash-coin fs-1"></i>
               <span class="fs-5 text-light">
                 $<span th:text="${balance != null ? balance : 0}">0</span>
