@@ -1,64 +1,66 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Provider Reviews</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-  <link rel="stylesheet" th:href="@{/css/reviews.css}">
+    <meta charset="UTF-8">
+    <title>Provider Reviews</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/reviews.css}">
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-  <div class="container">
+<div class="container">
     <div class="row justify-content-center my-5">
-      <div class="col card shadow-lg border-0 ">
-        <div class="card-body">
-          <form class="mg-3" th:action="@{/reviews/add}" method="post" th:object="${review}">
-            <input type="hidden" th:value="${provider.id}" name="providerProfileId">
-            <div class="row g-3 align-items-center mb-3">
-              <div class="col-auto position-relative">
-                <div th:if="${#fields.hasErrors('stars')}" th:errors="*{stars}" class="invalid-feedback d-block"></div>
-                <div class="rating">
-                  <input type="radio" th:field="*{stars}" id="star5"  value="5" hidden />
-                  <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+        <div class="col card shadow-lg border-0 ">
+            <div class="card-body">
+                <form class="mg-3" th:action="@{/reviews/add}" method="post" th:object="${review}">
+                    <input type="hidden" th:value="${provider.id}" name="providerProfileId">
+                    <div class="row g-3 align-items-center mb-3">
+                        <div class="col-auto position-relative">
+                            <div th:if="${#fields.hasErrors('stars')}" th:errors="*{stars}"
+                                 class="invalid-feedback d-block"></div>
+                            <div class="rating">
+                                <input type="radio" th:field="*{stars}" id="star5" value="5" hidden/>
+                                <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
 
-                  <input type="radio" th:field="*{stars}" id="star4"  value="4" hidden />
-                  <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" th:field="*{stars}" id="star4" value="4" hidden/>
+                                <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
 
-                  <input type="radio" th:field="*{stars}" id="star3"  value="3" hidden />
-                  <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" th:field="*{stars}" id="star3" value="3" hidden/>
+                                <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
 
-                  <input type="radio" th:field="*{stars}" id="star2"  value="2" hidden />
-                  <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                                <input type="radio" th:field="*{stars}" id="star2" value="2" hidden/>
+                                <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
 
-                  <input type="radio" th:field="*{stars}" id="star1"  value="1" hidden />
-                  <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
-                </div>
-              </div>
+                                <input type="radio" th:field="*{stars}" id="star1" value="1" hidden/>
+                                <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <label class="form-label" for="title">Review title</label>
+                        <input id="title" th:field="*{title}" class="form-control" required
+                               placeholder="Summarise your experience">
+                        <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                             class="invalid-feedback d-block"></div>
+
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="content">Your review</label>
+                        <textarea id="content" th:field="*{reviewText}" rows="5" class="form-control"
+                                  placeholder="Share details…" required></textarea>
+                        <div th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}"
+                             class="invalid-feedback d-block"></div>
+                    </div>
+                    <button class="btn btn-primary btn-md mt-3" type="submit">Submit review</button>
+                    <a th:href="@{/reviews(providerProfileId=${provider.id})}"
+                       class="btn btn-secondary btn-md mt-3">
+                        Close
+                    </a>
+                </form>
             </div>
-            <div class="col-12 col-md-9">
-              <label class="form-label" for="title">Review title</label>
-              <input id="title" th:field="*{title}" class="form-control" required
-                     placeholder="Summarise your experience">
-              <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback d-block"></div>
-
-            </div>
-
-            <div class="col-12">
-              <label class="form-label" for="content">Your review</label>
-              <textarea id="content" th:field="*{reviewText}" rows="5" class="form-control"
-                        placeholder="Share details…" required></textarea>
-              <div th:if="${#fields.hasErrors('reviewText')}" th:errors="*{reviewText}" class="invalid-feedback d-block"></div>
-            </div>
-            <button class="btn btn-primary btn-md mt-3" type="submit">Submit review</button>
-            <a th:href="@{/reviews(providerProfileId=${provider.id})}"
-               class="btn btn-secondary btn-md mt-3">
-              Close
-            </a>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 </body>
 </html>

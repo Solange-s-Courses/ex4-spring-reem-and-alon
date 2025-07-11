@@ -9,10 +9,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-        .chat-item { transition: background .15s }
-        .chat-item:hover { background:#f8f9fa; cursor:pointer }
-        .avatar { width:48px; height:48px; object-fit:cover; border-radius:50% }
-        .unread-badge { font-size:.75rem }
+        .chat-item {
+            transition: background .15s
+        }
+
+        .chat-item:hover {
+            background: #f8f9fa;
+            cursor: pointer
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%
+        }
+
+        .unread-badge {
+            font-size: .75rem
+        }
 
         .messages-list {
             overflow-y: auto;
@@ -34,13 +49,13 @@
         }
 
         .message.sent {
-            background-color: #0d6efd; /* כחול bootstrap */
+            background-color: #0d6efd;
             color: white;
             align-self: flex-end;
         }
 
         .message.received {
-            background-color: #f1f3f5; /* אפור בהיר */
+            background-color: #f1f3f5;
             color: #212529;
             align-self: flex-start;
         }
@@ -51,12 +66,12 @@
         }
 
         .message.sent .message-time {
-            color: #dbe9ff; /* בהיר ונעים על כחול */
+            color: #dbe9ff;
             text-align: right;
         }
 
         .message.received .message-time {
-            color: #6c757d; /* אפור בינוני */
+            color: #6c757d;
             text-align: left;
         }
 
@@ -95,41 +110,34 @@
         }
     </style>
 </head>
-
 <body class="bg-light">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
 <div class="container py-4">
-
     <h3 class="mb-4 text-center"><i class="bi bi-chat-dots me-1"></i>Conversations</h3>
-
     <div th:if="${#lists.isEmpty(chats)}" class="text-center text-muted">
         <p class="mt-5"><i class="bi bi-inbox fs-1"></i></p>
         <p>No chats yet.</p>
     </div>
-
     <div th:unless="${#lists.isEmpty(chats)}" class="row justify-content-center">
         <div class="col-3 list-group shadow-sm">
             <a th:each="chat : ${chats}"
                th:href="@{/chats/{id}(id=${chat.id})}"
                th:data-chat-id="${chat.id}"
                class="list-group-item list-group-item-action d-flex align-items-center chat-item">
-
-
                 <div sec:authorize="hasRole('ADMIN')">
-                    <i class="bi bi-person-circle fs-1 avatar me-3" ></i>
+                    <i class="bi bi-person-circle fs-1 avatar me-3"></i>
                 </div>
                 <div sec:authorize="hasRole('USER')">
                     <img th:src="@{/provider-image/{id}(id=${chat.provider.id})}"
                          alt="avatar"
                          class="avatar me-3">
                 </div>
-
-
                 <div class="flex-fill">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span sec:authorize="hasRole('USER')" class="fw-semibold" th:text="${chat.provider.companyName}"></span>
-                        <span sec:authorize="hasRole('ADMIN')" class="fw-semibold" th:text="${chat.client.userName}"></span>
+                        <span sec:authorize="hasRole('USER')" class="fw-semibold"
+                              th:text="${chat.provider.companyName}"></span>
+                        <span sec:authorize="hasRole('ADMIN')" class="fw-semibold"
+                              th:text="${chat.client.userName}"></span>
                         <span class="badge rounded-pill bg-danger unread-badge ms-2"
                               th:attr="style=${(unreadMessages[chat.id]?:0) > 0 ? '' : 'display:none'}"
 
@@ -138,29 +146,29 @@
                 </div>
             </a>
         </div>
-        <div class="col mx-2 my-auto d-flex flex-column border border-white border-2 border-dark-subtle" style="height: 80vh">
+        <div class="col mx-2 my-auto d-flex flex-column border border-white border-2 border-dark-subtle"
+             style="height: 80vh">
             <div class="messages-list" id="messagesList">
-
                 <div id="startMsg" th:if="${messages == null or #lists.isEmpty(messages)}"
                      class="d-flex h-100 w-100 justify-content-center align-items-center text-muted">
                     <span>Start chat 🗨️</span>
                 </div>
-
                 <div th:unless="${messages == null or #lists.isEmpty(messages)}"
                      th:each="msg : ${messages}"
                      th:class="'message ' + (${msg.senderId} == ${userId} ? 'sent' : 'received')">
                     <div th:text="${msg.content}">Message content</div>
                     <div class="message-time">
-                        <span th:if="${msg.sentAt != null}"  th:text="${#temporals.format(msg.sentAt, 'HH:mm dd/MM/yyyy')}"></span>
+                        <span th:if="${msg.sentAt != null}"
+                              th:text="${#temporals.format(msg.sentAt, 'HH:mm dd/MM/yyyy')}"></span>
                         <span th:if="${msg.sentAt == null}">---</span>
                     </div>
                 </div>
             </div>
-
             <form th:if="${chatId != null}" method="post" class="chat-input d-flex mb-3">
                 <input type="hidden" name="chatId" th:value="${chatId}"/>
                 <input type="hidden" name="userId" th:value="${userId}"/>
-                <input type="text" name="content" class="form-control chatInput" placeholder="Type your message..." required autocomplete="off"/>
+                <input type="text" name="content" class="form-control chatInput" placeholder="Type your message..."
+                       required autocomplete="off"/>
                 <button class=" ms-2 btn btn-primary text-center" type="submit">Send</button>
             </form>
         </div>

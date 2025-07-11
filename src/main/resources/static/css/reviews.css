@@ -1,7 +1,5 @@
-/* ---------- General ---------- */
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
 
-/* ---------- Header ---------- */
 .header-section{
     background:linear-gradient(135deg,#212529 0%,#495057 100%);
     color:#fff;
@@ -15,7 +13,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     opacity:.9
 }
 
-/* ---------- Filter bar ---------- */
 .search-section{
     background:#fff;
     border-bottom:1px solid #dee2e6;
@@ -31,7 +28,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     background:#495057;
     border-color:#495057
 }
-/* ---------- Results info ---------- */
 .results-info{
     border-bottom:1px solid #dee2e6;
     padding-bottom:10px;
@@ -42,7 +38,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     color:#6c757d
 }
 
-/* ---------- Review card ---------- */
 .review-card{
     border:1px solid #dee2e6;
     border-radius:12px;
@@ -79,7 +74,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
     border-radius:4px
 }
 
-/* ---------- Empty state ---------- */
+
 .no-results{
     text-align:center;
     padding:60px 20px;
@@ -93,7 +88,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
 
 .rating {
     display: flex;
-    flex-direction: row-reverse; /* הופך סדר */
+    flex-direction: row-reverse;
     justify-content: flex-start;
     gap: 0.25rem;
     user-select: none;
@@ -112,13 +107,13 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#212529}
 
 .rating label:hover,
 .rating label:hover ~ label {
-    color: #ffc107; /* צבע זהב בהובר */
+    color: #ffc107;
 }
 
 .rating input:checked ~ label {
-    color: #ffc107; /* צבע זהב כשנבחר */
-}
+    color: #ffc107;
 
-#reviewsList .card {
-    margin-bottom: 1rem;
+    #reviewsList .card {
+        margin-bottom: 1rem;
+    }
 }

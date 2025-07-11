@@ -3,7 +3,7 @@
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     const form = document.querySelector("form.chat-input");
     // ============ ניהול מונה הודעות שלא נקראו ============
-    function renderUnreadBadge(chatId) {
+    const renderUnreadBadge=(chatId) =>{
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
         const count = unreadCounts[chatId] || 0;
         if (chatItem) {
@@ -74,12 +74,6 @@
 
                 socket.onclose = e => window.location.href = "/login?expired";
 
-
-
-
-            });
-        };
-
         return {
             sendMessage,
             connectToSocket,
@@ -127,7 +121,7 @@
         const chatLinks = document.querySelectorAll('[data-chat-id]');
         chatLinks.forEach(link => {
             const chatId = link.getAttribute('data-chat-id');
-            renderUnreadBadge(chatId); // מצייר את המונה מההתחלה
+            renderUnreadBadge(chatId);
         });
 
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;

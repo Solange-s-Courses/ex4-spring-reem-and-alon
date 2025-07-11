@@ -16,9 +16,6 @@
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
-<a href="/session-info">בדוק מצב סשן</a>
-<!-- Dashboard Section -->
 <div class="container pb-4">
     <div class="row rounded-3 py-4 mb-4 dark-text-emphasis">
         <div class="col-8 fw-bold text-start">
@@ -34,34 +31,30 @@
             </a>
         </div>
     </div>
-
-    <!-- Statistics Cards -->
     <div class="row mb-4 align-items-center">
-        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700">
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700 stats-card">
             <i class="bi bi-box fs-1 mb-2 text-center"></i>
             <h3 class="fs-4 fw-bold" th:text="${subscriptions != null ? #lists.size(subscriptions) : '0'}">0</h3>
             <p>Active Services</p>
         </div>
-        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700">
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700 stats-card">
             <i class="bi bi-wallet2 fs-1 mb-2"></i>
             <h3 class="fs-4 fw-bold">
                 <span th:text="${balance != null ? balance : '0.00'}">0.00</span> ₪
             </h3>
             <p>Account Balance</p>
         </div>
-        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700">
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700 stats-card">
             <i class="bi bi-receipt fs-1 mb-2"></i>
             <h3 class="fs-4 fw-bold" th:text="${billings != null ? #lists.size(billings) : '0'}">0</h3>
             <p>Total Billings</p>
         </div>
-        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700">
+        <div class="col mb-3 mx-2 rounded text-center text-white p-3 bg-gray-700 stats-card">
             <i class="bi bi-calendar-check fs-1 mb-2"></i>
             <h3 class="fs-4 fw-bold">15</h3>
             <p>Days to Next Billing</p>
         </div>
     </div>
-
-    <!-- Purchased Packages Section -->
     <div class="row mb-4">
         <div class="col-12 mb-2">
             <h2 class="pb-2 border-bottom border-2 border-dark text-dark fs-4 fw-semibold mb-4">
@@ -71,13 +64,11 @@
         <div th:if="${subscriptions != null and !subscriptions.isEmpty()}" class="col-12">
             <div id="subsCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <!-- Desktop carousel - 4 items per slide -->
                     <div class="d-none d-lg-block">
                         <div th:each="subscribe, iterStat : ${subscriptions}"
                              th:if="${iterStat.index % 4 == 0}"
                              class="carousel-item"
                              th:classappend="${iterStat.index == 0} ? ' active'">
-
                             <div class="row row-cols-4">
                                 <div th:each="i : ${#numbers.sequence(0, 3)}"
                                      th:if="${iterStat.index + i < subscriptions.size()}"
@@ -88,14 +79,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Tablet carousel - 2 items per slide -->
                     <div class="d-none d-md-block d-lg-none">
                         <div th:each="subscribe, iterStat : ${subscriptions}"
                              th:if="${iterStat.index % 2 == 0}"
                              class="carousel-item"
                              th:classappend="${iterStat.index == 0} ? ' active'">
-
                             <div class="row row-cols-2">
                                 <div th:each="i : ${#numbers.sequence(0, 1)}"
                                      th:if="${iterStat.index + i < subscriptions.size()}"
@@ -106,13 +94,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Mobile carousel - 1 item per slide -->
                     <div class="d-block d-md-none">
                         <div th:each="subscribe, iterStat : ${subscriptions}"
                              class="carousel-item"
                              th:classappend="${iterStat.index == 0} ? ' active'">
-
                             <div class="row">
                                 <div class="col-12">
                                     <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${subscribe})}"></div>
@@ -123,10 +108,12 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center gap-3 mt-3">
-                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel" data-bs-slide="prev">
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel"
+                        data-bs-slide="prev">
                     <i class="bi bi-chevron-left"></i> prev
                 </button>
-                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel" data-bs-slide="next">
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel"
+                        data-bs-slide="next">
                     next <i class="bi bi-chevron-right"></i>
                 </button>
             </div>
@@ -140,7 +127,6 @@
         </div>
     </div>
     <div class="row">
-        <!-- Account balance and transactions -->
         <div class="col-12">
             <h2 class="pb-2 border-bottom border-2 border-dark text-dark fs-4 fw-semibold mb-4">
                 <i class="bi bi-credit-card me-2"></i> Account Balance And Transactions
@@ -156,7 +142,6 @@
                     <div class="text-center fs-4 fw-bold mb-4">
                         <span th:text="${balance != null ? balance : '0.00'}">0.00</span> ₪
                     </div>
-
                     <form th:action="@{/user/balance/add}" method="post">
                         <div class="mb-3">
                             <label for="amount" class="form-label fw-semibold">Add Funds (₪)</label>
@@ -172,8 +157,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Monthly Billing Section -->
         <div class="col-lg-8 mb-4">
             <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group">
                 <div class="list-group-item bg-gray-700">
@@ -187,16 +170,17 @@
                     </div>
                 </div>
                 <div class="list-group-item" th:each="transaction : ${transactions}">
-                    <!--                                fregmant for each list group!-->
                     <div class="row fw-semibold text-center align-items-center">
                         <div class="col" th:text="${'#' + transaction.id}"></div>
                         <div class="col" th:text="${transaction.subscription.user.userName}"></div>
-                        <div class="col" th:text="${transaction.subscription.planPackage.providerProfile.providerName}"></div>
+                        <div class="col"
+                             th:text="${transaction.subscription.planPackage.providerProfile.providerName}"></div>
                         <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
                         <div class="col fw-normal">
                             <span class="badge px-2 py-2"
                                   th:text="${transaction.type.name()}"
-                                  th:classappend="' bg-success'" th:if="${transaction.type.name() == 'TRANSFER'}"></span>
+                                  th:classappend="' bg-success'"
+                                  th:if="${transaction.type.name() == 'TRANSFER'}"></span>
                             <span class="badge"
                                   th:text="${transaction.type.name()}"
                                   th:classappend="' bg-warning'" th:if="${transaction.type.name() == 'FEE'}"></span>
@@ -204,7 +188,8 @@
                                   th:text="${transaction.type.name()}"
                                   th:classappend="' bg-danger'" th:if="${transaction.type.name() == 'REJECT'}"></span>
                         </div>
-                        <div class="col" th:text="${transaction.timestamp != null ? #temporals.format(transaction.timestamp, 'dd/MM/yyyy HH:mm') : 'N/A'}"></div>
+                        <div class="col"
+                             th:text="${transaction.timestamp != null ? #temporals.format(transaction.timestamp, 'dd/MM/yyyy HH:mm') : 'N/A'}"></div>
                     </div>
                 </div>
             </div>
