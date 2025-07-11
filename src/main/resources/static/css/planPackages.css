@@ -75,24 +75,6 @@
     align-items: center;
 }
 
-/*.btn-add,.btn-remove, .btn-purchase {*/
-/*    background-color: #495057;*/
-/*    border: 1px solid #495057;*/
-/*    color: white;*/
-/*    padding: 8px 16px;*/
-/*    border-radius: 6px;*/
-/*    font-size: 14px;*/
-/*    font-weight: 500;*/
-/*    flex: 1;*/
-/*    transition: all 0.2s ease;*/
-/*}*/
-
-/*.btn-add:hover,.btn-remove:hover, .btn-purchase:hover {*/
-/*    background-color: #212529;*/
-/*    border-color: #212529;*/
-/*    color: white;*/
-/*}*/
-
 .product-rating {
     position: absolute;
     top: 12px;
