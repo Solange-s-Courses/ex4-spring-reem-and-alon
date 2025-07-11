@@ -20,19 +20,19 @@
 
     <div class="mb-3">
       <label for="userName" class="form-label fw-semibold">Username</label>
-      <input type="text" th:field="*{userName}" id="userName" class="form-control rounded-3" required/>
+      <input type="text" th:field="*{userName}" id="userName" class="form-control rounded-3"/>
       <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="invalid-feedback d-block"></div>
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label fw-semibold">Email</label>
-      <input type="email" th:field="*{email}" id="email" class="form-control rounded-3" required/>
+      <input type="email" th:field="*{email}" id="email" class="form-control rounded-3"/>
       <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback d-block"></div>
     </div>
 
     <div class="mb-3">
       <label for="password" class="form-label fw-semibold">Password</label>
-      <input type="password" th:field="*{password}" id="password" class="form-control rounded-3" required/>
+      <input type="password" th:field="*{password}" id="password" class="form-control rounded-3"/>
       <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback d-block"></div>
     </div>
 
@@ -40,9 +40,8 @@
 
     <div class="mb-3">
       <label for="companyName" class="form-label fw-semibold">Company Name</label>
-      <input type="text" th:field="*{companyName}" id="companyName" class="form-control rounded-3" required/>
+      <input type="text" th:field="*{companyName}" id="companyName" class="form-control rounded-3"/>
       <div th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="invalid-feedback d-block"></div>
-      companyName
     </div>
 
     <div class="mb-4">

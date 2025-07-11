@@ -33,11 +33,13 @@ public class RegisterProviderController {
     }
 
     @PostMapping
-    public String processRegisterAdmin(@Valid @ModelAttribute AdminRegistrationFormDTO admin,
+    public String processRegisterAdmin(@Valid @ModelAttribute("admin") AdminRegistrationFormDTO admin,
                                        BindingResult result,
                                        Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            model.addAttribute("admin" , admin);
             model.addAttribute("providers",providerCategoryService.findAllCategoryNames());
+            result.getAllErrors().forEach(System.out::println);
             return "register-admin";
         }
         try {

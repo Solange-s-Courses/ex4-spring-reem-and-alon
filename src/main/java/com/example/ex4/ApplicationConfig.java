@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,7 +36,7 @@ public class ApplicationConfig {
                         .requestMatchers( "/css/**", "/login", "/register/**").permitAll()
                         .requestMatchers("/user/**", "/cart/**","/api/cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/chats/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/chats/**", "/api/chat/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -47,7 +48,6 @@ public class ApplicationConfig {
                 )
                 .sessionManagement(
                         session -> session
-                        .invalidSessionUrl("/login?error")
                         .maximumSessions(1)
                         .expiredUrl("/login?error")
                 )
@@ -70,6 +70,8 @@ public class ApplicationConfig {
 
         return http.build();
     }
+
+
     @Bean
     public CommandLineRunner initAdmin(PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,

@@ -6,6 +6,8 @@ import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
+import com.example.ex4.repository.PlanPackageRepository;
+import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ public class CheckoutService {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @Autowired
     private ShoppingCart sessionCart;
@@ -30,6 +34,8 @@ public class CheckoutService {
 
     @Autowired
     private PlanPackageService planPackageService ;
+    @Autowired
+    private PlanPackageRepository planPackageRepository;
 
     @Transactional
     public void processCheckout(User user) {
@@ -38,6 +44,8 @@ public class CheckoutService {
                 .collect(Collectors.toSet());
 
         List<PlanPackage> plans = planPackageService.findAllProducts(pkgIds);
+        if (!subscriptionRepository.existsByUserAndPlanPackageIn(user, plans))
+            throw new RuntimeException("Already subscribed for some of the packages");
 
         validateCheckout(user.getCreditBalance(), plans);
 
@@ -53,11 +61,13 @@ public class CheckoutService {
                 );
     }
 
-    private void validateCheckout(int userCredit, List<PlanPackage> plans) {
+    public void validateCheckout(User user, List<PlanPackage> plans) {
         int totalCost = plans.stream().map(PlanPackage::getMonthlyCost).reduce(0, Integer::sum);
 
         if (totalCost > userCredit) {
             throw new RuntimeException("not enough credit balance to proceed checkout");
         }
+
+        if (subscriptionRepository.existsAllBypla)
     }
 }

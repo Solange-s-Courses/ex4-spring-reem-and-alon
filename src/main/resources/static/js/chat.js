@@ -45,8 +45,12 @@
                         if (msg.senderId !== userId){
                             fetch(`/api/chat/${msg.messageId}/read`, {
                                 method: "PUT",
+                            }).then(response => {
+                                if (response.status === 401){
+                                    window.location.href = "/login?expired";
+                                }
                             }).catch(err => {
-                                console.log(err.response.data)
+                                console.error("Network error:", err);
                             })
                         }
                         unreadCounts[msg.chatId] = 0;
@@ -61,29 +65,24 @@
 
                 stompClient.subscribe("/user/queue/errors", (message) => {
                     console.log(message.body)
-                    const msg = JSON.parse(message.body);
-                    console.log(msg.body)
-                    if (msg.body === "SESSION_EXPIRED") {
+                    if (message.body === "SESSION_EXPIRED") {
                         window.location.href = "/login?expired";
                     } else {
-                        alert("שגיאה: " + msg.body); // הצג שגיאת ולידציה או business
+                        alert("שגיאה: " + message.body); // הצג שגיאת ולידציה או business
                     }
                 });
 
-            });
-        };
+                socket.onclose = e => window.location.href = "/login?expired";
 
-        const disconnectSocket = () => {
-            // קריאה נכונה לנתק את stomp
-            if (stompClient && stompClient.connected) {
-                stompClient.disconnect();
-            }
+
+
+
+            });
         };
 
         return {
             sendMessage,
             connectToSocket,
-            disconnectSocket
         };
     })();
 

@@ -56,6 +56,7 @@ public class CheckoutController {
 
     @PostMapping
     public String checkout( @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        checkoutService.validateCheckout(userPrincipal.getUser(), subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
         checkoutService.processCheckout(userPrincipal.getUser());
         userSubscriptions.setSubscriptions(subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
         sessionCart.clear();

@@ -1,5 +1,6 @@
 package com.example.ex4.controller;
 
+import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.service.MessageService;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,8 +27,9 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public ChatMessageDTO sendMessage(@Valid ChatMessageDTO messageDTO, Principal principal) {
-        if (principal == null)
+    public ChatMessageDTO sendMessage(@Valid ChatMessageDTO messageDTO,
+                                      @AuthenticationPrincipal MyUserPrincipal myUserPrincipal) {
+        if (myUserPrincipal == null)
             throw new AccessDeniedException("SESSION_EXPIRED");
         return messageService.saveMessage(messageDTO);
     }

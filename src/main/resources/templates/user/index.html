@@ -161,6 +161,7 @@
                         <div class="mb-3">
                             <label for="amount" class="form-label fw-semibold">Add Funds (₪)</label>
                             <input type="text" min="1" class="form-control" id="amount" name="amount" required>
+                            <span th:if="${errorMessage}" class="text-danger" th:text="${errorMessage}"></span>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-outline-info text-dark">

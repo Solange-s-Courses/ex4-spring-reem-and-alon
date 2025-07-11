@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Controller
 @RequestMapping("/user")
@@ -43,5 +44,9 @@ public class UserController {
         return "redirect:/user";
     }
 
-
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public String handleTypeMismatch(MethodArgumentTypeMismatchException ex, Model model) {
+        model.addAttribute("errorMessage", "You must enter a valid integer number!");
+        return "user/index";
+    }
 }

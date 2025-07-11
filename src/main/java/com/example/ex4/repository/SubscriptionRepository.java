@@ -11,4 +11,6 @@ import java.util.List;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     List<Subscription> findSubscriptionByUser(User user);
     List<Subscription> findAllByPlanPackage(PlanPackage planPackage);
+
+    boolean existsByUserAndPlanPackageIn(User user, List<PlanPackage> plans);
 }
