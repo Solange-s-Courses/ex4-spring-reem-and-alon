@@ -42,7 +42,7 @@ public class RegisterProviderController {
         }
         try {
             providerProfileService.registerProviderProfile(admin);
-            redirectAttributes.addFlashAttribute("message", "Registration successful! Awaiting super admin approval. you can login for meanwhile");
+            redirectAttributes.addFlashAttribute("message", "Registration successful! Awaiting super admin approval");
             return "redirect:/login";
         } catch (DataIntegrityViolationException ex) {
             result.rejectValue("userName", "username in use. please enter new username");

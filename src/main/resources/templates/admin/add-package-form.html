@@ -8,26 +8,27 @@
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container mt-5 d-flex justify-content-center">
-    <form id="pkg-form" th:object="${planPackage}" th:action="@{/admin/add-package}" method="post" class="p-4 rounded-4 shadow-lg bg-white">
+    <form id="pkg-form" th:object="${planPackage}" th:action="@{/admin/add-package}" method="post"
+          class="p-4 rounded-4 shadow-lg bg-white">
         <div class="mb-4 text-center">
             <div class="rounded-4 py-3 mb-3 bg-info-subtle">
                 <i class="bi bi-person-circle fs-1"></i>
                 <h4 class="fw-bold mb-0 mt-2">Create New Package</h4>
             </div>
         </div>
-
         <div class="mb-3">
             <label for="title" class="form-label fw-semibold">Title</label>
-            <input type="text" th:field="*{title}" class="form-control rounded-3" id="title" placeholder="Title" required>
+            <input type="text" th:field="*{title}" class="form-control rounded-3" id="title" placeholder="Title"
+                   required>
             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
-
         <div class="mb-3">
             <label for="description" class="form-label fw-semibold">Description</label>
-            <textarea th:field="*{description}" class="form-control rounded-3" id="description" placeholder="Description" required></textarea>
-            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            <textarea th:field="*{description}" class="form-control rounded-3" id="description"
+                      placeholder="Description" required></textarea>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('description')}"
+                 th:errors="*{description}"></div>
         </div>
-
         <div class="mb-3">
             <label class="form-label fw-semibold">Discounts per Subscription Period</label>
             <div class="row g-2">
@@ -38,7 +39,8 @@
                            th:value="*{yearlyDiscount}"
                            class="form-control rounded-3"
                            placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('yearlyDiscount')}" th:errors="*{yearlyDiscount}"></div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('yearlyDiscount')}"
+                         th:errors="*{yearlyDiscount}"></div>
                 </div>
                 <div class="col">
                     <label for="halfYearlyDiscount" class="form-label small">Half-Yearly (%)</label>
@@ -47,7 +49,8 @@
                            th:value="*{halfYearlyDiscount}"
                            class="form-control rounded-3"
                            placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('halfYearlyDiscount')}" th:errors="*{halfYearlyDiscount}"></div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('halfYearlyDiscount')}"
+                         th:errors="*{halfYearlyDiscount}"></div>
                 </div>
                 <div class="col">
                     <label for="threeMonthDiscount" class="form-label small">3-Month (%)</label>
@@ -56,26 +59,25 @@
                            th:value="*{threeMonthDiscount}"
                            class="form-control rounded-3"
                            placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('threeMonthDiscount')}" th:errors="*{threeMonthDiscount}"></div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('threeMonthDiscount')}"
+                         th:errors="*{threeMonthDiscount}"></div>
                 </div>
             </div>
         </div>
-
         <div class="mb-3">
             <label for="monthlyCost" class="form-label fw-semibold">Monthly Cost</label>
-            <input type="number" th:field="*{monthlyCost}" class="form-control rounded-3" id="monthlyCost" min="1" required>
-            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('monthlyCost')}" th:errors="*{monthlyCost}"></div>
+            <input type="number" th:field="*{monthlyCost}" class="form-control rounded-3" id="monthlyCost" min="1"
+                   required>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('monthlyCost')}"
+                 th:errors="*{monthlyCost}"></div>
         </div>
-
         <div class="mb-3">
             <label for="expiryDate" class="form-label fw-semibold">Expiry Date</label>
             <input type="date" th:field="*{expiryDate}" class="form-control rounded-3" id="expiryDate" required>
-            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('expiryDate')}" th:errors="*{expiryDate}"></div>
+            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('expiryDate')}"
+                 th:errors="*{expiryDate}"></div>
         </div>
-
-        <input type="hidden" th:field="*{providerProfileId}" />
-
-
+        <input type="hidden" th:field="*{providerProfileId}"/>
         <div class="d-flex gap-4">
             <button type="submit" class="btn btn-success btn-lg rounded-3 flex-fill">
                 <i class="bi bi-person-check me-2"></i>
