@@ -12,6 +12,8 @@ public class ChatMessageDTO {
     @NotNull(message = "cannot find chat id")
     private Long chatId;
 
+    private Long messageId;
+
     @NotBlank(message = "content is required")
     private String content;
 

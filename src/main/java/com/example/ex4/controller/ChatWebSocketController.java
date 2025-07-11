@@ -4,13 +4,17 @@ import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Controller
@@ -21,16 +25,16 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public ChatMessageDTO sendMessage(@Valid ChatMessageDTO messageDTO) {
-        messageDTO.setIsRead(false);
-        messageDTO.setSentAt(LocalDateTime.now());
-        messageService.saveMessage(messageDTO);
-        return messageDTO;
+    public ChatMessageDTO sendMessage(@Valid ChatMessageDTO messageDTO, Principal principal) {
+        if (principal == null)
+            throw new AccessDeniedException("SESSION_EXPIRED");
+        return messageService.saveMessage(messageDTO);
     }
 
-    @MessageExceptionHandler(MethodArgumentNotValidException.class)
-    @SendToUser("/queue/errors") // שולח ספציפית למשתמש
-    public String handleValidationException(MethodArgumentNotValidException ex) {
-        return ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+    @MessageExceptionHandler({AccessDeniedException.class, MethodArgumentNotValidException.class})
+    @SendToUser("/queue/errors")
+    public String handleValidationException(Exception ex) {
+        System.out.println(ex.getMessage() + " " + " hiiiiiiiiiiiiii");
+        return ex.getMessage();
     }
 }

@@ -2,6 +2,7 @@ package com.example.ex4;
 
 import com.example.ex4.entity.User;
 import com.example.ex4.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -9,13 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -32,12 +29,14 @@ public class ApplicationConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(withDefaults()).csrf(withDefaults())
+        http.cors(withDefaults()).csrf(csrf ->csrf.ignoringRequestMatchers("/chat-websocket/**", "/api/chat/**"))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers( "/css/**", "/login", "/register/**","/chats/**").permitAll()
-                        .requestMatchers("/user/**", "/cart/**","/api/cart/**","/session-info/**").hasRole("USER")
+                        .requestMatchers("/chat-websocket/**").authenticated()
+                        .requestMatchers( "/css/**", "/login", "/register/**").permitAll()
+                        .requestMatchers("/user/**", "/cart/**","/api/cart/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")//
+                        .requestMatchers("/chats/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/provider-image/**").hasAnyRole("USER","ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -46,32 +45,31 @@ public class ApplicationConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
-                .sessionManagement(session -> session
+                .sessionManagement(
+                        session -> session
+                        .invalidSessionUrl("/login?error")
                         .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-                        .sessionRegistry(sessionRegistry())
                         .expiredUrl("/login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID") // name of Spring cookie
                         .clearAuthentication(true)
+                        .invalidateHttpSession(true)
                         .permitAll()
                 )
                 .exceptionHandling(
                         exceptionHandling -> exceptionHandling
+                                .defaultAuthenticationEntryPointFor(
+                                        (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED),
+                                        request -> request.getRequestURI().startsWith("/api/")
+                                )
                                 .accessDeniedPage("/403")
                 );
 
         return http.build();
     }
-
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
     @Bean
     public CommandLineRunner initAdmin(PasswordEncoder passwordEncoder,
                                        @Value("${admin.username}") String username,
