@@ -1,5 +1,6 @@
 package com.example.ex4.dto;
 
+import com.example.ex4.constants.SubscriptionPeriod;
 import lombok.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;

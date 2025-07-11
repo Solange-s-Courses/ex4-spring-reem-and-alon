@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
 <body>
-<div th:fragment="planPackage(planPackage, pageName)">
+<div th:fragment="planPackage(planPackage, pageName)"
+     th:with="
+        quarterMonthlyCost=${planPackage.monthlyCost * (1.0 - planPackage.threeMonthDiscount/100.0)},
+        halfYearMonthlyCost=${planPackage.monthlyCost * (1.0 - planPackage.halfYearlyDiscount/100.0)},
+        yearMonthlyCost=${planPackage.monthlyCost * (1.0 - planPackage.yearlyDiscount/100.0)}
+     ">
     <div class="card h-100 shadow align-items-stretch">
         <div class="card-header bg-light border-0 py-2 text-center">
             <span class="badge bg-secondary text-white small"
@@ -24,17 +29,18 @@
                                 <span class="badge bg-warning text-dark position-absolute top-0 start-50 translate-middle" th:text="${planPackage.threeMonthDiscount + '% OFF'}"></span>
                                 <div class="fw-bold text-primary">3 Months</div>
                                 <div class="fw-bolder text-dark"
-                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.threeMonthDiscount/100.0), 1, 1) + '₪/month'}">
+                                     th:text="${#numbers.formatDecimal(quarterMonthlyCost,1,1) + '₪/month'}">
                                 </div>
 
                                 <small class="text-muted">
                                     Total: <span class="fw-semibold"
-                                                 th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.threeMonthDiscount/100.0) * 3, 1, 1) + '₪'}"></span>
+                                                 th:text="${#numbers.formatDecimal(quarterMonthlyCost * 3, 1, 1) + '₪'}"></span>
                                 </small>
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
                                 <input type="hidden" name="subPkgName"  value="Three Months">
+                                <input type="hidden" name="monthlyCost"  th:value="${quarterMonthlyCost}">
                                 <div th:if="${pageName == 'search'}">
                                     <button class="btn btn-outline-primary btn-sm mt-3" type="submit">
                                         <i class="bi bi-cart-plus me-1"></i>Add to Cart
@@ -54,16 +60,17 @@
                                 <span class="badge bg-info text-dark position-absolute top-0 start-50 translate-middle" th:text="${planPackage.halfYearlyDiscount + '% OFF'}"></span>
                                 <div class="fw-bold" style="color: #d38933;">6 Months</div>
                                 <div class="fw-bolder text-dark"
-                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.halfYearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                     th:text="${#numbers.formatDecimal(halfYearMonthlyCost,1,1) + '₪/month'}">
                                 </div>
 
                                 <small class="text-muted">
-                                    Total: <span class="fw-semibold"  th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - planPackage.halfYearlyDiscount / 100) * 6, 1, 1)} + '₪'"></span>
+                                    Total: <span class="fw-semibold"  th:text="${#numbers.formatDecimal(halfYearMonthlyCost * 6, 1, 1) + '₪'}"></span>
                                 </small>
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
                                 <input type="hidden" name="subPkgName"  value="Six Months">
+                                <input type="hidden" name="monthlyCost"  th:value="${halfYearMonthlyCost}">
                                 <div th:if="${pageName == 'search'}">
                                     <button class="btn btn-outline-warning btn-sm mt-3" type="submit" style="border-color: #d38933; color: #d38933;">
                                         <i class="bi bi-cart-plus me-1"></i>Add to Cart
@@ -83,16 +90,17 @@
                                 <span class="badge bg-success text-white position-absolute top-0 start-50 translate-middle" th:text="${planPackage.yearlyDiscount + '% OFF'}"></span>
                                 <div class="fw-bold text-success">12 Months</div>
                                 <div class="fw-bolder text-dark"
-                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1.0 - planPackage.yearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                     th:text="${#numbers.formatDecimal(yearMonthlyCost, 1, 1) + '₪/month'}">
                                     224.0₪/month
                                 </div>
                                 <small class="text-muted">
-                                    Total: <span class="fw-semibold" th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - planPackage.halfYearlyDiscount / 100) * 12, 1, 1)} + '₪'"></span>
+                                    Total: <span class="fw-semibold" th:text="${#numbers.formatDecimal(yearMonthlyCost * 12, 1, 1) + '₪'}"></span>
                                 </small>
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto mb-2 justify-content-center" action="#" method="post">
                                 <input type="hidden" name="pkgId" th:value="${planPackage.id}">
                                 <input type="hidden" name="subPkgName"  value="Twelve Months">
+                                <input type="hidden" name="monthlyCost"  th:value="${yearMonthlyCost}">
                                 <button class="btn btn-outline-success btn-sm mt-3" type="submit">
                                     <i class="bi bi-cart-plus me-1"></i>Add to Cart
                                 </button>
@@ -103,6 +111,6 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 </body>
 </html>

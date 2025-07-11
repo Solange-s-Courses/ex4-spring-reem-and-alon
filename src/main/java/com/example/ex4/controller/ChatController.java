@@ -1,6 +1,8 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
+import com.example.ex4.components.CheckoutProviders;
+import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.entity.Chat;
 import com.example.ex4.entity.ProviderProfile;
@@ -18,7 +20,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/chats")
+@RequestMapping("/chat")
 public class ChatController {
 
     @Autowired
@@ -28,6 +30,14 @@ public class ChatController {
     private ChatService chatService;
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
+
+    @PostMapping("/create")
+    public String createChatAfterCheckout(@Autowired CheckoutProviders planOwnerProviders,
+                                          @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        List<ProviderProfile> providers = planOwnerProviders.getProviders();
+        chatService.createNewChats(userPrincipal.getUser(), providers);
+        return "redirect:/user/checkout?success=true";
+    }
 
     @GetMapping()
     public String list(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {

@@ -17,10 +17,6 @@
         }
     }
 
-    function resetUnread(chatId) {
-        unreadCounts[chatId] = 0;
-        renderUnreadBadge(chatId);
-    }
 
     // =============== WebSocket ניהול =================
     const webSocket = (() => {
@@ -42,11 +38,11 @@
 
                     if (chatId && msg.chatId === chatId) {
                         messageRenderer.render(msg, msg.senderId === userId);
-                        if (msg.senderId !== userId){
+                        if (msg.senderId !== userId) {
                             fetch(`/api/chat/${msg.messageId}/read`, {
                                 method: "PUT",
                             }).then(response => {
-                                if (response.status === 401){
+                                if (response.status === 401) {
                                     window.location.href = "/login?expired";
                                 }
                             }).catch(err => {
@@ -73,6 +69,8 @@
                 });
 
                 socket.onclose = e => window.location.href = "/login?expired";
+            })
+        }
 
         return {
             sendMessage,

@@ -13,18 +13,18 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class CartRestController {
 
     @Autowired
-    private ShoppingCart sessionCart;
+    private ShoppingCart shoppingCart;
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemDTO item) {
-        if (!sessionCart.addProduct(item)){
+        if (!shoppingCart.addProduct(item)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product already exists in the cart!");
         }
         return ResponseEntity.accepted().body("Package added to cart successfully!");
     }
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeFromCart(@RequestBody CartItemDTO item) {
-        if (!sessionCart.removeProduct(item.getPkgId(),item.getSubPkgName())){
+        if (!shoppingCart.removeProduct(item.getPkgId(),item.getSubPkgName())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product does not exists in the cart!");
         }
         return ResponseEntity.ok().body("Package removed from cart successfully!");

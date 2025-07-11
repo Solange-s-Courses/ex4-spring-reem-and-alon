@@ -1,13 +1,14 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
+import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.UserSessionSubscriptions;
-import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.ProviderProfile;
+import com.example.ex4.entity.User;
 import com.example.ex4.service.CheckoutService;
 import com.example.ex4.service.PlanPackageService;
-import com.example.ex4.service.SubscriptionService;
+import com.example.ex4.service.ProviderProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,21 +36,23 @@ public class CheckoutController {
     private PlanPackageService planPackageService;
 
     @Autowired
-    private UserSessionSubscriptions userSubscriptions;
+    private PlanPackageService provide;
 
     @Autowired
-    private SubscriptionService subscriptionService;
+    private CheckoutProviders planOwnerProviders;
+    @Autowired
+    private ProviderProfileService providerProfileService;
 
     @GetMapping
-    public String cartPage(Model model) {
-        List<CartItemDTO> cartItems = sessionCart.getItems();
-
+    public String cartPage(@RequestParam(value = "success", required = false) Boolean success, Model model) {
+        if (success != null && success) {
+            sessionCart.clear();
+        }
         Set<Long> pkgIds = sessionCart.getPkgIds();
-
         Map<Long, PlanPackage> pkgMap = planPackageService.findAllProducts(pkgIds).stream()
                 .collect(Collectors.toMap(PlanPackage::getId, planPackage -> planPackage));
 
-        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartItems", sessionCart.getItems());
         model.addAttribute("pkgMap", pkgMap);
 
         return "user/checkout-cart";
@@ -56,12 +60,17 @@ public class CheckoutController {
 
     @PostMapping
     public String checkout( @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
-        checkoutService.validateCheckout(userPrincipal.getUser(), subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
-        checkoutService.processCheckout(userPrincipal.getUser());
-        userSubscriptions.setSubscriptions(subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
-        sessionCart.clear();
+        User user = userPrincipal.getUser();
+        List<PlanPackage> plansToPurchase = planPackageService.findAllProducts(sessionCart.getPkgIds());
+        checkoutService.processCheckout(user, plansToPurchase);
+        Set<Long> seenIds = new HashSet<>();
+        List<ProviderProfile> uniqueProviders = plansToPurchase.stream()
+                .map(PlanPackage::getProviderProfile)
+                .filter(provider -> seenIds.add(provider.getId()))
+                .collect(Collectors.toList());
 
-        return "redirect:/user/checkout?success=true";
+        planOwnerProviders.setProviders(uniqueProviders);
+        return "forward:/chat/create";
     }
 
     @ExceptionHandler({RuntimeException.class})

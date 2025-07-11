@@ -1,5 +1,6 @@
 package com.example.ex4.entity;
 
+import com.example.ex4.constants.SubscriptionPeriod;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;

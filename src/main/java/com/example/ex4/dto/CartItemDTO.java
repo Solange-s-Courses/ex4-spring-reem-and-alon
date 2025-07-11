@@ -1,16 +1,14 @@
 package com.example.ex4.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class CartItemDTO {
     private Long pkgId;
     private String subPkgName;
-    private Integer price;
+    private Double monthlyCost;
 }

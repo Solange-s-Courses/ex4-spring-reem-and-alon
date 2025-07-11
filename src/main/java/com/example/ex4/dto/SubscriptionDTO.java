@@ -14,7 +14,7 @@ public class SubscriptionDTO {
 
     private String planDescription;
     private String planName;
-    private int monthlyCost;
+    private double monthlyCost;
 
     private Long providerId;
     private String providerName;

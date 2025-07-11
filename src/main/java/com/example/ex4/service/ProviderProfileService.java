@@ -1,6 +1,7 @@
 package com.example.ex4.service;
 
 import com.example.ex4.dto.AdminRegistrationFormDTO;
+import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
@@ -34,8 +35,6 @@ public class ProviderProfileService {
 
     @Transactional
     public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws IOException {
-
-
         User admin = User.builder().userName(profileForm.getUserName())
                 .email(profileForm.getEmail())
                 .password(profileForm.getPassword())
@@ -61,5 +60,4 @@ public class ProviderProfileService {
 
     public List<ProviderProfile> findAllPendingProfiles(){ return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
     public void removeProviderProfile(long id) {providerProfileRepository.deleteById(id);}
-
 }

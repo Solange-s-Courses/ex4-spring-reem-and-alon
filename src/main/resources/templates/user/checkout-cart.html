@@ -23,7 +23,11 @@
     <h1 class="text-center fw-bold mb-4">Current Packages in Cart</h1>
     <div th:if="${cartItems != null and !cartItems.isEmpty()}">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
-            <div th:each="cartItem : ${cartItems}" class="col">
+            <div th:each="cartItem : ${cartItems}" class="col"
+                 th:with="quarterMonthlyCost=${pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].threeMonthDiscount/100.0)},
+                            halfYearMonthlyCost=${pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].halfYearlyDiscount/100.0)},
+                            yearMonthlyCost=${pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].yearlyDiscount/100.0)}
+                         ">
                 <div class="card h-100 shadow align-items-stretch">
                     <div class="card-header bg-light border-0 py-2 text-center">
                         <span class="badge bg-secondary text-white small"
@@ -50,13 +54,10 @@
                                             <span class="badge bg-warning text-dark position-absolute top-0 start-50 translate-middle"
                                                   th:text="${pkgMap[cartItem.pkgId].threeMonthDiscount + '% OFF'}"></span>
                                             <div class="fw-bold text-primary">3 Months</div>
-                                            <div class="fw-bolder text-dark"
-                                                 th:text="${#numbers.formatDecimal(pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].threeMonthDiscount/100.0), 1, 1) + '₪/month'}">
-                                            </div>
+                                            <div class="fw-bolder text-dark" th:text="${#numbers.formatDecimal(cartItem.monthlyCost,1,1) + '₪/month'}"></div>
 
-                                            <small class="text-muted">
-                                                Total: <span class="fw-semibold"
-                                                             th:text="${#numbers.formatDecimal(pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].threeMonthDiscount/100.0) * 3, 1, 1) + '₪'}"></span>
+                                            <small class="text-muted"> Total:
+                                                <span class="fw-semibold" th:text="${#numbers.formatDecimal(cartItem.monthlyCost * 3, 1, 1) + '₪'}"></span>
                                             </small>
                                         </div>
                                     </div>
@@ -67,13 +68,12 @@
                                             <span class="badge bg-info text-dark position-absolute top-0 start-50 translate-middle"
                                                   th:text="${pkgMap[cartItem.pkgId].halfYearlyDiscount + '% OFF'}"></span>
                                             <div class="fw-bold" style="color: #d38933;">6 Months</div>
-                                            <div class="fw-bolder text-dark"
-                                                 th:text="${#numbers.formatDecimal(pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].halfYearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                            <div class="fw-bolder text-dark" th:text="${#numbers.formatDecimal(cartItem.monthlyCost,1,1) + '₪/month'}">
                                             </div>
 
                                             <small class="text-muted">
                                                 Total: <span class="fw-semibold"
-                                                             th:text="${pkgMap[cartItem.pkgId].monthlyCost * (1 - pkgMap[cartItem.pkgId].halfYearlyDiscount/100) * 6 + '₪'}"></span>
+                                                             th:text="${#numbers.formatDecimal(cartItem.monthlyCost * 6, 1, 1) + '₪'}"></span>
                                             </small>
                                         </div>
                                     </div>
@@ -86,12 +86,12 @@
 
                                             <div class="fw-bold text-success">12 Months</div>
                                             <div class="fw-bolder text-dark"
-                                                 th:text="${#numbers.formatDecimal(pkgMap[cartItem.pkgId].monthlyCost * (1.0 - pkgMap[cartItem.pkgId].yearlyDiscount/100.0), 1, 1) + '₪/month'}">
+                                                 th:text="${#numbers.formatDecimal(cartItem.monthlyCost,1,1) + '₪/month'}">
                                             </div>
 
                                             <small class="text-muted">
                                                 Total: <span class="fw-semibold"
-                                                             th:text="${pkgMap[cartItem.pkgId].monthlyCost * (1 - pkgMap[cartItem.pkgId].yearlyDiscount/100) * 12 + '₪'}"></span>
+                                                             th:text="${#numbers.formatDecimal(cartItem.monthlyCost * 12, 1, 1) + '₪'}"></span>
                                             </small>
                                         </div>
                                     </div>
@@ -100,6 +100,7 @@
                             <form action=# class="mt-3 remove-from-cart-form" method="post">
                                 <input type="hidden" name="pkgId" th:value="${cartItem.pkgId}"/>
                                 <input type="hidden" name="subPkgName" th:value="${cartItem.subPkgName}"/>
+                                <input type="hidden" name="monthlyCost" th:value="${cartItem.monthlyCost}"/>
                                 <button type="submit" class="btn btn-outline-danger btn-remove btn-sm w-100">
                                     Remove from Cart <i class="bi bi-cart-dash ms-1"></i>
                                 </button>

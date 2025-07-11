@@ -1,7 +1,6 @@
 package com.example.ex4.service;
 
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
@@ -27,47 +26,31 @@ public class CheckoutService {
     private SubscriptionRepository subscriptionRepository;
 
     @Autowired
-    private ShoppingCart sessionCart;
-
-    @Autowired
-    private ChatService chatService;
-
-    @Autowired
-    private PlanPackageService planPackageService ;
-    @Autowired
-    private PlanPackageRepository planPackageRepository;
+    private ShoppingCart shoppingCart;
 
     @Transactional
-    public void processCheckout(User user) {
-        Set<Long> pkgIds = sessionCart.getItems().stream()
-                .map(CartItemDTO::getPkgId)
-                .collect(Collectors.toSet());
-
-        List<PlanPackage> plans = planPackageService.findAllProducts(pkgIds);
-        if (!subscriptionRepository.existsByUserAndPlanPackageIn(user, plans))
-            throw new RuntimeException("Already subscribed for some of the packages");
-
-        validateCheckout(user.getCreditBalance(), plans);
-
+    public void processCheckout(User user, List<PlanPackage> plans) {
+        validateCheckout(user, plans);
         plans.forEach(plan -> {
             Subscription newSubscription = subscriptionService.createSubscription(user, plan);
-            transactionService.createTransaction(newSubscription, plan.getMonthlyCost());
+            transactionService.createPaymentTransaction(newSubscription, plan.getMonthlyCost());
         });
-        plans.stream()
-                .map(PlanPackage::getProviderProfile)
-                .distinct()
-                .forEach(provider ->
-                        chatService.getOrCreate(user, provider)
-                );
     }
 
-    public void validateCheckout(User user, List<PlanPackage> plans) {
-        int totalCost = plans.stream().map(PlanPackage::getMonthlyCost).reduce(0, Integer::sum);
-
-        if (totalCost > userCredit) {
-            throw new RuntimeException("not enough credit balance to proceed checkout");
+    private void validateCheckout(User user, final List<PlanPackage> plans) {
+        if (plans.isEmpty()) {
+            throw new RuntimeException("You dont have any items in your cart!");
         }
 
-        if (subscriptionRepository.existsAllBypla)
+        if (plans.stream().map(PlanPackage::getId).distinct().count() < plans.size()) {
+            throw new RuntimeException("You cannot purchase subscription more same plan package twice!");
+        }
+
+        if (subscriptionRepository.existsByUserAndPlanPackageIn(user, plans))
+            throw new RuntimeException("Already subscribed for some of the packages");
+
+        if (shoppingCart.getTotalCost() * 12 > user.getCreditBalance()){
+            throw new RuntimeException("Not enough credit balance for a yearly commitment for all packages");
+        }
     }
 }

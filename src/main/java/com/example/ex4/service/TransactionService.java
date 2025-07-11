@@ -18,7 +18,7 @@ public class TransactionService {
     @Autowired
     private SubscriptionRepository subscriptionRepo;
 
-    public void createTransaction(Subscription subscriber, int monthlyCost) {
+    public void createPaymentTransaction(Subscription subscriber, int monthlyCost) {
         Transaction transaction = Transaction.builder()
                 .subscription(subscriber)
                 .amount(monthlyCost)

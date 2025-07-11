@@ -39,4 +39,8 @@ public class ShoppingCart implements Serializable {
                 .map(CartItemDTO::getPkgId)
                 .collect(Collectors.toSet());
     }
+
+    public double getTotalCost() {
+        return items.stream().mapToDouble(CartItemDTO::getMonthlyCost).sum();
+    }
 }

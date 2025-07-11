@@ -2,8 +2,8 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.components.UserSessionSubscriptions;
 import com.example.ex4.service.ReviewService;
+import com.example.ex4.service.SubscriptionService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,16 +23,14 @@ public class UserController {
     private ReviewService reviewService;
 
     @Autowired
-    private UserSessionSubscriptions userSubscriptions;
+    private SubscriptionService subscriptionService;
 
     @Autowired
     private ShoppingCart sessionCart;
 
     @GetMapping
     public String userIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
-        if (!userSubscriptions.isEmpty()){
-            model.addAttribute("subscriptions", userSubscriptions.getSubscriptions());
-        }
+        model.addAttribute("subscriptions", subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
         model.addAttribute("userName", userPrincipal.getUser().getUserName());
         model.addAttribute("cartItems",sessionCart.getItems());
         return "user/index";
