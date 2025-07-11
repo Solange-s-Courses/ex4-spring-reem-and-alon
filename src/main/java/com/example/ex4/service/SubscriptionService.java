@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
@@ -46,4 +47,7 @@ public class SubscriptionService {
 
     }
 
+    public boolean existsInUserSubscription(User user, CartItemDTO item) {
+        return subscriptionRepository.existsByUserAndPlanPackage_Id(user, item.getPkgId());
+    }
 }

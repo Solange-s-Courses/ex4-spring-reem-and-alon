@@ -10,13 +10,11 @@ import java.util.stream.Collectors;
 public class ShoppingCart implements Serializable {
     private final List<CartItemDTO> items = new ArrayList<>();
 
-
     public ShoppingCart() {}
 
     public boolean addProduct(CartItemDTO item) {
         for (CartItemDTO existing : items) {
-            if (Objects.equals(existing.getPkgId(), item.getPkgId()) &&
-                    Objects.equals(existing.getSubPkgName(), item.getSubPkgName())) {
+            if (Objects.equals(existing.getPkgId(), item.getPkgId())) {
                 return false;
             }
         }

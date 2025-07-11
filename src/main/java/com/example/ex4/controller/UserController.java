@@ -2,7 +2,6 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.service.ReviewService;
 import com.example.ex4.service.SubscriptionService;
 import com.example.ex4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private ReviewService reviewService;
 
     @Autowired
     private SubscriptionService subscriptionService;

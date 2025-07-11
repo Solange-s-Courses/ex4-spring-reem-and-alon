@@ -13,4 +13,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     List<Subscription> findAllByPlanPackage(PlanPackage planPackage);
 
     boolean existsByUserAndPlanPackageIn(User user, List<PlanPackage> plans);
+
+    boolean existsByUserAndPlanPackage_Id(User user, Long pkgId);
 }
