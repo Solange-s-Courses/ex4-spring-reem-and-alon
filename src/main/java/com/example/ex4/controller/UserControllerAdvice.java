@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class})
+@ControllerAdvice(assignableTypes = {UserController.class, SearchProviderController.class, CheckoutController.class,ChatController.class})
 public class UserControllerAdvice {
 
     @Autowired

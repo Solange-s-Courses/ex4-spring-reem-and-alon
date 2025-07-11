@@ -45,7 +45,6 @@
             showToast(SUCCESS_TITLE, data);
             cartSizeEl.innerText = String(parseInt(cartSizeEl.innerText) + 1);
 
-         // UI updates
             form.querySelector('.btn-add')?.classList.add('d-none');
             form.querySelector('.btn-remove')?.classList.remove('d-none');
         },
@@ -89,7 +88,6 @@
             showToast(ERR_TITLE, err.message, true);
         }
     };
-
 
     document.addEventListener("DOMContentLoaded",()=>{
         addToCartForms.forEach(form => {

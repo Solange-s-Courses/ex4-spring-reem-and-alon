@@ -3,7 +3,7 @@
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     const form = document.querySelector("form.chat-input");
     // ============ ניהול מונה הודעות שלא נקראו ============
-    function renderUnreadBadge(chatId) {
+    const renderUnreadBadge=(chatId) =>{
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
         const count = unreadCounts[chatId] || 0;
         if (chatItem) {
@@ -15,11 +15,6 @@
                 chatItem.style.display = 'none';
             }
         }
-    }
-
-    function resetUnread(chatId) {
-        unreadCounts[chatId] = 0;
-        renderUnreadBadge(chatId);
     }
 
     // =============== WebSocket ניהול =================
@@ -66,7 +61,7 @@
                     if (msg.body === "SESSION_EXPIRED") {
                         window.location.href = "/login?expired";
                     } else {
-                        alert("שגיאה: " + msg.body); // הצג שגיאת ולידציה או business
+                        alert("שגיאה: " + msg.body);
                     }
                 });
 
@@ -74,7 +69,6 @@
         };
 
         const disconnectSocket = () => {
-            // קריאה נכונה לנתק את stomp
             if (stompClient && stompClient.connected) {
                 stompClient.disconnect();
             }
@@ -128,7 +122,7 @@
         const chatLinks = document.querySelectorAll('[data-chat-id]');
         chatLinks.forEach(link => {
             const chatId = link.getAttribute('data-chat-id');
-            renderUnreadBadge(chatId); // מצייר את המונה מההתחלה
+            renderUnreadBadge(chatId);
         });
 
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
