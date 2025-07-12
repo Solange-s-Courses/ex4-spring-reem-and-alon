@@ -2,7 +2,6 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.CheckoutProviders;
-import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.entity.Chat;
 import com.example.ex4.entity.ProviderProfile;

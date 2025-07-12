@@ -1,12 +1,9 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
-import com.example.ex4.constants.SubscriptionPeriod;
 import com.example.ex4.dto.PlanPackageDTO;
-import com.example.ex4.entity.User;
-import com.example.ex4.entity.ProviderProfile;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.entity.Transaction;
+import com.example.ex4.dto.PlanPackageOptionDTO;
+import com.example.ex4.entity.*;
 import com.example.ex4.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +44,8 @@ public class AdminController {
      */
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private PeriodService periodService;
 
     /**
      * Displays the admin dashboard with the admins profile, packages, and transactions.
@@ -57,8 +59,12 @@ public class AdminController {
     public String adminIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal,Model model) {
         User admin = userPrincipal.getUser();
         ProviderProfile providerProfile = profileService.findProviderProfile(admin);
-        List<PlanPackage> plans = planPackageService.getAllProviderPackages(providerProfile);
-        List<Transaction> transactions = transactionService.findAllProviderTransactions(plans);
+        List<PlanPackageDTO> plans = planPackageService.getAllProviderPackages(providerProfile);
+        List<Transaction> transactions = transactionService.findAllProviderTransactions(providerProfile);
+
+        for (PlanPackageDTO planPackage : plans) {
+            System.out.println(planPackage);
+        }
 
         model.addAttribute("admin", admin);
         model.addAttribute("profile", providerProfile);
@@ -74,9 +80,27 @@ public class AdminController {
      * @return add package form page
      */
     @GetMapping("/add-package")
-    public String getPackageForm(Model model) {
-        model.addAttribute("planPackage", new PlanPackageDTO());
-        model.addAttribute("subscriptionPeriod", SubscriptionPeriod.values());
+    public String getPackageForm(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
+        List<Period> periods = periodService.findAll();
+
+        PlanPackageDTO planPackageDTO = new PlanPackageDTO();
+        List<PlanPackageOptionDTO> options = new ArrayList<>();
+
+        for (Period period : periods) {
+            options.add(PlanPackageOptionDTO.builder()
+                    .periodId(period.getId())
+                    .periodName(period.getName())
+                    .months(period.getMonths())
+                    .discount(BigDecimal.ZERO)
+                    .build());
+        }
+        ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());
+
+        planPackageDTO.setProviderProfileId(providerProfile.getId());
+        planPackageDTO.setPlanOptions(options);
+
+        model.addAttribute("subscriptionPeriod", periods);
+        model.addAttribute("planPackage", planPackageDTO);
         return "admin/add-package-form";
     }
 
@@ -95,13 +119,14 @@ public class AdminController {
     public String addPackage(
             @AuthenticationPrincipal MyUserPrincipal userPrincipal,
             @Valid @ModelAttribute("planPackage") PlanPackageDTO planPackageDTO,
-            BindingResult result, Model model)
-    {
-        ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());
+            BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("subscriptionPeriod", SubscriptionPeriod.values());
+            model.addAttribute("subscriptionPeriod",  periodService.findAll());
             return "admin/add-package-form";
         }
+
+        ProviderProfile providerProfile = profileService.findProviderProfile(userPrincipal.getUser());
+
         planPackageService.saveNewPackage(providerProfile, planPackageDTO);
         return "redirect:/admin";
     }

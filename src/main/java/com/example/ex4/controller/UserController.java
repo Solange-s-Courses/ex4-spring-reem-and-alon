@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.math.BigDecimal;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -33,8 +35,8 @@ public class UserController {
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal,@RequestParam int amount, Model model) {
-        if (amount <= 0) {
+    public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal, @RequestParam BigDecimal amount, Model model) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             model.addAttribute("errorMessage", "Amount must be greater than 0");
             return "user/index";
         }

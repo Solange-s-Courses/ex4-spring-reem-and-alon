@@ -3,6 +3,7 @@ package com.example.ex4.components;
 import com.example.ex4.dto.CartItemDTO;
 import org.springframework.stereotype.Component;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ public class ShoppingCart implements Serializable {
      */
     public boolean addProduct(CartItemDTO item) {
         for (CartItemDTO existing : items) {
-            if (Objects.equals(existing.getPkgId(), item.getPkgId())) {
+            if (Objects.equals(existing.getPkgOptionId(), item.getPkgOptionId())) {
                 return false;
             }
         }
@@ -45,12 +46,12 @@ public class ShoppingCart implements Serializable {
     /**
      * Removes a product from the cart by package ID and subscription package name.
      *
-     * @param pkgId  the package ID of the product to remove
+     * @param OptionId  the package ID of the product to remove
      * @param subPkgName the subscription package name of the product to remove
      * @return {@code true} if an item was removed; {@code false} otherwise
      */
-    public boolean removeProduct(long pkgId, String subPkgName) {
-        return items.removeIf(i -> i.getPkgId() == pkgId &&
+    public boolean removeProduct(long OptionId, String subPkgName) {
+        return items.removeIf(i -> i.getPkgOptionId() == OptionId &&
                 Objects.equals(i.getSubPkgName(), subPkgName));
     }
 
@@ -74,7 +75,7 @@ public class ShoppingCart implements Serializable {
      */
     public Set<Long> getPkgIds() {
         return items.stream()
-                .map(CartItemDTO::getPkgId)
+                .map(CartItemDTO::getPkgOptionId)
                 .collect(Collectors.toSet());
     }
 
@@ -83,7 +84,11 @@ public class ShoppingCart implements Serializable {
      *
      * @return the total cost as a double
      */
-    public double getTotalCost() {
-        return items.stream().mapToDouble(CartItemDTO::getMonthlyCost).sum();
+    public BigDecimal getTotalCost() {
+        return items.stream().map(CartItemDTO::getMonthlyCost).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public int getSize() {
+        return items.size();
     }
 }

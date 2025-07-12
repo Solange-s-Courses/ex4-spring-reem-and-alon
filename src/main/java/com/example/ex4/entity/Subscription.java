@@ -3,7 +3,9 @@ package com.example.ex4.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,19 +13,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Subscription {
+public class Subscription implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @ManyToOne
-    private PlanPackage planPackage;
 
     @ManyToOne
     private User user;
 
     @NotNull(message = "Start date is required")
     private LocalDate startDate;
+
+    @ManyToOne
+    private PlanPackageOption planPackageOption;
+
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transaction> paymentTransactions;
 
     @Builder.Default
     private String status = "ACTIVE";

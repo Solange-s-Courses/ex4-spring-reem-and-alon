@@ -1,20 +1,20 @@
 package com.example.ex4.dto;
 
-import com.example.ex4.entity.PlanPackage;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SearchResultDTO {
-    List<PlanPackage> planPackages;
-    private long reviewCount;
     private double avgStars;
-    private boolean avgHasHalfStarOrMore;
+    private long reviewCount;
+    private String providerName;
+
+    @Builder.Default
+    List<PlanPackageDTO> plans = new ArrayList<>();
 }

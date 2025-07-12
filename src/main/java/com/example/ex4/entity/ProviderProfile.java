@@ -2,6 +2,7 @@ package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class ProviderProfile {
+public class ProviderProfile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +32,5 @@ public class ProviderProfile {
     private User user;
 
     @OneToMany(mappedBy = "providerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlanPackage> planPackage;
+    private List<PlanPackage> planPackages;
 }

@@ -3,6 +3,8 @@ package com.example.ex4.controller;
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
 import com.example.ex4.dto.CartItemDTO;
+import com.example.ex4.entity.PlanPackageOption;
+import com.example.ex4.service.PlanPackageService;
 import com.example.ex4.service.SubscriptionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
 
 
 @RestController
@@ -21,6 +25,8 @@ public class CartRestController {
     private ShoppingCart shoppingCart;
     @Autowired
     private SubscriptionService subscriptionService;
+    @Autowired
+    private PlanPackageService planPackageService;
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody @Valid CartItemDTO item, @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
@@ -35,7 +41,7 @@ public class CartRestController {
 
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeFromCart(@RequestBody @Valid CartItemDTO item) {
-        if (!shoppingCart.removeProduct(item.getPkgId(),item.getSubPkgName())){
+        if (!shoppingCart.removeProduct(item.getPkgOptionId(),item.getSubPkgName())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product does not exists in the cart!");
         }
         return ResponseEntity.ok().body("Package removed from cart successfully!");

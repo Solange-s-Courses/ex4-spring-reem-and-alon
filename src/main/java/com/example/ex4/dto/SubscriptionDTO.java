@@ -1,6 +1,8 @@
 package com.example.ex4.dto;
 
 import lombok.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -14,7 +16,7 @@ public class SubscriptionDTO {
 
     private String planDescription;
     private String planName;
-    private double monthlyCost;
+    private BigDecimal monthlyCost;
 
     private Long providerId;
     private String providerName;

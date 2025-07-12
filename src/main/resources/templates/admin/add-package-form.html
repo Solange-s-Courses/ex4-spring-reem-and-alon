@@ -16,58 +16,41 @@
                 <h4 class="fw-bold mb-0 mt-2">Create New Package</h4>
             </div>
         </div>
+        <input type="hidden" th:field="*{id}" />
         <div class="mb-3">
             <label for="title" class="form-label fw-semibold">Title</label>
-            <input type="text" th:field="*{title}" class="form-control rounded-3" id="title" placeholder="Title"
-                   required>
+            <input type="text" th:field="*{title}" class="form-control rounded-3" id="title" placeholder="Title">
             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label fw-semibold">Description</label>
             <textarea th:field="*{description}" class="form-control rounded-3" id="description"
-                      placeholder="Description" required></textarea>
+                      placeholder="Description"></textarea>
             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('description')}"
                  th:errors="*{description}"></div>
         </div>
         <div class="mb-3">
             <label class="form-label fw-semibold">Discounts per Subscription Period</label>
             <div class="row g-2">
-                <div class="col">
-                    <label for="yearlyDiscount" class="form-label small">Yearly (%)</label>
-                    <input id="yearlyDiscount" name="yearlyDiscount"
+                <div class="col" th:each="option, idx : *{planOptions}">
+                    <label th:for="${'planOptions' + idx.index + '.discount'}" class="form-label small" th:text="${option.periodName}"></label>
+                    <input th:field="*{planOptions[__${idx.index}__].discount}"
                            type="number" step="0.01" min="0" max="100"
-                           th:value="*{yearlyDiscount}"
                            class="form-control rounded-3"
+                           th:id="${'planOptions' + idx.index + '.discount'}"
                            placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('yearlyDiscount')}"
-                         th:errors="*{yearlyDiscount}"></div>
-                </div>
-                <div class="col">
-                    <label for="halfYearlyDiscount" class="form-label small">Half-Yearly (%)</label>
-                    <input id="halfYearlyDiscount" name="halfYearlyDiscount"
-                           type="number" step="0.01" min="0" max="100"
-                           th:value="*{halfYearlyDiscount}"
-                           class="form-control rounded-3"
-                           placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('halfYearlyDiscount')}"
-                         th:errors="*{halfYearlyDiscount}"></div>
-                </div>
-                <div class="col">
-                    <label for="threeMonthDiscount" class="form-label small">3-Month (%)</label>
-                    <input id="threeMonthDiscount" name="threeMonthDiscount"
-                           type="number" step="0.01" min="0" max="100"
-                           th:value="*{threeMonthDiscount}"
-                           class="form-control rounded-3"
-                           placeholder="0-100">
-                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('threeMonthDiscount')}"
-                         th:errors="*{threeMonthDiscount}"></div>
+                    <input type="hidden" th:field="*{planOptions[__${idx.index}__].periodId}" />
+                    <input type="hidden" th:field="*{planOptions[__${idx.index}__].periodName}" />
+                    <input type="hidden" th:field="*{planOptions[__${idx.index}__].months}" />
+                    <div class="invalid-feedback d-block"
+                         th:if="${#fields.hasErrors('planOptions[' + idx.index + '].discount')}"
+                         th:errors="*{planOptions[__${idx.index}__].discount}"></div>
                 </div>
             </div>
         </div>
         <div class="mb-3">
             <label for="monthlyCost" class="form-label fw-semibold">Monthly Cost</label>
-            <input type="number" th:field="*{monthlyCost}" class="form-control rounded-3" id="monthlyCost" min="1"
-                   required>
+            <input type="number" th:field="*{monthlyCost}" class="form-control rounded-3" id="monthlyCost" min="1">
             <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('monthlyCost')}"
                  th:errors="*{monthlyCost}"></div>
         </div>

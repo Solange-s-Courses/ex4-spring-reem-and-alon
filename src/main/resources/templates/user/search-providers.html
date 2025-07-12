@@ -220,11 +220,11 @@
         <div th:if="${results != null}" th:each="result : ${results}" class="card col shadow-sm mb-5">
             <div class="row my-auto card-header text-dark mb-4 align-content-center">
                 <div class="col-2 d-flex justify-content-center">
-                    <img th:src="@{/provider-image/{id}(id=${result.planPackages[0].providerProfile.id})}"
+                    <img th:src="@{/provider-image/{id}(id=${result.plans[0].providerProfileId})}"
                          class="img-thumbnail img-fluid object-fit-cover" style="width: 120px" alt="Provider Image"/>
                 </div>
                 <div class="col-4 justify-content-start my-auto">
-                    <h4 th:text="${result.planPackages[0].providerProfile.companyName}" class="text-center"></h4>
+                    <h4 th:text="${result.providerName}" class="text-center"></h4>
                     <div class="d-flex align-items-center text-center pt-3">
                         <div class="d-flex align-items-center text-center">
                             <div class="d-flex text-warning me-2"
@@ -247,7 +247,7 @@
                               style="margin:0; padding:0; border:none;">
                             <input type="hidden" name="category" th:value="${selectedCategory}"/>
                             <input type="hidden" name="providerProfileId"
-                                   th:value="${result.planPackages[0].providerProfile.id}"/>
+                                   th:value="${result.plans[0].providerProfileId}"/>
                             <button type="submit"
                                     class="btn btn-link p-0 m-0 align-baseline
                                             link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4 fw-bolder"
@@ -257,7 +257,7 @@
                         </form>
                     </div>
                 </div>
-                <div th:replace="~{fragments/plan-package-carousel :: planCarousel(plans=${result.planPackages}, pageName=${'search'})}"></div>
+                <div th:replace="~{fragments/plan-package-carousel :: planCarousel(plans=${result.plans}, pageName=${'search'})}"></div>
             </div>
             <div th:unless="${results != null}" class="no-results">
                 <i class="bi bi-search"></i>

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +28,9 @@ public class UserControllerAdvice {
     @Autowired
     private MessageService messageService;
 
-    @ModelAttribute("shoppingCart")
-    public List<PlanPackage> shoppingCart() {
-        Set<Long> pkgIds = sessionCart.getPkgIds();
-        return planPackageService.findAllProducts(pkgIds);
+    @ModelAttribute("shoppingCartSize")
+    public int shoppingCartSize() {
+        return sessionCart.getSize();
     }
 
     @ModelAttribute("userName")
@@ -38,7 +39,7 @@ public class UserControllerAdvice {
     }
 
     @ModelAttribute("balance")
-    public int balance(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+    public BigDecimal balance(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         return userPrincipal.getUser().getCreditBalance();
     }
 

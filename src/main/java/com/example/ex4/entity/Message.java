@@ -2,7 +2,7 @@ package com.example.ex4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Message {
+public class Message implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,8 @@ public class Message {
     @Column(nullable = false)
     private LocalDateTime sentAt;
 
-    private boolean isRead;
+    @Builder.Default
+    private boolean isRead = false;
 
     @ManyToOne
     private Chat chat;

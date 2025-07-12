@@ -3,8 +3,8 @@ package com.example.ex4.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -33,5 +33,5 @@ public class User implements Serializable {
     private String password;
 
     @Builder.Default
-    private int creditBalance = 0;
+    private BigDecimal creditBalance = BigDecimal.valueOf(0);
 }

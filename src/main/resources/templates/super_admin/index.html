@@ -215,8 +215,8 @@
                         <div class="col" th:text="${'#' + transaction.id}"></div>
                         <div class="col" th:text="${transaction.subscription.user.userName}"></div>
                         <div class="col"
-                             th:text="${transaction.subscription.planPackage.providerProfile.companyName}"></div>
-                        <div class="col" th:text="${transaction.amount + ' ₪'}"></div>
+                             th:text="${transaction.subscription.planPackageOption.planPackage.providerProfile.companyName}"></div>
+                        <div class="col" th:text="${transaction.chargePrice + ' ₪'}"></div>
                         <div class="col fw-normal">
                             <span class="badge px-2 py-2"
                                   th:text="${transaction.type.name()}"

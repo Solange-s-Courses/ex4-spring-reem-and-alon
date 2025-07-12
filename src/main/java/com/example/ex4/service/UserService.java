@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.example.ex4.entity.User;
 import com.example.ex4.repository.UserRepository;
 
+import java.math.BigDecimal;
+
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
@@ -18,8 +20,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void depositToBalance(User user, int amount) {
-        user.setCreditBalance(user.getCreditBalance() + amount);
+    public void depositToBalance(User user, BigDecimal amount) {
+        user.setCreditBalance(user.getCreditBalance().add(amount));
         userRepository.save(user);
     }
 

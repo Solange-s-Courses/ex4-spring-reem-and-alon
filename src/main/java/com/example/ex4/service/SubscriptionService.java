@@ -1,18 +1,18 @@
 package com.example.ex4.service;
 
-import com.example.ex4.constants.SubscriptionPeriod;
 import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.dto.SubscriptionDTO;
-import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.Subscription;
+import com.example.ex4.entity.User;
+import com.example.ex4.repository.PlanPackageOptionRepository;
 import com.example.ex4.repository.PlanPackageRepository;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,14 +21,15 @@ public class SubscriptionService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
-    @Autowired
-    private PlanPackageRepository planPackageRepository;
 
-    public Subscription createSubscription(User user, PlanPackage plan) {
-        if (plan.getExpiryDate().isBefore(LocalDate.now())) {
+    @Autowired
+    private PlanPackageOptionRepository planPackageOptionRepository;
+
+    public Subscription createSubscription(User user, PlanPackageOption plan) {
+        if (plan.getPlanPackage().getExpiryDate().isBefore(LocalDate.now())) {
             throw new RuntimeException("Cannot subscribe service plan package. because its not available anymore.");
         }
-        Subscription sub = Subscription.builder().user(user).planPackage(plan).startDate(LocalDate.now()).build();
+        Subscription sub = Subscription.builder().user(user).planPackageOption(plan).startDate(LocalDate.now()).build();
         return subscriptionRepository.save(sub);
     }
 
@@ -41,21 +42,24 @@ public class SubscriptionService {
     }
 
     private SubscriptionDTO toSubscriptionDTO(Subscription subscription) {
+        PlanPackageOption planPackageOption = subscription.getPlanPackageOption();
         return SubscriptionDTO.builder().status(subscription.getStatus())
                 .startDate(subscription.getStartDate())
-                .planDescription(subscription.getPlanPackage().getDescription())
-                .monthlyCost(subscription.getPlanPackage().getMonthlyCost())
-                .providerId(subscription.getPlanPackage().getProviderProfile().getId())
-                .providerName(subscription.getPlanPackage().getProviderProfile().getCompanyName())
-                .category(subscription.getPlanPackage().getProviderProfile().getCategory().getName())
+                .planDescription(planPackageOption.getPlanPackage().getDescription())
+                .monthlyCost(planPackageOption.getPlanPackage().getMonthlyCost())
+                .providerId(planPackageOption.getPlanPackage().getProviderProfile().getId())
+                .providerName(planPackageOption.getPlanPackage().getProviderProfile().getCompanyName())
+                .category(planPackageOption.getPlanPackage().getProviderProfile().getCategory().getName())
                 .build();
 
     }
 
     public boolean existsInUserSubscription(User user, CartItemDTO item) {
-        if (!planPackageRepository.existsById(item.getPkgId())){
-            throw new IllegalArgumentException("Plan package not found");
-        }
-        return subscriptionRepository.existsByUserAndPlanPackage_Id(user, item.getPkgId());
+        PlanPackageOption planPackageOption = planPackageOptionRepository.findById(item.getPkgOptionId())
+                .orElseThrow(() -> new IllegalArgumentException("Plan package option not found"));
+
+        PlanPackage planPackage = planPackageOption.getPlanPackage();
+
+        return subscriptionRepository.existsByUserAndPlanPackageOption_PlanPackage(user, planPackage);
     }
 }

@@ -38,10 +38,12 @@ public class ProviderProfileService {
      */
     @Autowired
     private ProviderCategoryRepository providerCategoryRepository;
+    @Autowired
+    private ProviderCategoryService providerCategoryService;
 
 
     public ProviderProfile findProviderProfile(User admin) {
-        return providerProfileRepository.findByUser(admin).orElse(null);
+        return providerProfileRepository.findByUser(admin).orElseThrow(()-> new RuntimeException("No provider profile found"));
     }
 
     public void activateAdminAccount(long id) {
@@ -77,4 +79,8 @@ public class ProviderProfileService {
 
     public List<ProviderProfile> findAllPendingProfiles(){ return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
     public void removeProviderProfile(long id) {providerProfileRepository.deleteById(id);}
+
+    public List<ProviderProfile> findAllProviderByCategoryWithPackages(ProviderCategory category) {
+        return providerProfileRepository.findByCategoryAndPlanPackagesIsNotEmpty(category);
+    }
 }

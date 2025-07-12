@@ -34,9 +34,9 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                        pkgId: form.querySelector("input[name='pkgId']").value,
-                        subPkgName: form.querySelector("input[name='subPkgName']").value,
-                        monthlyCost: form.querySelector("input[name='monthlyCost']").value,
+                    pkgOptionId: form.querySelector("input[name='pkgOptionId']").value,
+                    subPkgName: form.querySelector("input[name='subPkgName']").value,
+                    monthlyCost: form.querySelector("input[name='monthlyCost']").value,
                 })
             });
 
@@ -58,7 +58,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    pkgId: form.querySelector("input[name='pkgId']").value,
+                    pkgOptionId: form.querySelector("input[name='pkgOptionId']").value,
                     subPkgName: form.querySelector("input[name='subPkgName']").value,
                     monthlyCost: form.querySelector("input[name='monthlyCost']").value,
                 })

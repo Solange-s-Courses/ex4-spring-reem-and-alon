@@ -8,14 +8,12 @@ import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.service.ProviderCategoryService;
 import com.example.ex4.service.ProviderProfileService;
 import com.example.ex4.service.ReviewService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.ex4.service.SearchProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.util.*;
 
 
@@ -29,13 +27,12 @@ public class SearchProviderController {
 
     @Autowired
     private ShoppingCart sessionCart;
-    @Autowired
-    private ReviewService reviewService;
 
     @Autowired
     private SearchCategoryHolder searchCategoryHolder;
+
     @Autowired
-    private ProviderProfileService providerProfileService;
+    private SearchProviderService searchProviderService;
 
     @GetMapping
     public ModelAndView initSearchFormData(@RequestParam(value = "category", required = false) String category,
@@ -56,21 +53,7 @@ public class SearchProviderController {
     @GetMapping("/result")
     public ModelAndView groupedByProviderResult(ModelMap model) {
         String category = searchCategoryHolder.getCategory();
-        ProviderCategory providerCategory = providerCategoryService.findByName(category);
-
-        List<ProviderProfile> providers = providerCategory.getProviders().stream().
-                filter(profile -> profile.getPlanPackage() != null && !profile.getPlanPackage().isEmpty())
-                .toList();
-        List<SearchResultDTO> results = new ArrayList<>();
-        providers.forEach(provider -> {
-            SearchResultDTO searchResultDTO = new SearchResultDTO();
-            searchResultDTO.setPlanPackages(provider.getPlanPackage());
-            searchResultDTO.setAvgStars(reviewService.getAverageStars(provider));
-            searchResultDTO.setReviewCount(reviewService.getReviewersCount(provider));
-            results.add(searchResultDTO);
-        });
-
-        model.addAttribute("results", results);
+        model.addAttribute("results", searchProviderService.findAllProviderResultByCategory(category));
         return new ModelAndView("user/search-providers",model);
     }
 }

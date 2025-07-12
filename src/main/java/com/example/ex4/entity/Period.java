@@ -3,6 +3,7 @@ package com.example.ex4.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -11,15 +12,16 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class ProviderCategory implements Serializable {
+public class Period implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private List<ProviderProfile> providers;
+    @Column(nullable = false, unique = true)
+    private int months;
 }
+
+

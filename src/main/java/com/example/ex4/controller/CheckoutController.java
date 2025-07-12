@@ -3,12 +3,11 @@ package com.example.ex4.controller;
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.entity.PlanPackage;
+import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.User;
 import com.example.ex4.service.CheckoutService;
 import com.example.ex4.service.PlanPackageService;
-import com.example.ex4.service.ProviderProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,10 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -35,13 +31,9 @@ public class CheckoutController {
     @Autowired
     private PlanPackageService planPackageService;
 
-    @Autowired
-    private PlanPackageService provide;
 
     @Autowired
     private CheckoutProviders planOwnerProviders;
-    @Autowired
-    private ProviderProfileService providerProfileService;
 
     @GetMapping
     public String cartPage(@RequestParam(value = "success", required = false) Boolean success, Model model) {
@@ -49,11 +41,7 @@ public class CheckoutController {
             sessionCart.clear();
         }
         Set<Long> pkgIds = sessionCart.getPkgIds();
-        Map<Long, PlanPackage> pkgMap = planPackageService.findAllProducts(pkgIds).stream()
-                .collect(Collectors.toMap(PlanPackage::getId, planPackage -> planPackage));
-
-        model.addAttribute("cartItems", sessionCart.getItems());
-        model.addAttribute("pkgMap", pkgMap);
+        model.addAttribute("cartItems", planPackageService.getPlanOptionsByIds(pkgIds));
 
         return "user/checkout-cart";
     }
@@ -61,15 +49,13 @@ public class CheckoutController {
     @PostMapping
     public String checkout( @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();
-        List<PlanPackage> plansToPurchase = planPackageService.findAllProducts(sessionCart.getPkgIds());
+        List<PlanPackageOption> plansToPurchase = planPackageService.getPlanOptionsByIds(sessionCart.getPkgIds());
         checkoutService.processCheckout(user, plansToPurchase);
-        Set<Long> seenIds = new HashSet<>();
-        List<ProviderProfile> uniqueProviders = plansToPurchase.stream()
-                .map(PlanPackage::getProviderProfile)
-                .filter(provider -> seenIds.add(provider.getId()))
-                .collect(Collectors.toList());
+        Set<ProviderProfile> uniqueProviders = plansToPurchase.stream()
+                .map(period -> period.getPlanPackage().getProviderProfile())
+                .collect(Collectors.toSet());
 
-        planOwnerProviders.setProviders(uniqueProviders);
+        planOwnerProviders.setProviders(new ArrayList<>(uniqueProviders));
         return "forward:/chat/create";
     }
 

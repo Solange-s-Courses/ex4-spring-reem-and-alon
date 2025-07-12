@@ -7,6 +7,7 @@ import com.example.ex4.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,10 +19,8 @@ public class TransactionService {
     @Autowired
     private SubscriptionRepository subscriptionRepo;
 
-    public void createPaymentTransaction(Subscription subscriber, int monthlyCost) {
-        Transaction transaction = Transaction.builder()
-                .subscription(subscriber)
-                .amount(monthlyCost)
+    public void createPaymentTransaction(Subscription subscriber, BigDecimal monthlyCost) {
+        Transaction transaction = Transaction.builder().subscription(subscriber).chargePrice(monthlyCost)
                 .timestamp(LocalDateTime.now()).type(TransactionType.TRANSFER)
                 .build();
         transactionRepo.save(transaction);
@@ -32,13 +31,10 @@ public class TransactionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Transaction> findAllProviderTransactions(List<PlanPackage> plans) {
-        List<Subscription> subscriptions = plans.stream()
-                .flatMap(plan->subscriptionRepo.findAllByPlanPackage(plan).stream())
-                .toList();
-
+    public List<Transaction> findAllProviderTransactions(ProviderProfile profile) {
+        List<Subscription> subscriptions = subscriptionRepo.findAllByPlanPackageOption_PlanPackage_ProviderProfile(profile);
         return subscriptions.stream()
-                .flatMap(subscription -> transactionRepo.findAllBySubscription(subscription).stream())
+                .flatMap(sub -> sub.getPaymentTransactions().stream())
                 .toList();
     }
 }

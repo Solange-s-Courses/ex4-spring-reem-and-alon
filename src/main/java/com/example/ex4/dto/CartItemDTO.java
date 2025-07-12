@@ -1,9 +1,10 @@
 package com.example.ex4.dto;
 
-import com.example.ex4.validator.ValidSubscriptionPeriodLabel;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -12,13 +13,12 @@ import lombok.*;
 @Builder
 public class CartItemDTO {
     @NotNull
-    private Long pkgId;
+    private Long pkgOptionId;
 
     @NotNull
-    @ValidSubscriptionPeriodLabel
     private String subPkgName;
 
     @NotNull
-    @Min(1)
-    private Double monthlyCost;
+    @DecimalMin("1.00")
+    private BigDecimal monthlyCost;
 }

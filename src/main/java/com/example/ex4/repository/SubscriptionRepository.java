@@ -1,18 +1,22 @@
 package com.example.ex4.repository;
 
-import com.example.ex4.entity.User;
-import com.example.ex4.entity.PlanPackage;
-import com.example.ex4.entity.Subscription;
+import com.example.ex4.entity.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     List<Subscription> findSubscriptionByUser(User user);
-    List<Subscription> findAllByPlanPackage(PlanPackage planPackage);
 
-    boolean existsByUserAndPlanPackageIn(User user, List<PlanPackage> plans);
+    List<Subscription> findAllByPlanPackageOption_PlanPackage_ProviderProfile(ProviderProfile provider);
 
-    boolean existsByUserAndPlanPackage_Id(User user, Long pkgId);
+    boolean existsByUserAndPlanPackageOptionIn(User user, List<PlanPackageOption> plans);
+
+    boolean existsByUserAndPlanPackageOption_PlanPackage(User user, PlanPackage planPackage);
+
+
+    List<Subscription> findByUserAndPlanPackageOption_PlanPackage(User user, PlanPackage planPackage);
 }
