@@ -1,7 +1,6 @@
 package com.example.ex4.service;
 
 import com.example.ex4.dto.AdminRegistrationFormDTO;
-import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.ProviderProfile;
@@ -14,14 +13,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service layer for managing provider profiles and related business logic.
+ * <p>
+ * Handles creation, retrieval, update, and management of provider (admin) profiles.
+ */
 @Service
 public class ProviderProfileService {
+
+    /**
+     * * Service for business logic of {@link User}.
+     */
     @Autowired
     private UserService userService;
+
+    /**
+     * Repository for the {@code Entity} bean of {@link ProviderProfile}.
+     */
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
+
+    /**
+     * Repository for the {@code Entity} bean of {@link ProviderCategory}.
+     */
     @Autowired
     private ProviderCategoryRepository providerCategoryRepository;
+
 
     public ProviderProfile findProviderProfile(User admin) {
         return providerProfileRepository.findByUser(admin).orElse(null);

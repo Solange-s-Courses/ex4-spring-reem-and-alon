@@ -1,6 +1,5 @@
 package com.example.ex4.service;
 
-import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.entity.Chat;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.User;
@@ -10,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 
 @Service
 public class ChatService {

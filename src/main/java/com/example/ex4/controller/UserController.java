@@ -33,7 +33,11 @@ public class UserController {
     }
 
     @PostMapping("/balance/add")
-    public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal,@RequestParam int amount) {
+    public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal,@RequestParam int amount, Model model) {
+        if (amount <= 0) {
+            model.addAttribute("errorMessage", "Amount must be greater than 0");
+            return "user/index";
+        }
         userService.depositToBalance(userPrincipal.getUser(), amount);
         return "redirect:/user";
     }

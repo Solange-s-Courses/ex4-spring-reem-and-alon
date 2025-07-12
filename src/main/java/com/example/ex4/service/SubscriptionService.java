@@ -1,15 +1,18 @@
 package com.example.ex4.service;
 
+import com.example.ex4.constants.SubscriptionPeriod;
 import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.User;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.Subscription;
+import com.example.ex4.repository.PlanPackageRepository;
 import com.example.ex4.repository.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,8 @@ public class SubscriptionService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private PlanPackageRepository planPackageRepository;
 
     public Subscription createSubscription(User user, PlanPackage plan) {
         if (plan.getExpiryDate().isBefore(LocalDate.now())) {
@@ -48,6 +53,9 @@ public class SubscriptionService {
     }
 
     public boolean existsInUserSubscription(User user, CartItemDTO item) {
+        if (!planPackageRepository.existsById(item.getPkgId())){
+            throw new IllegalArgumentException("Plan package not found");
+        }
         return subscriptionRepository.existsByUserAndPlanPackage_Id(user, item.getPkgId());
     }
 }

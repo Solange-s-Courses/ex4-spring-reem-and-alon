@@ -17,17 +17,42 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ * Controller for handling provider (admin) endpoint requests.
+ * <p>
+ * Responsible for managing provider profiles, packages, and related transactions.
+ * Provides endpoints for the admin dashboard, package creation, and related operations.
+ */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    /**
+     * Service for business logic of {@link ProviderProfile}.
+     */
     @Autowired
     private ProviderProfileService profileService;
+
+    /**
+     * Service for business logic of {@link PlanPackage}.
+     */
     @Autowired
     private PlanPackageService planPackageService;
 
+    /**
+     * Service for business logic of {@link Transaction}.
+     */
     @Autowired
     private TransactionService transactionService;
 
+    /**
+     * Displays the admin dashboard with the admins profile, packages, and transactions.
+     *
+     * @param userPrincipal the authenticated admin user
+     * @param model transfer the data to the view
+     * @return the admin dashboard page (his index page)
+     * @see MyUserPrincipal
+     */
     @GetMapping
     public String adminIndex(@AuthenticationPrincipal MyUserPrincipal userPrincipal,Model model) {
         User admin = userPrincipal.getUser();
@@ -42,6 +67,12 @@ public class AdminController {
         return "admin/index";
     }
 
+    /**
+     * render the "add plan form" page
+     *
+     * @param model transfer the data to the view
+     * @return add package form page
+     */
     @GetMapping("/add-package")
     public String getPackageForm(Model model) {
         model.addAttribute("planPackage", new PlanPackageDTO());
@@ -49,6 +80,17 @@ public class AdminController {
         return "admin/add-package-form";
     }
 
+    /**
+     * This method handle the submission of the "add package" form.
+     * Validate the input and if all inputs are valid it creates new {@link PlanPackage}
+     * and save it into the database
+     *
+     * @param userPrincipal the authenticated admin user
+     * @param planPackageDTO the {@code PlanPackage} form inputs
+     * @param result contains the validation errors of the {@code planPackageDTO}
+     * @param model transfer the data to the view
+     * @return redirect to admin dashboard page
+     */
     @PostMapping("/add-package")
     public String addPackage(
             @AuthenticationPrincipal MyUserPrincipal userPrincipal,

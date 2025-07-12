@@ -14,7 +14,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.time.LocalDateTime;
 
 @Controller
@@ -32,8 +31,7 @@ public class ReviewController {
                              @RequestParam(required = false) Double minRating,
                              Model model) {
 
-        ProviderProfile provider = providerProfileRepository.findById(providerProfileId)
-                .orElseThrow(() -> new RuntimeException("No profile found"));
+        ProviderProfile provider = providerProfileRepository.findById(providerProfileId).orElseThrow(() -> new RuntimeException("No profile found"));
 
         if (minRating != null && minRating > 0) {
             model.addAttribute("reviews", reviewService.getReviewsByProviderAndMinRating(providerProfileId, minRating));
