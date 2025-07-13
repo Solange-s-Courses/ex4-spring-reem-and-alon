@@ -35,7 +35,8 @@ public class ShoppingCart implements Serializable {
      */
     public boolean addProduct(CartItemDTO item) {
         for (CartItemDTO existing : items) {
-            if (Objects.equals(existing.getPkgOptionId(), item.getPkgOptionId())) {
+            if (Objects.equals(existing.getPkgOptionId(), item.getPkgOptionId()) ||
+            Objects.equals(existing.getPkgId(), item.getPkgId())) {
                 return false;
             }
         }

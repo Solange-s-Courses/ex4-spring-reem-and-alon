@@ -3,6 +3,7 @@ package com.example.ex4.controller;
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.User;
@@ -14,10 +15,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for handling checkout endpoint requests
+ * <p>
+ * Responsible for managing user purchase action on its shopping cart
+ * The user can only but all items at once
+ *
+ * @see ShoppingCart
+ */
 @Controller
 @RequestMapping("user/checkout")
 public class CheckoutController {
@@ -28,10 +36,15 @@ public class CheckoutController {
     @Autowired
     private CheckoutService checkoutService;
 
+    /**
+     * Service for business logic of {@link PlanPackage}.
+     */
     @Autowired
     private PlanPackageService planPackageService;
 
-
+    /**
+     * Request scope bean that holds the plan packages owner (of the items the user wants to buy)
+     */
     @Autowired
     private CheckoutProviders planOwnerProviders;
 

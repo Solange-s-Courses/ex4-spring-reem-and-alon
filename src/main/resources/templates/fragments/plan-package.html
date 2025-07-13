@@ -44,7 +44,8 @@
                                 </small>
                             </div>
                             <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
-                                <input type="hidden" name="pkgOptionId" th:value="${period.id}">
+                                <input type="hidden" name="pkgOptionId" th:value="${period.periodId}">
+                                <input type="hidden" name="pkgId" th:value="${planPackage.pkgId}">
                                 <input type="hidden" name="subPkgName" th:value="${period.periodName}">
                                 <input type="hidden" name="monthlyCost" th:value="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)), 1, 1)}">
                                 <div th:if="${pageName == 'search'}">

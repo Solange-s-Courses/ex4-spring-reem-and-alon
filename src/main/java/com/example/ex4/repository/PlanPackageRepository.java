@@ -9,8 +9,10 @@ import java.util.Optional;
 
 @Repository
 public interface PlanPackageRepository extends JpaRepository<PlanPackage, Long> {
-    Optional<List<PlanPackage>> findAllByProviderProfile(ProviderProfile profile);
-
-    PlanPackage findByIdAndTitle(Long id, String title);
-    boolean existsByIdAndTitle(Long pkgId, String subPkgName);
+    /**
+     * Finds all the plan packages of the given provider
+     * @param provider  Provider profile that can have many packages
+     * @return Optional list of all provider plan packages
+     */
+    Optional<List<PlanPackage>> findAllByProviderProfile(ProviderProfile provider);
 }

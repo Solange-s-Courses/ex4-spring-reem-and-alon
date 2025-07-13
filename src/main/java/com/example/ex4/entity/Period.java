@@ -3,9 +3,10 @@ package com.example.ex4.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 
+/**
+ * Entity representing a subscription period (e.g. monthly, yearly).
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,15 +14,22 @@ import java.util.List;
 @Builder
 @Entity
 public class Period implements Serializable {
+    /**
+     * Unique identifier for the period.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Name of the period (e.g. "Yearly", "Monthly").
+     */
     @Column(nullable = false, unique = true)
     private String name;
 
+    /**
+     * Duration of the period in months.
+     */
     @Column(nullable = false, unique = true)
     private int months;
 }
-
-

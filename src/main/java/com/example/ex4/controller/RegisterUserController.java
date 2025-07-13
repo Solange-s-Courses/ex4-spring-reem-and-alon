@@ -15,18 +15,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * Controller for user registration flow.
+ *
+ * @see UserService
+ */
 @RequestMapping("/register/user")
 @Controller
 public class RegisterUserController {
+    /**
+     * Service for user operations.
+     */
     @Autowired
     private UserService userService;
 
+    /**
+     * Displays the user registration form.
+     *
+     * @param model Spring Model for adding attributes
+     * @return the name of the registration view
+     */
     @GetMapping
     public String registerUserForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
+    /**
+     * Processes the user registration form.
+     *
+     * @param user the user registration details
+     * @param result validation results
+     * @param model Spring ModelMap for adding attributes
+     * @return redirect to log in on success, or the registration form on validation or database error
+     * @see UserService#addNewUser(User)
+     */
     @PostMapping
     public ModelAndView processRegister(@Valid @ModelAttribute User user, BindingResult result, ModelMap model) {
         if (result.hasErrors()) {

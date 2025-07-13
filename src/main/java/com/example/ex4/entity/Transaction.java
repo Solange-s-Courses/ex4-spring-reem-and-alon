@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.*;
 
+/**
+ * Entity representing a payment transaction for a subscription.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,20 +19,40 @@ import lombok.*;
 @Builder
 @Entity
 public class Transaction implements Serializable {
+    /**
+     * Unique identifier for the transaction.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The subscription this transaction is for.
+     *
+     * @see Subscription
+     */
     @ManyToOne
     private Subscription subscription;
 
+    /**
+     * The amount charged.
+     */
     @NotNull
     @DecimalMin("0.00")
     private BigDecimal chargePrice;
 
+    /**
+     * Timestamp when the transaction occurred.
+     */
     @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp;
 
+    /**
+     * Transaction type (e.g. CHARGE, REFUND).
+     *
+     * @see com.example.ex4.constants.TransactionType
+     */
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private com.example.ex4.constants.TransactionType type;
 }
+

@@ -6,7 +6,6 @@ import com.example.ex4.entity.Period;
 import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.ProviderProfile;
-import com.example.ex4.mappers.PlanPackageMapper;
 import com.example.ex4.repository.PeriodRepository;
 import com.example.ex4.repository.PlanPackageOptionRepository;
 import com.example.ex4.repository.PlanPackageRepository;
@@ -14,75 +13,67 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+/**
+ * Service for managing plan packages, including mapping, validation, and calculations.
+ *
+ * @see PlanPackage
+ * @see PlanPackageOption
+ */
 @Service
 public class PlanPackageService {
     @Autowired
     private PlanPackageRepository planPackageRepository;
     @Autowired
     private PlanPackageOptionRepository planPackageOptionRepository;
-
-    @Autowired
-    private PlanPackageMapper planPackageMapper;
     @Autowired
     private PeriodRepository periodRepository;
 
     /**
      * Returns all plan packages (DTOs) for a provider profile.
+     *
+     * @param profile the provider profile
+     * @return list of plan packages as DTOs
      */
     public List<PlanPackageDTO> getAllProviderPackages(ProviderProfile profile) {
         List<PlanPackage> plans = planPackageRepository.findAllByProviderProfile(profile)
                 .orElse(List.of());
-        List<PlanPackageDTO> dtos = planPackageMapper.toDtoList(plans);
-        for (int i = 0; i < plans.size(); i++) {
-            dtos.get(i).setPlanOptions(planPackageMapper.toPeriodDtoList(plans.get(i).getPlanOptions()));
-        }
-
-        return dtos;
+        return plans.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
     /**
      * Returns a single PlanPackageDTO for a PlanPackage entity.
+     *
+     * @param planPackage the plan package entity
+     * @return the DTO representation
      */
     public PlanPackageDTO getPlanPackage(PlanPackage planPackage) {
-        PlanPackageDTO dto = planPackageMapper.toDto(planPackage);
-        dto.setPlanOptions(planPackageMapper.toPeriodDtoList(planPackage.getPlanOptions()));
-        return dto;
+        return entityToDto(planPackage);
     }
 
     /**
-     * Converts PlanPackageOption entities to DTOs (periods options).
-     */
-    private List<PlanPackageOptionDTO> getPeriodsOptions(List<PlanPackageOption> planOptions) {
-        return planOptions.stream().map(option ->
-                PlanPackageOptionDTO.builder()
-                        .periodName(option.getPeriod().getName())
-                        .months(option.getPeriod().getMonths())
-                        .discount(option.getDiscount())
-                        .build()
-        ).toList();
-    }
-
-    /**
-     * Saves a new plan package using the mapper.
+     * Saves a new plan package for a provider (without mapper).
+     *
+     * @param providerProfile the provider
+     * @param packageDTO the package details
      */
     @Transactional
     public void saveNewPackage(ProviderProfile providerProfile, PlanPackageDTO packageDTO) {
-
         PlanPackage newPlanPackage = PlanPackage.builder()
                 .title(packageDTO.getTitle())
                 .description(packageDTO.getDescription())
-                .monthlyCost(packageDTO.getMonthlyCost()) // הוספת המחיר החודשי
+                .monthlyCost(packageDTO.getMonthlyCost())
                 .expiryDate(packageDTO.getExpiryDate())
                 .providerProfile(providerProfile)
                 .build();
 
-        // יצירת האופציות
         List<PlanPackageOption> options = packageDTO.getPlanOptions().stream().map(option -> {
             Period period = periodRepository.findById(option.getPeriodId())
                     .orElseThrow(() -> new RuntimeException("Period not found: " + option.getPeriodId()));
@@ -95,11 +86,17 @@ public class PlanPackageService {
                     .build();
         }).toList();
 
-        // הוספת האופציות לחבילה
         newPlanPackage.getPlanOptions().addAll(options);
         planPackageRepository.save(newPlanPackage);
     }
 
+    /**
+     * Calculates the option price based on monthly cost and discount.
+     *
+     * @param monthlyCost the monthly base price
+     * @param optionDTO the option DTO (period and discount)
+     * @return the calculated price for the option
+     */
     private BigDecimal calculateOptionPrice(BigDecimal monthlyCost, PlanPackageOptionDTO optionDTO) {
         if (monthlyCost == null) {
             return BigDecimal.ZERO;
@@ -119,22 +116,37 @@ public class PlanPackageService {
 
     /**
      * Finds all PlanPackageDTOs for a set of PlanPackageOption IDs.
+     *
+     * @param optionsId set of plan package option IDs
+     * @return list of corresponding package DTOs
      */
     public List<PlanPackageDTO> findAllPlanPackageOptions(Set<Long> optionsId) {
         List<PlanPackageOption> planPeriods = planPackageOptionRepository.findAllById(optionsId);
         List<PlanPackage> plans = planPeriods.stream()
                 .map(PlanPackageOption::getPlanPackage)
                 .toList();
-        return planPackageMapper.toDtoList(plans);
+        return plans.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
     /**
      * Gets PlanPackageOption entities by their IDs.
+     *
+     * @param optionsId set of option IDs
+     * @return list of options
      */
     public List<PlanPackageOption> getPlanOptionsByIds(Set<Long> optionsId) {
         return planPackageOptionRepository.findAllById(optionsId);
     }
 
+    /**
+     * Checks if the cart already contains an option from the same package.
+     *
+     * @param pkgOptionIds the set of existing option IDs in the cart
+     * @param newPkgOptionId the new option ID to check
+     * @return true if same package already exists in the cart
+     */
     public boolean cartContainsSomePackageOption(Set<Long> pkgOptionIds, @NotNull Long newPkgOptionId) {
         if (pkgOptionIds.isEmpty()) return false;
 
@@ -145,10 +157,60 @@ public class PlanPackageService {
                 .anyMatch(option -> option.getPlanPackage().getId() == newOption.getPlanPackage().getId());
     }
 
+    /**
+     * Finds all products (PlanPackage) for a set of option IDs.
+     *
+     * @param optionsId set of option IDs
+     * @return list of packages for those options
+     */
     public List<PlanPackage> findAllProducts(Set<Long> optionsId) {
         List<PlanPackageOption> planOptions = getPlanOptionsByIds(optionsId);
         return planOptions.stream()
                 .map(PlanPackageOption::getPlanPackage)
                 .toList();
+    }
+
+    /**
+     * Maps a PlanPackage entity to its DTO representation.
+     *
+     * @param entity the entity
+     * @return the DTO
+     */
+    private PlanPackageDTO entityToDto(PlanPackage entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        PlanPackageDTO dto = new PlanPackageDTO();
+        dto.setTitle(entity.getTitle());
+        dto.setPkgId(entity.getId());
+        dto.setDescription(entity.getDescription());
+        dto.setMonthlyCost(entity.getMonthlyCost());
+        dto.setExpiryDate(entity.getExpiryDate());
+        dto.setProviderProfileId(entity.getProviderProfile().getId());
+        dto.setPlanOptions(planOptionsToDto(entity.getPlanOptions()));
+
+        return dto;
+    }
+
+    /**
+     * Maps a list of PlanPackageOption entities to their DTOs.
+     *
+     * @param planOptions list of options
+     * @return list of DTOs
+     */
+    private List<PlanPackageOptionDTO> planOptionsToDto(List<PlanPackageOption> planOptions) {
+        if (planOptions == null) {
+            return new ArrayList<>();
+        }
+
+        return planOptions.stream().map(option ->
+                PlanPackageOptionDTO.builder()
+                        .periodName(option.getPeriod().getName())
+                        .months(option.getPeriod().getMonths())
+                        .discount(option.getDiscount())
+                        .periodId(option.getId())
+                        .build()
+        ).toList();
     }
 }

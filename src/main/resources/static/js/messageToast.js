@@ -35,6 +35,7 @@
                 },
                 body: JSON.stringify({
                     pkgOptionId: form.querySelector("input[name='pkgOptionId']").value,
+                    pkgId: form.querySelector("input[name='pkgId']").value,
                     subPkgName: form.querySelector("input[name='subPkgName']").value,
                     monthlyCost: form.querySelector("input[name='monthlyCost']").value,
                 })
@@ -59,6 +60,7 @@
                 },
                 body: JSON.stringify({
                     pkgOptionId: form.querySelector("input[name='pkgOptionId']").value,
+                    pkgId: form.querySelector("input[name='pkgId']").value,
                     subPkgName: form.querySelector("input[name='subPkgName']").value,
                     monthlyCost: form.querySelector("input[name='monthlyCost']").value,
                 })

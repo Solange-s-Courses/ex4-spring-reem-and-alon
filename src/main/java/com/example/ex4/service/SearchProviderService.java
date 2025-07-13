@@ -10,26 +10,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+/**
+ * Service for searching providers by category and aggregating their data (plans, reviews).
+ *
+ * @see ProviderCategory
+ * @see ProviderProfile
+ * @see SearchResultDTO
+ * @see PlanPackageService
+ */
 @Service
 public class SearchProviderService {
-
-    @Autowired
-    private ProviderProfileService providerProfileService;
 
     @Autowired
     private ProviderCategoryService providerCategoryService;
 
     @Autowired
-    private ReviewService reviewService;
-    @Autowired
     private ProviderProfileRepository providerProfileRepository;
+
     @Autowired
     private ReviewRepository reviewRepository;
-    @Autowired
-    private SubscriptionService subscriptionService;
+
     @Autowired
     private PlanPackageService planPackageService;
 
+    /**
+     * Returns a list of search results for providers in a given category,
+     * each including average stars, review count, and available plans.
+     *
+     * @param category the provider category name
+     * @return list of search result DTOs for each provider in the category
+     */
     public List<SearchResultDTO> findAllProviderResultByCategory(String category) {
         ProviderCategory providerCategory = providerCategoryService.findByName(category);
         List<ProviderProfile> providers = providerProfileRepository.findByCategoryAndPlanPackagesIsNotEmpty(providerCategory);
@@ -48,3 +58,4 @@ public class SearchProviderService {
         }).toList();
     }
 }
+

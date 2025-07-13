@@ -44,6 +44,10 @@ public class AdminController {
      */
     @Autowired
     private TransactionService transactionService;
+
+    /**
+     * Service for business logic of {@link Period}.
+     */
     @Autowired
     private PeriodService periodService;
 
@@ -76,6 +80,7 @@ public class AdminController {
     /**
      * render the "add plan form" page
      *
+     * @param userPrincipal the authenticated admin user
      * @param model transfer the data to the view
      * @return add package form page
      */
@@ -114,6 +119,8 @@ public class AdminController {
      * @param result contains the validation errors of the {@code planPackageDTO}
      * @param model transfer the data to the view
      * @return redirect to admin dashboard page
+     *
+     * @see PlanPackageDTO
      */
     @PostMapping("/add-package")
     public String addPackage(

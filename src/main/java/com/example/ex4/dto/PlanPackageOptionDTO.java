@@ -27,14 +27,4 @@ public class PlanPackageOptionDTO {
 
     /** ID of the period (for DB lookup) */
     private Long periodId;
-
-    @Override
-    public String toString() {
-        return "PlanPackageOptionDTO{" +
-                "periodName='" + periodName + '\'' +
-                ", months=" + months +
-                ", discount=" + discount +
-                ", periodId=" + periodId +
-                '}';
-    }
 }

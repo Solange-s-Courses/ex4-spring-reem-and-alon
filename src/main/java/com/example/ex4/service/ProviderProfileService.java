@@ -16,45 +16,70 @@ import java.util.List;
 /**
  * Service layer for managing provider profiles and related business logic.
  * <p>
- * Handles creation, retrieval, update, and management of provider (admin) profiles.
+ * Handles creation, retrieval, approval, image fetching, and removal of provider (admin) profiles.
+ *
+ * @see ProviderProfile
+ * @see ProviderCategory
+ * @see User
  */
 @Service
 public class ProviderProfileService {
 
     /**
-     * * Service for business logic of {@link User}.
+     * Service for user business logic.
      */
     @Autowired
     private UserService userService;
 
     /**
-     * Repository for the {@code Entity} bean of {@link ProviderProfile}.
+     * Repository for provider profiles.
      */
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
 
     /**
-     * Repository for the {@code Entity} bean of {@link ProviderCategory}.
+     * Repository for provider categories.
      */
     @Autowired
     private ProviderCategoryRepository providerCategoryRepository;
-    @Autowired
-    private ProviderCategoryService providerCategoryService;
 
-
+    /**
+     * Finds a provider profile by its associated user.
+     *
+     * @param admin the user entity (admin/provider)
+     * @return the provider profile
+     * @throws RuntimeException if no profile found for the user
+     */
     public ProviderProfile findProviderProfile(User admin) {
-        return providerProfileRepository.findByUser(admin).orElseThrow(()-> new RuntimeException("No provider profile found"));
+        return providerProfileRepository.findByUser(admin)
+                .orElseThrow(() -> new RuntimeException("No provider profile found"));
     }
 
+    /**
+     * Approves (activates) an admin/provider profile by ID.
+     *
+     * @param id the profile ID
+     * @throws RuntimeException if the profile is not found
+     */
     public void activateAdminAccount(long id) {
-        ProviderProfile profile = providerProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("Provider profile not found"));
+        ProviderProfile profile = providerProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Provider profile not found"));
         profile.setApproved(true);
         providerProfileRepository.save(profile);
     }
 
+    /**
+     * Registers a new provider profile using registration form data.
+     * Creates both the user and the provider profile.
+     *
+     * @param profileForm the admin registration form data
+     * @throws IOException if there is an error processing the image
+     * @throws RuntimeException if the category does not exist
+     */
     @Transactional
     public void registerProviderProfile(AdminRegistrationFormDTO profileForm) throws IOException {
-        User admin = User.builder().userName(profileForm.getUserName())
+        User admin = User.builder()
+                .userName(profileForm.getUserName())
                 .email(profileForm.getEmail())
                 .password(profileForm.getPassword())
                 .role("ADMIN")
@@ -62,7 +87,8 @@ public class ProviderProfileService {
 
         userService.addNewUser(admin);
 
-        ProviderCategory category = providerCategoryRepository.findByName(profileForm.getCategory());
+        ProviderCategory category = providerCategoryRepository.findByName(profileForm.getCategory())
+                .orElseThrow(() -> new RuntimeException("Provider category not found"));
 
         ProviderProfile profile = ProviderProfile.builder()
                 .companyName(profileForm.getCompanyName())
@@ -72,15 +98,35 @@ public class ProviderProfileService {
         providerProfileRepository.save(profile);
     }
 
+    /**
+     * Returns the profile image bytes for a given provider profile ID.
+     *
+     * @param id the profile ID
+     * @return byte array of the profile image
+     * @throws RuntimeException if profile not found
+     */
     public byte[] findProfileImage(Long id) {
-        ProviderProfile profile = providerProfileRepository.findById(id).orElseThrow(()-> new RuntimeException("No profile found"));
+        ProviderProfile profile = providerProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No profile found"));
         return profile.getProfileImage();
     }
 
-    public List<ProviderProfile> findAllPendingProfiles(){ return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>()); }
-    public void removeProviderProfile(long id) {providerProfileRepository.deleteById(id);}
+    /**
+     * Finds all provider profiles that are pending approval.
+     *
+     * @return list of unapproved provider profiles (may be empty)
+     */
+    public List<ProviderProfile> findAllPendingProfiles() {
+        return providerProfileRepository.findAllByApprovedFalse().orElse(new ArrayList<>());
+    }
 
-    public List<ProviderProfile> findAllProviderByCategoryWithPackages(ProviderCategory category) {
-        return providerProfileRepository.findByCategoryAndPlanPackagesIsNotEmpty(category);
+    /**
+     * Removes a provider profile by ID.
+     *
+     * @param id the provider profile ID
+     */
+    public void removeProviderProfile(long id) {
+        providerProfileRepository.deleteById(id);
     }
 }
+

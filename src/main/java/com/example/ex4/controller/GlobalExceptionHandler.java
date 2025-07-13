@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
-        System.out.println(ex.getMessage());
         model.addAttribute("error", ex.getMessage());
         return "error-page";
     }

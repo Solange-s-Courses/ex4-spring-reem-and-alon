@@ -8,12 +8,26 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for handling authentication requests.
+ * <p>
+ * Responsible redirecting the logged-in user to its relevant page (base on its role)
+ */
 @Controller
 public class AuthController {
 
+    /**
+     * Service for business logic of {@link ProviderProfile}.
+     */
     @Autowired
     private ProviderProfileService providerProfileService;
 
+    /**
+     * this method redirect the user to its index page
+     *
+     * @param userPrincipal the authenticated admin user
+     * @return the index page of the logged-in user based on its role
+     */
     @GetMapping("/")
     public String redirectAfterLogin(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         String role = userPrincipal.getUser().getRole();
@@ -33,6 +47,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * renders the "login page"
+     *
+     * @return login page
+     */
     @GetMapping("/login")
     public String loginPage() {
         return "login";

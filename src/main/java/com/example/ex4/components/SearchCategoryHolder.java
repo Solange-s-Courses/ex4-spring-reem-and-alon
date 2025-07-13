@@ -3,7 +3,6 @@ package com.example.ex4.components;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.RequestScope;
 
 /**
  * Holds the selected search category for the current HTTP request.

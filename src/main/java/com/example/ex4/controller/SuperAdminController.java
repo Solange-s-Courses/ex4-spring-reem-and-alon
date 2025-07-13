@@ -12,18 +12,43 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
+/**
+ * Controller for super admin actions, such as approving/rejecting provider profiles
+ * and managing provider categories.
+ *
+ * @see ProviderProfileService
+ * @see ProviderCategoryService
+ * @see TransactionService
+ */
 @Controller
 @RequestMapping("/super-admin")
 public class SuperAdminController {
 
+    /**
+     * Service for provider profile operations.
+     */
     @Autowired
     private ProviderProfileService providerProfileService;
 
+    /**
+     * Service for transaction operations.
+     */
     @Autowired
     private TransactionService transactionService;
+
+    /**
+     * Service for provider category operations.
+     */
     @Autowired
     private ProviderCategoryService providerCategoryService;
 
+    /**
+     * Displays the landing page for the super admin, with pending profiles,
+     * transaction history, and category list.
+     *
+     * @param model Spring model to add attributes
+     * @return the super admin index view
+     */
     @GetMapping
     public String landingPage(Model model) {
         List<ProviderProfile> pendingProfiles = providerProfileService.findAllPendingProfiles();
@@ -35,6 +60,14 @@ public class SuperAdminController {
         return "super_admin/index";
     }
 
+    /**
+     * Approves a provider profile.
+     *
+     * @param id the profile id
+     * @param redirectAttributes redirect attributes for feedback messages
+     * @return redirect to super admin index
+     * @see ProviderProfileService#activateAdminAccount(long)
+     */
     @PostMapping("/provider/approve/{id}")
     public String approveProfile(@PathVariable long id, RedirectAttributes redirectAttributes) {
         providerProfileService.activateAdminAccount(id);
@@ -42,6 +75,14 @@ public class SuperAdminController {
         return "redirect:/super-admin";
     }
 
+    /**
+     * Rejects and removes a provider profile.
+     *
+     * @param id the profile id
+     * @param redirectAttributes redirect attributes for feedback messages
+     * @return redirect to super admin index
+     * @see ProviderProfileService#removeProviderProfile(long)
+     */
     @DeleteMapping("/provider/reject/{id}")
     public String rejectProfile(@PathVariable long id, RedirectAttributes redirectAttributes) {
         providerProfileService.removeProviderProfile(id);
@@ -49,6 +90,15 @@ public class SuperAdminController {
         return "redirect:/super-admin";
     }
 
+    /**
+     * Adds a new provider category, if not empty and does not already exist.
+     *
+     * @param categoryName the category name to add
+     * @param redirectAttributes redirect attributes for feedback messages
+     * @return redirect to super admin index
+     * @see ProviderCategoryService#addCategory(String)
+     * @see ProviderCategoryService#categoryExists(String)
+     */
     @PostMapping("/provider/add-category")
     public String addProviderCategory(@RequestParam String categoryName,
                                       RedirectAttributes redirectAttributes) {

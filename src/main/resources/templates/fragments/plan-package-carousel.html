@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-<div th:fragment="planCarousel(plans, pageName)">
+<div th:fragment="planCarousel(plans, pageName)" th:with="uniqueId=${#temporals.format(#temporals.createNow(), 'SSS') + #strings.randomAlphanumeric(3)}">
     <div class="carousel-inner">
-        <div id="servicesCarouselDesktop" class="carousel slide d-none d-xl-block" data-bs-ride="false"
+        <div th:id="${'servicesCarousel' + uniqueId}" class="carousel slide d-none d-xl-block" data-bs-ride="false"
              data-bs-wrap="true">
             <div th:each="service, iterStat : ${plans}"
                  th:if="${iterStat.index % 3 == 0}"
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div id="servicesCarouselTablet" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false"
+        <div th:id="${'servicesCarousel' + uniqueId}" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false"
              data-bs-wrap="true">
             <div th:each="service, iterStat : ${plans}"
                  th:if="${iterStat.index % 2 == 0}"
@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <div id="servicesCarouselMobile" class="carousel slide d-block d-md-none" data-bs-ride="false"
+        <div th:id="${'servicesCarousel' + uniqueId}" class="carousel slide d-block d-md-none" data-bs-ride="false"
              data-bs-wrap="true">
             <div th:each="service, iterStat : ${plans}"
                  class="carousel-item"
@@ -49,31 +49,31 @@
         </div>
     </div>
     <div th:if="${#lists.size(plans) > 1}" class="d-flex d-md-none justify-content-center gap-3 mt-3">
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselMobile"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="prev">
             <i class="bi bi-chevron-left"></i> prev
         </button>
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselMobile"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="next">
             next <i class="bi bi-chevron-right"></i>
         </button>
     </div>
     <div th:if="${#lists.size(plans) > 2}" class="d-none d-md-flex d-lg-none justify-content-center gap-3 mt-3">
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselTablet"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="prev">
             <i class="bi bi-chevron-left"></i> prev
         </button>
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselTablet"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="next">
             next <i class="bi bi-chevron-right"></i>
         </button>
     </div>
     <div th:if="${#lists.size(plans) > 3}" class="d-none d-lg-flex justify-content-center gap-3 mt-3">
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselDesktop"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="prev">
             <i class="bi bi-chevron-left"></i> prev
         </button>
-        <button class="btn btn-outline-secondary" type="button" data-bs-target="#servicesCarouselDesktop"
+        <button class="btn btn-outline-secondary" type="button" th:data-bs-target="${'#servicesCarousel' + uniqueId}"
                 data-bs-slide="next">
             next <i class="bi bi-chevron-right"></i>
         </button>
