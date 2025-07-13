@@ -44,16 +44,18 @@ public class ChatController {
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
 
+    @Autowired CheckoutProviders planOwnerProviders;
+
     /**
      * Creates chat(s) after a successful checkout and redirects to the checkout page with a success parameter.
+     * uses the request scope bean to know which providers need to have chat with the user
      *
-     * @param planOwnerProviders Providers involved in the checkout process
      * @param userPrincipal The currently authenticated user
      * @return Redirect URL to the checkout page with success indication
      */
     @PostMapping("/create")
-    public String createChatAfterCheckout(@Autowired CheckoutProviders planOwnerProviders,
-                                          @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+    public String createChatAfterCheckout(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+        System.out.println("from create: " + planOwnerProviders.getProviders());
         List<ProviderProfile> providers = planOwnerProviders.getProviders();
         chatService.createNewChats(userPrincipal.getUser(), providers);
         return "redirect:/user/checkout?success=true";

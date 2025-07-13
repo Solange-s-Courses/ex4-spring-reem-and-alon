@@ -44,11 +44,11 @@ public class BeanConfiguration {
     }
 
     /**
-     * Defines the {@link SearchCategoryHolder} bean as request-scoped.
+     * Defines the {@link CheckoutProviders} bean as request-scoped.
      * <p>
-     * Each HTTP request will have its own instance to hold the search category.
+     * Each HTTP request will have it the providers that need to create the chat (with the user)
      *
-     * @return a new instance of {@link SearchCategoryHolder}
+     * @return a new instance of {@link CheckoutProviders}
      */
     @Bean
     @RequestScope
