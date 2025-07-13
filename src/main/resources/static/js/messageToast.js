@@ -35,6 +35,17 @@
         toast.show();
     }
 
+    /**
+     * Updates the cart UI visibility based on current cart state.
+     *
+     * - Shows or hides the "empty cart" message.
+     * - Shows or hides the cart items container.
+     * - Shows or hides the "Continue to Payment" section.
+     *
+     * This function only runs on the cart page (checked via `isCartPage`).
+     * It determines if the cart is empty by checking if there are any
+     * `.remove-from-cart-form` elements present in the DOM.
+     */
     const updateCartUI = () => {
         if (!isCartPage) return;
 
