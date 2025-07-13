@@ -68,14 +68,17 @@
     <div class="row row-cols-1">
         <div th:if="${results != null}" th:each="result : ${results}" class="card col shadow-sm mb-5">
             <div class="row my-auto card-header text-dark mb-4 align-content-center">
-                <div class="col-2 d-flex justify-content-center">
+                <!-- תמונה - שומר על המקורי למסכים גדולים -->
+                <div class="col-12 col-md-2 d-flex justify-content-center mb-3 mb-md-0">
                     <img th:src="@{/provider-image/{id}(id=${result.plans[0].providerProfileId})}"
                          class="img-thumbnail img-fluid object-fit-cover" style="width: 120px" alt="Provider Image"/>
                 </div>
-                <div class="col-4 justify-content-start my-auto">
-                    <h4 th:text="${result.providerName}" class="text-center"></h4>
-                    <div class="d-flex align-items-center text-center pt-3">
-                        <div class="d-flex align-items-center text-center">
+
+                <!-- פרטי הספק - שומר על המקורי למסכים גדולים -->
+                <div class="col-12 col-md-4 justify-content-start my-auto">
+                    <h4 th:text="${result.providerName}" class="text-center text-md-start"></h4>
+                    <div class="d-flex flex-column flex-md-row align-items-center align-md-items-start text-center text-md-start pt-3">
+                        <div class="d-flex align-items-center text-center mb-2 mb-md-0">
                             <div class="d-flex text-warning me-2"
                                  th:with="flooredStars=${T(java.lang.Math).floor(result.avgStars).intValue()},
                                             showHalfStar=${result.avgStars % 1 >= 0.5},
@@ -99,20 +102,21 @@
                                    th:value="${result.plans[0].providerProfileId}"/>
                             <button type="submit"
                                     class="btn btn-link p-0 m-0 align-baseline
-                                            link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-4 fw-bolder"
+                                            link-body-emphasis link-underline-opacity-0 link-underline-opacity-75-hover ms-md-4 fw-bolder"
                                     style="font-size: inherit;">
-                                <span th:text="${result.reviewCount}">0</span> reviews (click here to see reviews)
+                                <span th:text="${result.reviewCount}">0</span> reviews <span class="d-none d-md-inline">(click here to see reviews)</span>
                             </button>
                         </form>
                     </div>
                 </div>
                 <div th:replace="~{fragments/plan-package-carousel :: planCarousel(plans=${result.plans}, pageName=${'search'})}"></div>
             </div>
-            <div th:unless="${results != null}" class="no-results">
-                <i class="bi bi-search"></i>
-                <h3>No results found</h3>
-                <p>Try adjusting your search criteria or browse our categories to find what you're looking for.</p>
-            </div>
+        </div>
+
+        <div th:unless="${results != null}" class="no-results">
+            <i class="bi bi-search"></i>
+            <h3>No results found</h3>
+            <p>Try adjusting your search criteria or browse our categories to find what you're looking for.</p>
         </div>
     </div>
 </div>

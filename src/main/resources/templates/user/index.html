@@ -62,57 +62,79 @@
             </h2>
         </div>
         <div th:if="${subscriptions != null and !subscriptions.isEmpty()}" class="col-12">
-            <div id="subsCarousel" class="carousel slide">
+            <div id="subsCarouselLG" class="carousel slide d-none d-lg-block" data-bs-wrap="true">
                 <div class="carousel-inner">
-                    <div class="d-none d-lg-block">
-                        <div th:each="subscribe, iterStat : ${subscriptions}"
-                             th:if="${iterStat.index % 4 == 0}"
-                             class="carousel-item"
-                             th:classappend="${iterStat.index == 0} ? ' active'">
-                            <div class="row row-cols-4">
-                                <div th:each="i : ${#numbers.sequence(0, 3)}"
-                                     th:if="${iterStat.index + i < subscriptions.size()}"
-                                     th:with="currentSub=${subscriptions[iterStat.index + i]}"
-                                     class="col">
-                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-none d-md-block d-lg-none">
-                        <div th:each="subscribe, iterStat : ${subscriptions}"
-                             th:if="${iterStat.index % 2 == 0}"
-                             class="carousel-item"
-                             th:classappend="${iterStat.index == 0} ? ' active'">
-                            <div class="row row-cols-2">
-                                <div th:each="i : ${#numbers.sequence(0, 1)}"
-                                     th:if="${iterStat.index + i < subscriptions.size()}"
-                                     th:with="currentSub=${subscriptions[iterStat.index + i]}"
-                                     class="col">
-                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-block d-md-none">
-                        <div th:each="subscribe, iterStat : ${subscriptions}"
-                             class="carousel-item"
-                             th:classappend="${iterStat.index == 0} ? ' active'">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${subscribe})}"></div>
-                                </div>
+                    <div th:each="subscribe, iterStat : ${subscriptions}"
+                         th:if="${iterStat.index % 4 == 0}"
+                         class="carousel-item"
+                         th:classappend="${iterStat.index == 0} ? ' active'">
+                        <div class="row row-cols-4">
+                            <div th:each="i : ${#numbers.sequence(0, 3)}"
+                                 th:if="${iterStat.index + i < subscriptions.size()}"
+                                 th:with="currentSub=${subscriptions[iterStat.index + i]}"
+                                 class="col">
+                                <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center gap-3 mt-3">
-                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel"
+            <div id="subsCarouselMD" class="carousel slide d-none d-md-block d-lg-none" data-bs-wrap="true">
+                <div class="carousel-inner">
+                    <div th:each="subscribe, iterStat : ${subscriptions}"
+                         th:if="${iterStat.index % 2 == 0}"
+                         class="carousel-item"
+                         th:classappend="${iterStat.index == 0} ? ' active'">
+                        <div class="row row-cols-2">
+                            <div th:each="i : ${#numbers.sequence(0, 1)}"
+                                 th:if="${iterStat.index + i < subscriptions.size()}"
+                                 th:with="currentSub=${subscriptions[iterStat.index + i]}"
+                                 class="col">
+                                <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${currentSub})}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="subsCarouselSM" class="carousel slide d-block d-md-none" data-bs-wrap="true">
+                <div class="carousel-inner">
+                    <div th:each="subscribe, iterStat : ${subscriptions}"
+                         class="carousel-item"
+                         th:classappend="${iterStat.index == 0} ? ' active'">
+                        <div class="row">
+                            <div class="col-12">
+                                <div th:replace="~{fragments/subscription-card :: subscriptionCard(subscription = ${subscribe})}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.size(subscriptions) > 1}" class="d-flex d-md-none justify-content-center gap-3 mt-3">
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselSM"
                         data-bs-slide="prev">
                     <i class="bi bi-chevron-left"></i> prev
                 </button>
-                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarousel"
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselSM"
+                        data-bs-slide="next">
+                    next <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+            <div th:if="${#lists.size(subscriptions) > 2}" class="d-none d-md-flex d-lg-none justify-content-center gap-3 mt-3">
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselMD"
+                        data-bs-slide="prev">
+                    <i class="bi bi-chevron-left"></i> prev
+                </button>
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselMD"
+                        data-bs-slide="next">
+                    next <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+            <div th:if="${#lists.size(subscriptions) > 4}" class="d-none d-lg-flex justify-content-center gap-3 mt-3">
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselLG"
+                        data-bs-slide="prev">
+                    <i class="bi bi-chevron-left"></i> prev
+                </button>
+                <button class="btn btn-outline-secondary" type="button" data-bs-target="#subsCarouselLG"
                         data-bs-slide="next">
                     next <i class="bi bi-chevron-right"></i>
                 </button>

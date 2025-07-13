@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div th:fragment="planPackage(planPackage, pageName)">
-    <div class="card h-100 w-100 shadow align-items-stretch mt-4 mb-2 d-flex flex-column">
+    <div class="card h-100 shadow mt-4 mb-2 d-flex flex-column">
         <div class="card-header bg-light border-0 py-2 text-center">
             <span class="badge bg-secondary text-white small"
                   th:if="${planPackage.expiryDate}">
@@ -10,67 +10,67 @@
                 Available until: <span th:text="${#temporals.format(planPackage.expiryDate, 'dd/MM/yyyy')}"></span>
             </span>
         </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-            <div>
+        <div class="card-body d-flex flex-column flex-fill">
+            <div class="flex-grow-1">
                 <h5 class="fw-bold text-primary text-center mb-2" th:text="${planPackage.title}">Package Name</h5>
-                <div class="justify-content-center mb-3">
+                <div class="justify-content-center mb-3" style="height: 6rem; overflow: hidden;">
                     <p class="text-muted fw-bolder small" th:text="${planPackage.description}" th:title="${planPackage.description}"></p>
                 </div>
-                <div class="row g-3 justify-content-center align-items-center text-center mt-5">
-                    <div class="col-12 col-md-4" th:each="period, iterStat : ${planPackage.planOptions}">
-                        <div class="subscription-option border align-items-center border-2 shadow-sm position-relative"
-                             th:classappend="${iterStat.index == 0} ? 'border-primary bg-light' :
-                                           (${iterStat.index == 1} ? 'border-success bg-light' :
-                                           (${iterStat.index == 2} ? 'border-warning bg-light' : 'border-danger bg-light'))">
-                            <div class="justify-content-center mt-4">
-                                <span class="badge position-absolute top-0 start-50 translate-middle"
-                                      th:classappend="${iterStat.index == 0} ? 'bg-primary text-white' :
-                                                    (${iterStat.index == 1} ? 'bg-success text-white' :
-                                                    (${iterStat.index == 2} ? 'bg-warning text-dark' : 'bg-danger text-white'))"
-                                      th:text="${period.discount + '% OFF'}"
-                                      th:if="${period.discount > 0}"></span>
-                                <div class="fw-bold"
-                                     th:classappend="${iterStat.index == 0} ? 'text-primary' :
-                                                   (${iterStat.index == 1} ? 'text-success' :
-                                                   (${iterStat.index == 2} ? 'text-warning' : 'text-danger'))"
-                                     th:text="${period.months + ' ' + period.periodName}"></div>
-                                <div class="fw-bolder text-dark"
-                                     th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)), 1, 1) + '₪/month'}">
-                                </div>
-
-                                <small class="text-muted">
-                                    Total: <span class="fw-semibold"
-                                                 th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)) * period.months, 1, 1) + '₪'}"></span>
-                                </small>
+            </div>
+            <div class="row g-3 justify-content-center align-items-end text-center mt-auto">
+                <div class="col-12 col-md-4" th:each="period, iterStat : ${planPackage.planOptions}">
+                    <div class="subscription-option border align-items-center border-2 shadow-sm position-relative"
+                         th:classappend="${iterStat.index == 0} ? 'border-primary bg-light' :
+                                       (${iterStat.index == 1} ? 'border-success bg-light' :
+                                       (${iterStat.index == 2} ? 'border-warning bg-light' : 'border-danger bg-light'))">
+                        <div class="justify-content-center mt-4">
+                            <span class="badge position-absolute top-0 start-50 translate-middle"
+                                  th:classappend="${iterStat.index == 0} ? 'bg-primary text-white' :
+                                                (${iterStat.index == 1} ? 'bg-success text-white' :
+                                                (${iterStat.index == 2} ? 'bg-warning text-dark' : 'bg-danger text-white'))"
+                                  th:text="${period.discount + '% OFF'}"
+                                  th:if="${period.discount > 0}"></span>
+                            <div class="fw-bold"
+                                 th:classappend="${iterStat.index == 0} ? 'text-primary' :
+                                               (${iterStat.index == 1} ? 'text-success' :
+                                               (${iterStat.index == 2} ? 'text-warning' : 'text-danger'))"
+                                 th:text="${period.months + ' ' + period.periodName}"></div>
+                            <div class="fw-bolder text-dark"
+                                 th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)), 1, 1) + '₪/month'}">
                             </div>
-                            <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
-                                <input type="hidden" name="pkgOptionId" th:value="${period.periodId}">
-                                <input type="hidden" name="pkgId" th:value="${planPackage.pkgId}">
-                                <input type="hidden" name="subPkgName" th:value="${period.periodName}">
-                                <input type="hidden" name="monthlyCost" th:value="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)), 1, 1)}">
-                                <div th:if="${pageName == 'search'}">
-                                    <button class="btn btn-outline btn-sm mt-3" type="submit"
-                                            th:classappend="${iterStat.index == 0} ? 'btn-outline-primary' :
-                                                          (${iterStat.index == 1} ? 'btn-outline-success' :
-                                                          (${iterStat.index == 2} ? 'btn-outline-warning' : 'btn-outline-danger'))">
-                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
-                                    </button>
-                                </div>
-                                <div th:unless="${pageName == 'search'}">
-                                    <button type="submit" class="btn btn-outline btn-sm mt-3"
-                                            th:classappend="${iterStat.index == 0} ? 'btn-outline-primary' :
-                                                          (${iterStat.index == 1} ? 'btn-outline-success' :
-                                                          (${iterStat.index == 2} ? 'btn-outline-warning-' : 'btn-outline-danger'))">
-                                        Remove from <i class="bi bi-cart-dash"></i>
-                                    </button>
-                                </div>
-                            </form>
+
+                            <small class="text-muted">
+                                Total: <span class="fw-semibold"
+                                             th:text="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)) * period.months, 1, 1) + '₪'}"></span>
+                            </small>
                         </div>
+                        <form sec:authorize="hasRole('USER')" class="add-to-cart-form mx-auto justify-content-center mb-2" action="#" method="post">
+                            <input type="hidden" name="pkgOptionId" th:value="${period.periodId}">
+                            <input type="hidden" name="pkgId" th:value="${planPackage.pkgId}">
+                            <input type="hidden" name="subPkgName" th:value="${period.periodName}">
+                            <input type="hidden" name="monthlyCost" th:value="${#numbers.formatDecimal(planPackage.monthlyCost * (1 - (period.discount/100)), 1, 1)}">
+
+                            <div th:if="${pageName == 'search'}">
+                                <button class="btn btn-outline btn-sm mt-3" type="submit"
+                                        th:classappend="${iterStat.index == 0} ? 'btn-outline-primary' :
+                                                      (${iterStat.index == 1} ? 'btn-outline-success' :
+                                                      (${iterStat.index == 2} ? 'btn-outline-warning' : 'btn-outline-danger'))">
+                                    <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                </button>
+                            </div>
+                            <div th:unless="${pageName == 'search'}">
+                                <button type="submit" class="btn btn-outline btn-sm mt-3"
+                                        th:classappend="${iterStat.index == 0} ? 'btn-outline-primary' :
+                                                      (${iterStat.index == 1} ? 'btn-outline-success' :
+                                                      (${iterStat.index == 2} ? 'btn-outline-warning-' : 'btn-outline-danger'))">
+                                    Remove from <i class="bi bi-cart-dash"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</body>
 </html>

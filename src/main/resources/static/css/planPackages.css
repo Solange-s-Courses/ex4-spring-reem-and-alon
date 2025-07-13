@@ -5,8 +5,8 @@
 }
 
 .description-fixed {
-    min-height: 48px; /* לדוג' 2 שורות, תשנה לפי הצורך */
-    max-height: 48px; /* כדי שכל הכרטיסים יהיו אחידים */
+    min-height: 72px; /* לדוג' 2 שורות, תשנה לפי הצורך */
+    max-height: 72px; /* כדי שכל הכרטיסים יהיו אחידים */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
