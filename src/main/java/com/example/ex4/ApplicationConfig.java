@@ -91,23 +91,4 @@ public class ApplicationConfig {
         return http.build();
     }
 
-
-//    @Bean
-//    public CommandLineRunner initAdmin(PasswordEncoder passwordEncoder,
-//                                       @Value("${admin.username}") String username,
-//                                       @Value("${admin.email}") String email,
-//                                       @Value("${admin.password}") String password, UserRepository userRepository)
-//    {
-//        return args -> {
-//            if (userRepository.findByUserName(username) == null) {
-//                User admin = User.builder().userName(username).email(email).password(passwordEncoder.encode(password)).role("SUPER_ADMIN").build();
-//                userRepository.save(admin);
-//                System.out.println("✅ Admin user created: " + username);
-//            } else {
-//                System.out.println("ℹ️ Admin user already exists: " + username);
-//            }
-//        };
-//    }
-
-
 }
