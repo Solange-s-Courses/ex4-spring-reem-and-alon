@@ -22,8 +22,8 @@
 <div class="container">
     <h1 class="text-center fw-bold mb-4">Current Packages in Cart</h1>
     <div th:if="${cartItems != null and !cartItems.isEmpty()}">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
-            <div th:each="cartItem : ${cartItems}" class="col card">
+        <div class="cart-items row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-4">
+            <div th:each="cartItem : ${cartItems}" class="col">
                 <div class="card h-100 shadow align-items-stretch">
                     <div class="card-header bg-light border-0 py-2 text-center">
                         <span class="badge bg-secondary text-white small"
@@ -33,7 +33,7 @@
                           <span th:text="${#temporals.format(cartItem.planPackage.expiryDate, 'dd/MM/yyyy')}"></span>
                         </span>
                     </div>
-                    <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="card-body d-flex flex-column justify-content-between h-100">
                         <div>
                             <h5 class="fw-bold text-primary text-center mb-2"
                                 th:text="${cartItem.planPackage.title}"></h5>
@@ -66,7 +66,8 @@
                                 <input type="hidden" name="pkgOptionId" th:value="${cartItem.id}"/>
                                 <input type="hidden" name="pkgId" th:value="${cartItem.planPackage.id}"/>
                                 <input type="hidden" name="subPkgName" th:value="${cartItem.period.name}"/>
-                                <input type="hidden" name="monthlyCost" th:value="${#numbers.formatDecimal(cartItem.planPackage.monthlyCost * (1.0 - cartItem.discount/100.0), 1, 1)}"/>
+                                <input type="hidden" name="monthlyCost"
+                                       th:value="${#numbers.formatDecimal(cartItem.planPackage.monthlyCost * (1.0 - cartItem.discount/100.0), 1, 1)}"/>
                                 <button type="submit" class="btn btn-outline-danger btn-remove btn-sm w-100">
                                     Remove from Cart <i class="bi bi-cart-dash ms-1"></i>
                                 </button>
@@ -76,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center cart-payment [[${#lists.size(cartItems) == 0} ? 'd-none' : '']]">
+        <div class="row justify-content-center align-items-center cart-payment [[${#lists.size(cartItems) == 0} ? 'd-none' : '']]">
             <form class="col-12 justify-content-center mx-auto" th:action="@{/user/checkout}" method="post">
                 <button type="submit" class="btn btn-primary">
                     Continue to Payment <i class="bi bi-arrow-bar-right ms-2"></i>
@@ -84,14 +85,16 @@
             </form>
         </div>
     </div>
-    <div class="row justify-content-center cart-empty [[${#lists.size(cartItems) > 0} ? 'd-none' : '']]">
-    <div class="col-md-6 col-lg-4">
-        <div class="text-center py-5">
-            <h4 class="text-muted mb-3">Your cart is empty!</h4>
-            <p class="text-muted mb-4">Your cart doesn't have any items in it</p>
-            <a th:href="@{/user/search-providers}" class="btn btn-secondary">
-                <i class="bi bi-arrow-left me-2"></i>Back to Search
-            </a>
+
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4 text-center empty-cart">
+            <div class="py-5">
+                <h4 class="text-muted mb-3">Your cart is empty!</h4>
+                <p class="text-muted mb-4">Your cart doesn't have any items in it</p>
+                <a th:href="@{/user/search-providers}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Search
+                </a>
+            </div>
         </div>
     </div>
 </div>
