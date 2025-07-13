@@ -6,6 +6,8 @@
     const removeFromCartForms=document.querySelectorAll(".remove-from-cart-form")
     const isCartPage = window.location.pathname.includes('/checkout');
     const cartSizeEl = document.getElementById("cart-size")
+    const cartItems = document.querySelector('.cart-items');
+    const cartPayment = document.querySelector('.cart-payment');
 
     const toastEl = document.getElementById('main-toast');
     const toastTitle = document.querySelector('.toast-title')
