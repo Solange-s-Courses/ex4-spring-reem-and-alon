@@ -147,8 +147,8 @@
             </h2>
         </div>
         <div class="col-12 card card-body shadow-sm mx-2">
-            <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group">
-                <div class="list-group-item" style="background-color: #495057">
+            <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group" style="max-height: 200px; overflow-y: auto;">
+                <div class="list-group-item sticky-top" style="background-color: #495057">
                     <div class="row fw-semibold text-center align-items-center text-white">
                         <div class="col">Transaction ID</div>
                         <div class="col">User</div>

@@ -118,8 +118,8 @@
             </div>
         </div>
         <div class="col-lg-8 mb-4">
-            <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group">
-                <div class="list-group-item bg-gray-700">
+            <div th:if="${transactions != null and !transactions.isEmpty()}" class="list-group" style="max-height: 200px; overflow-y: auto;">
+                <div class="list-group-item bg-gray-700 sticky-top">
                     <div class="row fw-semibold text-center align-items-center text-white bg-gray-700">
                         <div class="col">Transaction ID</div>
                         <div class="col">Customer</div>

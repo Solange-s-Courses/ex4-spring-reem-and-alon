@@ -58,7 +58,7 @@ public class SubscriptionService {
      * Retrieves all subscriptions for a user as DTOs.
      *
      * @param user the user
-     * @return list of subscription DTOs (may be empty)
+     * @return list of subscription DTOs (maybe empty)
      */
     public List<SubscriptionDTO> findUserSubscriptions(User user) {
         List<Subscription> subscriptions = subscriptionRepository.findSubscriptionByUser(user);

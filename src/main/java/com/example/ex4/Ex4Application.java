@@ -2,6 +2,7 @@ package com.example.ex4;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Main class for starting the Spring Boot application.
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Entry point for the ex4 project.
  */
 @SpringBootApplication
+@EnableScheduling
 public class Ex4Application {
 
 	/**
