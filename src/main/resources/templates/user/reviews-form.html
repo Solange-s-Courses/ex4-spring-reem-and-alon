@@ -10,6 +10,10 @@
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div class="container">
+    <section class="header-section text-center">
+        <h1 th:text="${provider.companyName}"> Reviews</h1>
+        <p>See what customers really think</p>
+    </section>
     <div class="row justify-content-center my-5">
         <div class="col card shadow-lg border-0 ">
             <div class="card-body">

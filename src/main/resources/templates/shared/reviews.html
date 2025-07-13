@@ -12,8 +12,9 @@
     <link rel="stylesheet" th:href="@{/css/reviews.css}">
 </head>
 <body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <section class="header-section text-center">
-    <h1>Provider Reviews</h1>
+    <h1 th:text="${provider.companyName}"> Reviews</h1>
     <p>See what customers really think</p>
 </section>
 <div class="container search-section">
