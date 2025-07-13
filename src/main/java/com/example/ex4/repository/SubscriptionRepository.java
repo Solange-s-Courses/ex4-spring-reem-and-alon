@@ -46,6 +46,4 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      * @return true if user is subscribed to the plan package
      */
     boolean existsByUserAndPlanPackageOption_PlanPackage(User user, PlanPackage planPackage);
-
-    List<Subscription> findByLastChargedAtBefore(LocalDateTime oneMonthAgo);
 }

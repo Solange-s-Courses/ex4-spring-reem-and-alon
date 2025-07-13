@@ -10,10 +10,10 @@ import com.example.ex4.repository.PeriodRepository;
 import com.example.ex4.repository.PlanPackageOptionRepository;
 import com.example.ex4.repository.PlanPackageRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +78,7 @@ public class PlanPackageService {
                     .planPackage(newPlanPackage)
                     .discount(option.getDiscount())
                     .period(period)
-                    .optionPrice(calculateOptionPrice(packageDTO.getMonthlyCost(), option))
+                    .optionPrice(calculateOptionPrice(packageDTO.getMonthlyCost(), option.getDiscount()))
                     .build();
         }).toList();
 
@@ -90,25 +90,20 @@ public class PlanPackageService {
      * Calculates the option price based on monthly cost and discount.
      *
      * @param monthlyCost the monthly base price
-     * @param optionDTO the option DTO (period and discount)
+     * @param discount the discount
      * @return the calculated price for the option
      */
-    private BigDecimal calculateOptionPrice(BigDecimal monthlyCost, PlanPackageOptionDTO optionDTO) {
+    public BigDecimal calculateOptionPrice(BigDecimal monthlyCost, BigDecimal discount) {
         if (monthlyCost == null) {
             return BigDecimal.ZERO;
         }
-
-        BigDecimal totalPrice = monthlyCost.multiply(BigDecimal.valueOf(optionDTO.getMonths()));
-
-        if (optionDTO.getDiscount() != null) {
-            BigDecimal discountMultiplier = BigDecimal.ONE.subtract(
-                    optionDTO.getDiscount().divide(BigDecimal.valueOf(100))
-            );
-            totalPrice = totalPrice.multiply(discountMultiplier);
+        if (discount == null || discount.compareTo(BigDecimal.ZERO) == 0) {
+            return monthlyCost;
         }
-
-        return totalPrice;
+        BigDecimal discountMultiplier = BigDecimal.ONE.subtract(discount.divide(BigDecimal.valueOf(100)));
+        return monthlyCost.multiply(discountMultiplier).setScale(2, RoundingMode.HALF_UP);
     }
+
 
     /**
      * Gets PlanPackageOption entities by their IDs.

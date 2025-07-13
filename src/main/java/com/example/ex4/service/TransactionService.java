@@ -42,6 +42,13 @@ public class TransactionService {
     @Transactional
     public void createPaymentTransaction(Subscription subscriber, BigDecimal monthlyCost) {
         User user = subscriber.getUser();
+
+        if (user.getCreditBalance() == null)
+            throw new IllegalStateException("User " + user.getId() + " has null credit balance!");
+
+        if (monthlyCost == null)
+            throw new IllegalStateException("Monthly cost is null for subscription " + subscriber.getId());
+
         if (user.getCreditBalance().compareTo(monthlyCost) < 0) {
             Transaction transaction = Transaction.builder()
                     .subscription(subscriber)

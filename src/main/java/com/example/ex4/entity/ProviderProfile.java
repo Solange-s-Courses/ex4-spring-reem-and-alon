@@ -46,6 +46,7 @@ public class ProviderProfile implements Serializable {
      * Profile image as a byte array.
      */
     @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] profileImage;
 
     /**

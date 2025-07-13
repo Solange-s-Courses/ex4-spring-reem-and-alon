@@ -35,32 +35,32 @@ public class CellularPackagesInitializer implements ApplicationListener<ContextR
         // מחירים ואחוזי הנחה: [basePrice, [חודש, חצי שנה, שנה]]
         Map<String, List<PlanConfig>> configs = Map.of(
                 "WaveTel", List.of(
-                        new PlanConfig(39, new int[]{0, 5, 10}),
-                        new PlanConfig(59, new int[]{0, 7, 13}),
+                        new PlanConfig(39, new int[]{2, 5, 12}),
+                        new PlanConfig(59, new int[]{3, 7, 13}),
                         new PlanConfig(79, new int[]{0, 5, 12}),
-                        new PlanConfig(49, new int[]{0, 6, 11}),
-                        new PlanConfig(99, new int[]{0, 8, 15}),
-                        new PlanConfig(44, new int[]{0, 6, 10})
+                        new PlanConfig(49, new int[]{2, 6, 11}),
+                        new PlanConfig(99, new int[]{3, 8, 15}),
+                        new PlanConfig(44, new int[]{2, 6, 10})
                 ),
                 "Comovo", List.of(
-                        new PlanConfig(42, new int[]{0, 4, 9}),
-                        new PlanConfig(63, new int[]{0, 8, 12}),
-                        new PlanConfig(85, new int[]{0, 7, 14}),
-                        new PlanConfig(52, new int[]{0, 5, 8}),
-                        new PlanConfig(105, new int[]{0, 9, 16}),
-                        new PlanConfig(48, new int[]{0, 5, 9})
+                        new PlanConfig(42, new int[]{2, 4, 9}),
+                        new PlanConfig(63, new int[]{3, 8, 12}),
+                        new PlanConfig(85, new int[]{3, 7, 14}),
+                        new PlanConfig(52, new int[]{3, 5, 8}),
+                        new PlanConfig(105, new int[]{4, 9, 16}),
+                        new PlanConfig(48, new int[]{1, 5, 9})
                 ),
                 "CellNet", List.of(
-                        new PlanConfig(38, new int[]{0, 6, 11}),
-                        new PlanConfig(57, new int[]{0, 7, 14}),
-                        new PlanConfig(81, new int[]{0, 6, 13}),
-                        new PlanConfig(47, new int[]{0, 5, 12}),
-                        new PlanConfig(96, new int[]{0, 10, 16}),
-                        new PlanConfig(43, new int[]{0, 5, 9})
+                        new PlanConfig(38, new int[]{3, 6, 15}),
+                        new PlanConfig(57, new int[]{1, 7, 14}),
+                        new PlanConfig(81, new int[]{2, 6, 16}),
+                        new PlanConfig(47, new int[]{1, 5, 12}),
+                        new PlanConfig(96, new int[]{5, 10, 17}),
+                        new PlanConfig(43, new int[]{1, 5, 9})
                 )
         );
 
-        List<String> periods = List.of("Monthly", "Half Yearly", "Yearly");
+        List<String> periods = List.of("Three Month", "Half Yearly", "Yearly");
         int[] months = {1, 6, 12};
 
         // שמות חבילות

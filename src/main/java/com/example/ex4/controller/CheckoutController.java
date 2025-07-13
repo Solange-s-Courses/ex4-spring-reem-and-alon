@@ -103,6 +103,7 @@ public class CheckoutController {
      */
     @ExceptionHandler({RuntimeException.class})
     public String handleException(RedirectAttributes model, Exception ex) {
+        Arrays.stream(ex.getStackTrace()).forEach(System.out::println);
         model.addFlashAttribute("error", ex.getMessage());
         return "redirect:/user/checkout";
     }

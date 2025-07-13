@@ -48,6 +48,7 @@ public class PlanPackageOption implements Serializable {
     /**
      * Price for this option (possibly after discount).
      */
+    @Transient
     private BigDecimal optionPrice;
 }
 

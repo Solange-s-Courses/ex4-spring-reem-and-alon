@@ -53,6 +53,6 @@ public class Transaction implements Serializable {
      * @see com.example.ex4.constants.TransactionType
      */
     @Enumerated(EnumType.STRING)
-    private com.example.ex4.constants.TransactionType type;
+    private TransactionType type;
 }
 

@@ -45,6 +45,8 @@ public class CheckoutService {
      */
     @Autowired
     private ShoppingCart shoppingCart;
+    @Autowired
+    private PlanPackageService planPackageService;
 
     /**
      * Processes the checkout flow:
@@ -59,7 +61,8 @@ public class CheckoutService {
         validateCheckout(user, plans);
         plans.forEach(plan -> {
             Subscription newSubscription = subscriptionService.createSubscription(user, plan);
-            transactionService.createPaymentTransaction(newSubscription, plan.getOptionPrice());
+            transactionService.createPaymentTransaction(newSubscription,
+                    planPackageService.calculateOptionPrice(plan.getPlanPackage().getMonthlyCost(),plan.getDiscount()));
         });
     }
 

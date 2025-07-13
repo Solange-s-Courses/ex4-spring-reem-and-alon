@@ -86,6 +86,7 @@ public class ShoppingCart implements Serializable {
      * @return the total cost as a double
      */
     public BigDecimal getTotalCost() {
+        System.out.println(items.stream().map(CartItemDTO::getMonthlyCost).reduce(BigDecimal.ZERO, BigDecimal::add));
         return items.stream().map(CartItemDTO::getMonthlyCost).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
