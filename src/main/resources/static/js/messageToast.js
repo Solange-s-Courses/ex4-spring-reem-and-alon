@@ -35,6 +35,29 @@
         toast.show();
     }
 
+    /**
+     * Updates the cart UI visibility based on current cart state.
+     *
+     * - Shows or hides the "empty cart" message.
+     * - Shows or hides the cart items container.
+     * - Shows or hides the "Continue to Payment" section.
+     *
+     * This function only runs on the cart page (checked via `isCartPage`).
+     * It determines if the cart is empty by checking if there are any
+     * `.remove-from-cart-form` elements present in the DOM.
+     */
+    const updateCartUI = () => {
+        if (!isCartPage) return;
+
+        const isEmpty = document.querySelectorAll('.remove-from-cart-form').length === 0;
+        const emptyCartMessage = document.querySelector('.empty-cart');
+        const cartItemsContainer = document.querySelector('.cart-items');
+
+        if (emptyCartMessage) emptyCartMessage.style.display = isEmpty ? 'block' : 'none';
+        if (cartItemsContainer) cartItemsContainer.style.display = isEmpty ? 'none' : 'flex';
+        if (cartPayment) cartPayment.classList.toggle('d-none', isEmpty);
+    };
+
     // =============== CART ACTIONS ===============
     const cartActions = {
 
@@ -66,6 +89,7 @@
 
             form.querySelector('.btn-add')?.classList.add('d-none');
             form.querySelector('.btn-remove')?.classList.remove('d-none');
+            updateCartUI();
         },
 
         /**
@@ -100,6 +124,7 @@
                 form.querySelector('.btn-remove')?.classList.add('d-none');
                 form.querySelector('.btn-add')?.classList.remove('d-none');
             }
+            updateCartUI();
         }
     };
 
@@ -132,5 +157,7 @@
         removeFromCartForms.forEach(form=>{
             form.addEventListener("submit",(e)=> handleCartRequest(e))
         })
+        updateCartUI();
+
     })
 })()

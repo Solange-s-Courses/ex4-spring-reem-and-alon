@@ -68,13 +68,11 @@
     <div class="row row-cols-1">
         <div th:if="${results != null}" th:each="result : ${results}" class="card col shadow-sm mb-5">
             <div class="row my-auto card-header text-dark mb-4 align-content-center">
-                <!-- תמונה - שומר על המקורי למסכים גדולים -->
                 <div class="col-12 col-md-2 d-flex justify-content-center mb-3 mb-md-0">
                     <img th:src="@{/provider-image/{id}(id=${result.plans[0].providerProfileId})}"
                          class="img-thumbnail img-fluid object-fit-cover" style="width: 120px" alt="Provider Image"/>
                 </div>
 
-                <!-- פרטי הספק - שומר על המקורי למסכים גדולים -->
                 <div class="col-12 col-md-4 justify-content-start my-auto">
                     <h4 th:text="${result.providerName}" class="text-center text-md-start"></h4>
                     <div class="d-flex flex-column flex-md-row align-items-center align-md-items-start text-center text-md-start pt-3">
