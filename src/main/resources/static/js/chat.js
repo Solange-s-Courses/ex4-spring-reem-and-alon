@@ -1,5 +1,7 @@
 (() => {
     const form = document.querySelector("form.chat-input");
+    const messagesList = document.getElementById("messagesList");
+
 // ==================== Unread Messages Counter ====================
     /**
      * Updates the unread message badge for a specific chat.
@@ -97,7 +99,6 @@
 
     const messageRenderer = (() => {
 
-        const messagesList = document.getElementById("messagesList");
         const startMsg = document.getElementById("startMsg");
 
         /**
@@ -143,6 +144,8 @@
             const chatId = link.getAttribute('data-chat-id');
             renderUnreadBadge(chatId);
         });
+
+        messagesList.scrollTop = messagesList.scrollHeight;
 
         let currentChatId = chatIdInput ? Number(chatIdInput.value) : null;
         let currentUserId = userIdInput ? Number(userIdInput.value) : null;
