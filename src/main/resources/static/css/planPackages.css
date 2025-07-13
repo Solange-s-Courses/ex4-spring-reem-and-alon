@@ -4,6 +4,17 @@
     gap: 20px;
 }
 
+.description-fixed {
+    min-height: 48px; /* לדוג' 2 שורות, תשנה לפי הצורך */
+    max-height: 48px; /* כדי שכל הכרטיסים יהיו אחידים */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* מספר שורות */
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
 .product-image {
     width: 100%;
     height: 180px;

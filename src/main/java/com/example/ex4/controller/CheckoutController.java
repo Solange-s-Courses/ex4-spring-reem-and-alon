@@ -90,6 +90,7 @@ public class CheckoutController {
                 .collect(Collectors.toSet());
 
         planOwnerProviders.setProviders(new ArrayList<>(uniqueProviders));
+        System.out.println(planOwnerProviders.getProviders());
         return "forward:/chat/create";
     }
 

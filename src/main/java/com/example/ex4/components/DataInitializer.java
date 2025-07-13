@@ -94,7 +94,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
      */
     private void initializeProviderCategories() {
         addProviderCategoryIfNotExists("INTERNET");
-        addProviderCategoryIfNotExists("CELULAR");
+        addProviderCategoryIfNotExists("TELEVISION");
+        addProviderCategoryIfNotExists("CELLULAR");
     }
 
     /**
