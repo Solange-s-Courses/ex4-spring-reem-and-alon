@@ -8,7 +8,7 @@ This project is a full-stack web platform that connects customers with communica
 It is developed using Spring Boot, Spring Security, and Thymeleaf as the front-end templating engine , and session management to handle user activity and security. 
 The platform allows providers to register as admins by submitting an application form and selecting 
 an existing service category (categories are managed exclusively by the super admin and cannot be created manually).
-Once a provider is approved, they can create and manage package deals, offering 3-month, 6-month, or yearly 
+Once a provider is approved, they can create and manage package deals, offering 3-month, 6-month, or yearly (open for expansion)
 communication plans with custom pricing. Customers who register on the site can search for available packages based on category. 
 The site show to the customer all packages from different providers, making it easier for users to compare options, 
 purchase plans, leave reviews, and filter reviews based on positivity or relevance.
