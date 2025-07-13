@@ -20,6 +20,9 @@ The entire website is responsive and built with a focus on a clean, smooth user 
 
 <section>
   <h1>Project Workflow</h1>
+  <p>
+    When the program starts, it runs initialing program that creates the super admin, adds some default categories, and sets the available plan periods (3 months, 6 months, 1 year).
+  </p>
   <ol>
     <li>When the program starts, the super admin is created. He can add categories to control what categories exist and stop others from adding random ones.</li>
     <li>Providers can sign up and wait for the super admin to approve them as admins.</li>
