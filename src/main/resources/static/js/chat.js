@@ -1,8 +1,11 @@
 (() => {
-    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     const form = document.querySelector("form.chat-input");
-    // ============ ניהול מונה הודעות שלא נקראו ============
+// ==================== Unread Messages Counter ====================
+    /**
+     * Updates the unread message badge for a specific chat.
+     * If there are unread messages, shows the count; otherwise hides the badge.
+     * @param {string|number} chatId - The ID of the chat.
+     */
     const renderUnreadBadge=(chatId) =>{
         const chatItem = document.querySelector(`[data-chat-id="${chatId}"] .unread-badge`);
         const count = unreadCounts[chatId] || 0;
@@ -18,11 +21,17 @@
     }
 
 
-    // =============== WebSocket ניהול =================
+    // ==================== WebSocket Management ====================
     const webSocket = (() => {
         const socket = new SockJS("/chat-websocket");
         const stompClient = Stomp.over(socket);
 
+        /**
+         * Sends a chat message through the WebSocket connection.
+         * @param {string} content - Message text
+         * @param {number} chatId - ID of the chat
+         * @param {number} userId - ID of the sender
+         */
         const sendMessage = (content, chatId, userId) => {
             stompClient.send("/app/chat", {}, JSON.stringify({
                 chatId: chatId,
@@ -31,6 +40,12 @@
             }));
         };
 
+        /**
+         * Establishes WebSocket connection and handles incoming messages.
+         * Subscribes to relevant channels and manages message delivery & session validation.
+         * @param {number|null} chatId - Current active chat
+         * @param {number|null} userId - Current logged-in user
+         */
         const connectToSocket = (chatId, userId) => {
             stompClient.connect({}, () => {
                 stompClient.subscribe(`/topic/messages`, (message) => {
@@ -64,7 +79,7 @@
                     if (message.body === "SESSION_EXPIRED") {
                         window.location.href = "/login?expired";
                     } else {
-                        alert("שגיאה: " + message.body); // הצג שגיאת ולידציה או business
+                        alert("שגיאה: " + message.body);
                     }
                 });
 
@@ -78,11 +93,18 @@
         };
     })();
 
-    // =============== Renderer ===============
+    // ==================== Message Renderer ====================
+
     const messageRenderer = (() => {
+
         const messagesList = document.getElementById("messagesList");
         const startMsg = document.getElementById("startMsg");
 
+        /**
+         * Formats ISO timestamp to readable Hebrew date & time.
+         * @param {string} isoString - ISO date string
+         * @returns {string}
+         */
         const formatDate = (isoString) => {
             if (!isoString) return "---";
             const date = new Date(isoString);
@@ -111,7 +133,7 @@
         return { render };
     })();
 
-    // ============== DOM Ready ==============
+    // ==================== DOM Initialization ====================
     document.addEventListener("DOMContentLoaded", () => {
         const input = document.querySelector(".chatInput");
         const chatIdInput = document.querySelector('input[name="chatId"]');

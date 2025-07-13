@@ -1,6 +1,7 @@
 package com.example.ex4.service;
 
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.constants.ErrorMsg;
 import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.Subscription;
 import com.example.ex4.entity.User;
@@ -77,18 +78,18 @@ public class CheckoutService {
      */
     private void validateCheckout(User user, final List<PlanPackageOption> plans) {
         if (plans.isEmpty()) {
-            throw new RuntimeException("You dont have any items in your cart!");
+            throw new RuntimeException(ErrorMsg.EMPTY_CART);
         }
 
         if (plans.stream().map(PlanPackageOption::getId).distinct().count() < plans.size()) {
-            throw new RuntimeException("You cannot purchase subscription more same plan package twice!");
+            throw new RuntimeException(ErrorMsg.DUPLICATE_SUBSCRIPTION_PURCHASE);
         }
 
         if (subscriptionRepository.existsByUserAndPlanPackageOptionIn(user, plans))
-            throw new RuntimeException("Already subscribed for some of the packages");
+            throw new RuntimeException(ErrorMsg.ALREADY_SUBSCRIBED);
 
         if (shoppingCart.getTotalCost().compareTo(user.getCreditBalance()) > 0){
-            throw new RuntimeException("Not enough credit balance for a yearly commitment for all packages");
+            throw new RuntimeException(ErrorMsg.NOT_ENOUGH_CREDIT);
         }
     }
 }

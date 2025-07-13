@@ -2,6 +2,7 @@ package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.ShoppingCart;
+import com.example.ex4.constants.ErrorMsg;
 import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.service.SubscriptionService;
 import jakarta.validation.Valid;
@@ -22,16 +23,9 @@ public class CartRestController {
 
     /** Success message for adding product */
     private static final String PRODUCT_ADDED_SUCCESS = "Package added to cart successfully!";
-    /** Message if product already exists in cart */
-    private static final String PRODUCT_ALREADY_EXISTS = "Product already exists in the cart!";
-    /** Message if user already subscribed to product */
-    private static final String ALREADY_SUBSCRIBED = "Already subscribed to that item";
+
     /** Success message for removing product */
     private static final String PRODUCT_REMOVED_SUCCESS = "Package removed from cart successfully!";
-    /** Message if product does not exist in cart */
-    private static final String PRODUCT_NOT_EXISTS = "Product does not exists in the cart!";
-    /** Message for invalid request */
-    private static final String INVALID_REQUEST = "Invalid request: ";
 
     /** Shopping cart of the user (session bean) */
     @Autowired
@@ -52,10 +46,10 @@ public class CartRestController {
     public ResponseEntity<String> addToCart(@RequestBody @Valid CartItemDTO item,
                                             @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         if (subscriptionService.existsInUserSubscription(userPrincipal.getUser(), item)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_SUBSCRIBED);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorMsg.ITEM_ALREADY_SUBSCRIBED);
         }
         if (!shoppingCart.addProduct(item)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PRODUCT_ALREADY_EXISTS);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorMsg.PRODUCT_ALREADY_EXISTS);
         }
         return ResponseEntity.accepted().body(PRODUCT_ADDED_SUCCESS);
     }
@@ -69,7 +63,7 @@ public class CartRestController {
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeFromCart(@RequestBody @Valid CartItemDTO item) {
         if (!shoppingCart.removeProduct(item.getPkgOptionId(), item.getSubPkgName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PRODUCT_NOT_EXISTS);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorMsg.PRODUCT_NOT_EXISTS);
         }
         return ResponseEntity.ok().body(PRODUCT_REMOVED_SUCCESS);
     }
@@ -82,7 +76,7 @@ public class CartRestController {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleInvalidRequest1(MethodArgumentTypeMismatchException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INVALID_REQUEST + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorMsg.INVALID_REQUEST + ex.getMessage());
     }
 
     /**
@@ -93,6 +87,6 @@ public class CartRestController {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleInvalidRequest(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(INVALID_REQUEST + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorMsg.INVALID_REQUEST + ex.getMessage());
     }
 }

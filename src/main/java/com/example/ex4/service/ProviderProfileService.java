@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.constants.ErrorMsg;
 import com.example.ex4.dto.AdminRegistrationFormDTO;
 import com.example.ex4.entity.ProviderCategory;
 import com.example.ex4.entity.User;
@@ -52,7 +53,7 @@ public class ProviderProfileService {
      */
     public ProviderProfile findProviderProfile(User admin) {
         return providerProfileRepository.findByUser(admin)
-                .orElseThrow(() -> new RuntimeException("No provider profile found"));
+                .orElseThrow(() -> new RuntimeException(ErrorMsg.PROFILE_NOT_FOUND));
     }
 
     /**
@@ -63,7 +64,7 @@ public class ProviderProfileService {
      */
     public void activateAdminAccount(long id) {
         ProviderProfile profile = providerProfileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Provider profile not found"));
+                .orElseThrow(() -> new RuntimeException(ErrorMsg.PROFILE_NOT_FOUND));
         profile.setApproved(true);
         providerProfileRepository.save(profile);
     }
@@ -88,7 +89,7 @@ public class ProviderProfileService {
         userService.addNewUser(admin);
 
         ProviderCategory category = providerCategoryRepository.findByName(profileForm.getCategory())
-                .orElseThrow(() -> new RuntimeException("Provider category not found"));
+                .orElseThrow(() -> new RuntimeException(ErrorMsg.PROVIDER_CATEGORY_NOT_FOUND));
 
         ProviderProfile profile = ProviderProfile.builder()
                 .companyName(profileForm.getCompanyName())
@@ -107,7 +108,7 @@ public class ProviderProfileService {
      */
     public byte[] findProfileImage(Long id) {
         ProviderProfile profile = providerProfileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No profile found"));
+                .orElseThrow(() -> new RuntimeException(ErrorMsg.PROFILE_NOT_FOUND));
         return profile.getProfileImage();
     }
 

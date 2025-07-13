@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.constants.ErrorMsg;
 import com.example.ex4.dto.CartItemDTO;
 import com.example.ex4.dto.SubscriptionDTO;
 import com.example.ex4.entity.PlanPackage;
@@ -43,7 +44,7 @@ public class SubscriptionService {
      */
     public Subscription createSubscription(User user, PlanPackageOption plan) {
         if (plan.getPlanPackage().getExpiryDate().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Cannot subscribe service plan package. because its not available anymore.");
+            throw new RuntimeException(ErrorMsg.PLAN_PACKAGE_NOT_AVAILABLE);
         }
         Subscription sub = Subscription.builder()
                 .user(user)
@@ -96,7 +97,7 @@ public class SubscriptionService {
      */
     public boolean existsInUserSubscription(User user, CartItemDTO item) {
         PlanPackageOption planPackageOption = planPackageOptionRepository.findById(item.getPkgOptionId())
-                .orElseThrow(() -> new IllegalArgumentException("Plan package option not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMsg.PLAN_OPTION_NOT_FOUND));
 
         PlanPackage planPackage = planPackageOption.getPlanPackage();
 

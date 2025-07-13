@@ -13,6 +13,14 @@
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+    // =============== TOAST UTIL ===============
+    /**
+     * Shows a Bootstrap toast message for user feedback.
+     * @param {string} title - The title of the toast (e.g., Success or Error)
+     * @param {string} message - The body message to display
+     * @param {boolean} [isError=false] - Whether to display an error style
+     */
+
     const showToast = (title, message,  isError = false) => {
         toastTitle.textContent = title;
         toastBody.innerHTML = `
@@ -25,7 +33,14 @@
         toast.show();
     }
 
+    // =============== CART ACTIONS ===============
     const cartActions = {
+
+        /**
+         * Sends a request to add an item to the cart.
+         * Updates UI and cart counter if successful.
+         * @param {HTMLFormElement} form - The form containing product data
+         */
         add: async (form) => {
             const response = await fetch('/api/cart/add', {
                 method: 'POST',
@@ -51,6 +66,11 @@
             form.querySelector('.btn-remove')?.classList.remove('d-none');
         },
 
+        /**
+         * Sends a request to remove an item from the cart.
+         * Updates UI and cart counter if successful.
+         * @param {HTMLFormElement} form - The form containing product data
+         */
         remove: async (form) => {
             const response = await fetch('/api/cart/remove', {
                 method: 'DELETE',
@@ -81,6 +101,12 @@
         }
     };
 
+    // =============== HANDLER FUNCTION ===============
+    /**
+     * Handles both add and remove form submissions.
+     * Determines action based on button visibility.
+     * @param {SubmitEvent} e - The form submit event
+     */
     const handleCartRequest = async (e) => {
         e.preventDefault();
 
@@ -93,6 +119,10 @@
         }
     };
 
+    // =============== EVENT LISTENERS ===============
+    /**
+     * form submit handlers on page load
+     */
     document.addEventListener("DOMContentLoaded",()=>{
         addToCartForms.forEach(form => {
             form.addEventListener("submit",  (e)=> handleCartRequest(e))

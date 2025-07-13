@@ -23,8 +23,6 @@ public class PeriodService {
      * @return list of all periods
      */
     public List<Period> findAll() {
-        System.out.println(periodRepository.findAll());
-        System.out.println("HIIII");
         return periodRepository.findAll();
     }
 }

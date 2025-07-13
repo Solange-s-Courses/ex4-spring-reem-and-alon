@@ -1,5 +1,6 @@
 package com.example.ex4.service;
 
+import com.example.ex4.constants.ErrorMsg;
 import com.example.ex4.dto.ChatMessageDTO;
 import com.example.ex4.entity.Chat;
 import com.example.ex4.entity.Message;
@@ -141,10 +142,10 @@ public class MessageService {
      */
     public void markMessageAsRead(Long messageId, long id) {
         Message message = messageRepository.findByIdAndSenderIDNot(messageId, id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "message not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMsg.MSG_NOT_FOUND));
 
         if (message.getChat().getProvider().getId() != id && message.getChat().getClient().getId() != id)
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "read message not allowed");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMsg.ERR_READ_MSG);
 
         message.setRead(true);
         messageRepository.save(message);
