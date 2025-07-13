@@ -1,6 +1,5 @@
 package com.example.ex4.configuration;
 
-import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.components.SearchCategoryHolder;
 import com.example.ex4.components.ShoppingCart;
 import org.springframework.context.annotation.Bean;
@@ -50,11 +49,11 @@ public class BeanConfiguration {
      *
      * @return a new instance of {@link SearchCategoryHolder}
      */
-    @Bean
+/*    @Bean
     @RequestScope
     public CheckoutProviders checkoutProviders() {
         return new CheckoutProviders();
-    }
+    }*/
 }
 
 
