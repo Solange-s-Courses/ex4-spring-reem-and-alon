@@ -4,7 +4,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 /**
- * DTO for a package option (price for a given period & discount).
+ * DTO for a package option (price for a given period and discount).
  */
 @Getter
 @Setter
@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 @Builder
 public class PlanPackageOptionDTO {
 
+    /**
+     * PlanPackageOption id
+     */
     private Long id;
 
     /** Period display name */

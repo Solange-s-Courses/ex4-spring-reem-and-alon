@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for accessing and managing {@link PlanPackage} entities.
+ */
 @Repository
 public interface PlanPackageRepository extends JpaRepository<PlanPackage, Long> {
     /**

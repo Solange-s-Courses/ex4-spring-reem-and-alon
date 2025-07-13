@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * @code DataInitializer
+ * {@code DataInitializer}
  * <p>
  * Initializes default data in the database after the Spring context is refreshed.
  * This includes predefined subscription periods, an admin user, and provider categories.
@@ -33,7 +33,7 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private ProviderCategoryRepository providerCategoryRepository;
 
-    /** @code {PasswordEncoder} */
+    /** {@code PasswordEncoder} */
     @Autowired
     private PasswordEncoder passwordEncoder;
 

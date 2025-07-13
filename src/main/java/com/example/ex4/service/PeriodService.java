@@ -13,6 +13,8 @@ import java.util.List;
  */
 @Service
 public class PeriodService {
+
+    /** Repository for managing {@link Period} entities. */
     @Autowired
     private PeriodRepository periodRepository;
 

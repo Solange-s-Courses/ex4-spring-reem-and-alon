@@ -55,5 +55,8 @@ public class PlanPackageDTO {
     @NotNull(message = "provider profile Id is required")
     private Long providerProfileId;
 
+    /**
+     * PlanPackage Id
+     */
     private Long pkgId;
 }

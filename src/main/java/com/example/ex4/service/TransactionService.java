@@ -19,9 +19,11 @@ import java.util.List;
 @Service
 public class TransactionService {
 
+    /** Repository for managing transactions. */
     @Autowired
     private TransactionRepository transactionRepo;
 
+    /** Repository for managing subscriptions. */
     @Autowired
     private SubscriptionRepository subscriptionRepo;
 

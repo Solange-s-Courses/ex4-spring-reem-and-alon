@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class ReviewService {
 
+    /** Repository for managing {@link Review} entities. */
     @Autowired
     private ReviewRepository reviewRepository;
 

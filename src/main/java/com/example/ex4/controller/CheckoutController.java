@@ -3,7 +3,6 @@ package com.example.ex4.controller;
 import com.example.ex4.MyUserPrincipal;
 import com.example.ex4.components.CheckoutProviders;
 import com.example.ex4.components.ShoppingCart;
-import com.example.ex4.entity.PlanPackage;
 import com.example.ex4.entity.PlanPackageOption;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.User;
@@ -19,10 +18,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Controller for handling checkout endpoint requests
+ * Controller for handling user checkout operations.
  * <p>
- * Responsible for managing user purchase action on its shopping cart
- * The user can only but all items at once
+ * Responsible for managing user purchases of all items in the shopping cart at once,
+ * and handling the transition to the chat creation process with selected providers.
  *
  * @see ShoppingCart
  */
@@ -30,24 +29,39 @@ import java.util.stream.Collectors;
 @RequestMapping("user/checkout")
 public class CheckoutController {
 
+    /**
+     * Session-scoped shopping cart for the current user.
+     */
     @Autowired
     private ShoppingCart sessionCart;
 
+    /**
+     * Service layer for checkout business logic.
+     */
     @Autowired
     private CheckoutService checkoutService;
 
     /**
-     * Service for business logic of {@link PlanPackage}.
+     * Service for managing and retrieving plan packages and options.
      */
     @Autowired
     private PlanPackageService planPackageService;
 
     /**
-     * Request scope bean that holds the plan packages owner (of the items the user wants to buy)
+     * Request-scoped bean that holds the providers of the plans in the current checkout.
      */
     @Autowired
     private CheckoutProviders planOwnerProviders;
 
+    /**
+     * Displays the current user's shopping cart and its contents.
+     * <p>
+     * If the checkout was successful, clears the shopping cart.
+     *
+     * @param success optional query param indicating if checkout succeeded
+     * @param model   Spring MVC model for view attributes
+     * @return the cart page view
+     */
     @GetMapping
     public String cartPage(@RequestParam(value = "success", required = false) Boolean success, Model model) {
         if (success != null && success) {
@@ -55,12 +69,19 @@ public class CheckoutController {
         }
         Set<Long> pkgIds = sessionCart.getPkgIds();
         model.addAttribute("cartItems", planPackageService.getPlanOptionsByIds(pkgIds));
-
         return "user/checkout-cart";
     }
 
+    /**
+     * Performs the checkout for all items in the user's cart.
+     * <p>
+     * After purchase, collects all relevant providers and forwards to chat creation.
+     *
+     * @param userPrincipal the authenticated user principal
+     * @return a forward to the chat creation endpoint
+     */
     @PostMapping
-    public String checkout( @AuthenticationPrincipal MyUserPrincipal userPrincipal) {
+    public String checkout(@AuthenticationPrincipal MyUserPrincipal userPrincipal) {
         User user = userPrincipal.getUser();
         List<PlanPackageOption> plansToPurchase = planPackageService.getPlanOptionsByIds(sessionCart.getPkgIds());
         checkoutService.processCheckout(user, plansToPurchase);
@@ -72,8 +93,15 @@ public class CheckoutController {
         return "forward:/chat/create";
     }
 
+    /**
+     * Handles runtime exceptions during checkout, sets error flash attribute and redirects back to the cart.
+     *
+     * @param model attributes for redirect
+     * @param ex the exception caught
+     * @return redirect to the cart page
+     */
     @ExceptionHandler({RuntimeException.class})
-    public String handleException(RedirectAttributes model , Exception ex) {
+    public String handleException(RedirectAttributes model, Exception ex) {
         model.addFlashAttribute("error", ex.getMessage());
         return "redirect:/user/checkout";
     }

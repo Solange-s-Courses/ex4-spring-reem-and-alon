@@ -89,6 +89,10 @@ public class ShoppingCart implements Serializable {
         return items.stream().map(CartItemDTO::getMonthlyCost).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * Gets the size of the shopping cart
+     * @return the size of the shopping cart
+     */
     public int getSize() {
         return items.size();
     }

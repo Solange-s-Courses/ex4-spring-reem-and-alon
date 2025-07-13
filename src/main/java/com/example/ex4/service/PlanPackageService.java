@@ -27,10 +27,16 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PlanPackageService {
+
+    /** Repository for managing {@link PlanPackage} entities. */
     @Autowired
     private PlanPackageRepository planPackageRepository;
+
+    /** Repository for managing {@link PlanPackageOption} entities. */
     @Autowired
     private PlanPackageOptionRepository planPackageOptionRepository;
+
+    /** Repository for managing {@link Period} entities. */
     @Autowired
     private PeriodRepository periodRepository;
 
@@ -46,16 +52,6 @@ public class PlanPackageService {
         return plans.stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Returns a single PlanPackageDTO for a PlanPackage entity.
-     *
-     * @param planPackage the plan package entity
-     * @return the DTO representation
-     */
-    public PlanPackageDTO getPlanPackage(PlanPackage planPackage) {
-        return entityToDto(planPackage);
     }
 
     /**
@@ -115,22 +111,6 @@ public class PlanPackageService {
     }
 
     /**
-     * Finds all PlanPackageDTOs for a set of PlanPackageOption IDs.
-     *
-     * @param optionsId set of plan package option IDs
-     * @return list of corresponding package DTOs
-     */
-    public List<PlanPackageDTO> findAllPlanPackageOptions(Set<Long> optionsId) {
-        List<PlanPackageOption> planPeriods = planPackageOptionRepository.findAllById(optionsId);
-        List<PlanPackage> plans = planPeriods.stream()
-                .map(PlanPackageOption::getPlanPackage)
-                .toList();
-        return plans.stream()
-                .map(this::entityToDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Gets PlanPackageOption entities by their IDs.
      *
      * @param optionsId set of option IDs
@@ -138,36 +118,6 @@ public class PlanPackageService {
      */
     public List<PlanPackageOption> getPlanOptionsByIds(Set<Long> optionsId) {
         return planPackageOptionRepository.findAllById(optionsId);
-    }
-
-    /**
-     * Checks if the cart already contains an option from the same package.
-     *
-     * @param pkgOptionIds the set of existing option IDs in the cart
-     * @param newPkgOptionId the new option ID to check
-     * @return true if same package already exists in the cart
-     */
-    public boolean cartContainsSomePackageOption(Set<Long> pkgOptionIds, @NotNull Long newPkgOptionId) {
-        if (pkgOptionIds.isEmpty()) return false;
-
-        PlanPackageOption newOption = planPackageOptionRepository.findById(newPkgOptionId).orElse(null);
-        if (newOption == null) return false;
-        List<PlanPackageOption> cartOptions = planPackageOptionRepository.findAllById(pkgOptionIds);
-        return cartOptions.stream()
-                .anyMatch(option -> option.getPlanPackage().getId() == newOption.getPlanPackage().getId());
-    }
-
-    /**
-     * Finds all products (PlanPackage) for a set of option IDs.
-     *
-     * @param optionsId set of option IDs
-     * @return list of packages for those options
-     */
-    public List<PlanPackage> findAllProducts(Set<Long> optionsId) {
-        List<PlanPackageOption> planOptions = getPlanOptionsByIds(optionsId);
-        return planOptions.stream()
-                .map(PlanPackageOption::getPlanPackage)
-                .toList();
     }
 
     /**

@@ -74,9 +74,9 @@ public class SearchProviderController {
      *
      * @param model Spring ModelMap for adding attributes
      * @return the results view grouped by provider
-     * @see SearchProviderService#findAllProviderResultByCategory(String)
-     * @see SearchCategoryHolder#getCategory()
-     * @code Example: forwarding to results after category chosen}
+     * @see SearchProviderService
+     * @see SearchCategoryHolder
+     * {@code Example: forwarding to results after category chosen}
      * */
     @GetMapping("/result")
     public ModelAndView groupedByProviderResult(ModelMap model) {

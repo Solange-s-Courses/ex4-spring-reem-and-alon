@@ -25,9 +25,11 @@ import java.util.stream.Collectors;
 @Service
 public class SubscriptionService {
 
+    /** Repository for managing subscriptions. */
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    /** Repository for managing plan package options. */
     @Autowired
     private PlanPackageOptionRepository planPackageOptionRepository;
 

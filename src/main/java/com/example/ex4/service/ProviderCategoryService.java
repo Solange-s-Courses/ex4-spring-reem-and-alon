@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProviderCategoryService {
 
+    /** Repository for managing {@code PlanPackage} entities. */
     @Autowired
     private ProviderCategoryRepository providerCategoryRepository;
 

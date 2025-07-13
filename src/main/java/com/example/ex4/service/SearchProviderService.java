@@ -21,15 +21,19 @@ import java.util.List;
 @Service
 public class SearchProviderService {
 
+    /** Service for provider categories. */
     @Autowired
     private ProviderCategoryService providerCategoryService;
 
+    /** Repository for provider profiles. */
     @Autowired
     private ProviderProfileRepository providerProfileRepository;
 
+    /** Repository for reviews. */
     @Autowired
     private ReviewRepository reviewRepository;
 
+    /** Service for plan package business logic. */
     @Autowired
     private PlanPackageService planPackageService;
 
