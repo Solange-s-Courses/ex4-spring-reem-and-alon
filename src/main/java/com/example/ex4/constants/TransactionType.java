@@ -6,7 +6,7 @@ package com.example.ex4.constants;
  *   <li>{@link #TRANSFER} – Money transfer between accounts or users.</li>
  *   <li>{@link #DEPOSIT} – Deposit of funds into an account.</li>
  *   <li>{@link #REFUND} – Refund transaction.</li>
- *   <li>{@link #FEE} – Transaction fee or service charge.</li>
+ *   <li>{@link #FAILED} – Transaction charge failed.</li>
  * </ul>
  */
 public enum TransactionType {
@@ -16,6 +16,6 @@ public enum TransactionType {
     DEPOSIT,
     /** Refund transaction. */
     REFUND,
-    /** Transaction fee or service charge. */
-    FEE
+    /** Transaction charge failed. */
+    FAILED
 }

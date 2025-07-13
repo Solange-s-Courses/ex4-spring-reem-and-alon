@@ -36,4 +36,6 @@ public interface ProviderProfileRepository extends JpaRepository<ProviderProfile
      * @return list of provider profiles with non-empty plan packages in the given category
      */
     List<ProviderProfile> findByCategoryAndPlanPackagesIsNotEmpty(ProviderCategory category);
+
+    Optional<ProviderProfile> findByCompanyName(String companyName);
 }

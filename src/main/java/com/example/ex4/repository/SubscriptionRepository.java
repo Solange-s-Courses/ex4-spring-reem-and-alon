@@ -3,6 +3,8 @@ package com.example.ex4.repository;
 import com.example.ex4.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -44,4 +46,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
      * @return true if user is subscribed to the plan package
      */
     boolean existsByUserAndPlanPackageOption_PlanPackage(User user, PlanPackage planPackage);
+
+    List<Subscription> findByLastChargedAtBefore(LocalDateTime oneMonthAgo);
 }
