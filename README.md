@@ -34,6 +34,20 @@ The entire website is responsive and built with a focus on a clean, smooth user 
   <li>Username: <code>admin</code></li>
   <li>Password: <code>admin123</code></li>
 </ul>
+<p><strong>Admin (providers) default credentials you can use to add packages:</strong></p>
+<ul>
+  <li>Username: <code>WaveTel</code>(CELLULAR)</li>
+  <li>Password: <code>1</code></li>
+  <li>Username: <code>SuperTV</code>(TELEVISION)</li>
+  <li>Password: <code>1</code></li>
+</ul>
+<p><strong>users default credentials you can login with to find packages:</strong></p>
+<ul>
+  <li>Username: <code>alon</code></li>
+  <li>Password: <code>1</code></li>
+  <li>Username: <code>reem</code></li>
+  <li>Password: <code>1</code></li>
+</ul>
   <ol>
     <li>When the program starts, the super admin is created. He can add categories to control what categories exist and stop others from adding random ones.</li>
     <li>Providers can sign up and wait for the super admin to approve them as admins.</li>
@@ -107,6 +121,7 @@ The entire website is responsive and built with a focus on a clean, smooth user 
   <li>Many features and buttons on the website are not fully implemented yet and have been left for future expansion. The working features are marked in the project workflow, so please follow the workflow accordingly.</li>
   <li>The program uses sessions – if you are inactive for the set time, you will not be able to perform actions once the session expires.</li>
   <li>The platform is designed to be extendable, not only for communication providers but also for other types of services. This was the motivation behind choosing this project.</li>
+  <li><strong> we used  one of the 3 days extra to fix readme</strong></li>
 </ol>
 <h1>Execution</h1>
 <ol>

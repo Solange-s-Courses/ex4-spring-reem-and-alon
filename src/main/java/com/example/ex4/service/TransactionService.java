@@ -106,7 +106,6 @@ public class TransactionService {
      * {@code periodMonths} is the number of months in the subscription period,
      * {@code transactionsMade} is the number of existing payment transactions for the subscription.
      * {@code today >= nextChargeDate}, the subscription is charged and a transaction is created.
-     * </p>
      *
      * <b>Assumptions:</b>
      * <ul>
