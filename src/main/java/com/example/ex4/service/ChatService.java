@@ -72,4 +72,8 @@ public class ChatService {
                 .orElseGet(() -> createChat(user, provider))
         );
     }
+
+    public Chat getChatByProviderId(User user, Long providerId) {
+        return chatRepository.findByClientAndProvider_Id(user, providerId);
+    }
 }

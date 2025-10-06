@@ -33,9 +33,10 @@
                     <hr>
                 </div>
                 <div class="d-flex gap-2 mb-0">
-                    <button type="button" class="btn btn-add flex-fill">
+                    <a th:href="@{/chat(id=${subscription.providerId})}"
+                       class="btn btn-add flex-fill">
                         <i class="bi bi-chat-dots me-1"></i> Contact
-                    </button>
+                    </a>
                     <button type="button" class="btn btn-remove flex-fill">
                         <i class="bi bi-x-circle me-1"></i> Cancel
                     </button>

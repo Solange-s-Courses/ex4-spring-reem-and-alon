@@ -69,12 +69,14 @@ public class ChatController {
      * @return The chat list view name
      */
     @GetMapping()
-    public String list(@AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
+    public String list(@RequestParam(required = false) Long id, @AuthenticationPrincipal MyUserPrincipal userPrincipal, Model model) {
         User user = userPrincipal.getUser();
+        if (id != null) {
+            Chat chat = chatService.getChatByProviderId(user, id);
+            return "forward:/chat/" + chat.getId();
+        }
         ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
-        List<Chat> chats = providerProfile != null ?
-                chatService.getAllChatsForProvider(providerProfile) :
-                chatService.getAllChatsForClient(user);
+        List<Chat> chats = providerProfile != null ? chatService.getAllChatsForProvider(providerProfile) : chatService.getAllChatsForClient(user);
         model.addAttribute("chats", chats);
         model.addAttribute("userId", user.getId());
         model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
