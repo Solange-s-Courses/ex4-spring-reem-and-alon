@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-12 col-md-9">
                         <label class="form-label" for="title">Review title</label>
-                        <input id="title" th:field="*{title}" class="form-control" required
+                        <input id="title" th:field="*{title}" class="form-control"
                                placeholder="Summarise your experience">
                         <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
                              class="invalid-feedback d-block"></div>

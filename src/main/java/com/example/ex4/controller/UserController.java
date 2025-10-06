@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.math.BigDecimal;
 
 /**
@@ -62,7 +64,7 @@ public class UserController {
      *
      * @param userPrincipal authenticated user principal
      * @param amount the amount to deposit
-     * @param model Spring model for error message
+     * @param redirectAttributes Spring RedirectAttributes for error message
      * @return redirect to user index, or reload with error if invalid amount
      * @see UserService#depositToBalance(com.example.ex4.entity.User, BigDecimal)
      */
@@ -70,6 +72,7 @@ public class UserController {
     public String depositCredit(@AuthenticationPrincipal MyUserPrincipal userPrincipal, @RequestParam BigDecimal amount, Model model) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             model.addAttribute("errorMessage", "Amount must be greater than 0");
+            model.addAttribute("subscriptions", subscriptionService.findUserSubscriptions(userPrincipal.getUser()));
             return "user/index";
         }
         userService.depositToBalance(userPrincipal.getUser(), amount);
