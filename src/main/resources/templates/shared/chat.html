@@ -22,7 +22,8 @@
             <a th:each="chat : ${chats}"
                th:href="@{/chat/{id}(id=${chat.id})}"
                th:data-chat-id="${chat.id}"
-               class="list-group-item list-group-item-action d-flex align-items-center chat-item">
+               class="list-group-item list-group-item-action d-flex align-items-center chat-item"
+               th:classappend="${chat.id} == ${chatId} ? ' bg-info-subtle' : ''">
                 <div sec:authorize="hasRole('ADMIN')">
                     <i class="bi bi-person-circle fs-1 avatar me-3"></i>
                 </div>
