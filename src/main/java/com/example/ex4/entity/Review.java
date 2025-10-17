@@ -1,8 +1,7 @@
 package com.example.ex4.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,21 +43,21 @@ public class Review implements Serializable {
     /**
      * The text of the review.
      */
-    @Column(nullable = false)
+    @NotBlank(message = "Please enter description of the review.")
     private String reviewText;
 
     /**
      * Title or summary for the review.
      */
-    @Column(nullable = false)
+    @NotBlank(message = "Please enter title to your review.")
     private String title;
 
     /**
      * Number of stars given (1-5).
      */
-    @Column(nullable = false)
-    @Min(1)
-    @Max(5)
+    @NotNull(message = "Please select a star rating between 1 and 5.")
+    @DecimalMin(value = "1.0", message = "Rating must be at least 1 star.")
+    @DecimalMax(value = "5.0", message = "Rating cannot exceed 5 stars.")
     private Double stars;
 
     /**
