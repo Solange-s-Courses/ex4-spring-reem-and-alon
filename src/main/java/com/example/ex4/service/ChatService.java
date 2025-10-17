@@ -76,4 +76,8 @@ public class ChatService {
     public Chat getChatByProviderId(User user, Long providerId) {
         return chatRepository.findByClientAndProvider_Id(user, providerId);
     }
+
+    public Chat getChatByPId(Long chatId) {
+        return chatRepository.findById(chatId).orElse(null);
+    }
 }

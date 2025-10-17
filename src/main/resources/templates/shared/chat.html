@@ -40,7 +40,6 @@
                               th:text="${chat.client.userName}"></span>
                         <span class="badge rounded-pill bg-danger unread-badge ms-2"
                               th:attr="style=${(unreadMessages[chat.id]?:0) > 0 ? '' : 'display:none'}"
-
                               th:text="${unreadMessages[chat.id]}"></span>
                     </div>
                 </div>
@@ -48,7 +47,17 @@
         </div>
         <div class="col mx-2 my-auto d-flex flex-column border border-white border-2 border-dark-subtle"
              style="height: 80vh">
-            <div class="messages-list" id="messagesList">
+            <div class="chat-header d-flex justify-content-center align-items-center py-2 border-bottom border-dark-subtle w-100">
+                <div class="d-flex align-items-center">
+                    <img sec:authorize="hasRole('USER')"
+                         th:if="${providerId != null}"
+                         th:src="@{/provider-image/{id}(id=${providerId})}"
+                         alt="Provider"
+                         style="width:75px;height:75px;object-fit:cover;border-radius:50%;margin-right:12px;">
+                    <h6 class="fw-semibold mb-0">Customer Service</h6>
+                </div>
+            </div>
+            <div class="messages-list mt-3" id="messagesList">
                 <div id="startMsg" th:if="${messages == null or #lists.isEmpty(messages)}"
                      class="d-flex h-100 w-100 justify-content-center align-items-center text-muted">
                     <span>Start chat 🗨️</span>

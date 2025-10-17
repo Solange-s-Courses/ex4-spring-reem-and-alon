@@ -9,6 +9,7 @@ import com.example.ex4.entity.User;
 import com.example.ex4.repository.ProviderProfileRepository;
 import com.example.ex4.service.ChatService;
 import com.example.ex4.service.MessageService;
+import com.example.ex4.service.ProviderProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,6 +46,8 @@ public class ChatController {
     private ProviderProfileRepository providerProfileRepository;
 
     @Autowired CheckoutProviders planOwnerProviders;
+    @Autowired
+    private ProviderProfileService providerProfileService;
 
     /**
      * Creates chat(s) after a successful checkout and redirects to the checkout page with a success parameter.
@@ -97,6 +100,7 @@ public class ChatController {
                                    @AuthenticationPrincipal MyUserPrincipal userPrincipal,
                                    Model model) {
         User user = userPrincipal.getUser();
+        Chat chat = chatService.getChatByPId(chatId);
         ProviderProfile providerProfile = providerProfileRepository.findByUser(user).orElse(null);
         messageService.markAsRead(chatId, user.getId());
 
@@ -104,10 +108,14 @@ public class ChatController {
                 chatService.getAllChatsForProvider(providerProfile) :
                 chatService.getAllChatsForClient(user);
 
+        System.out.println("providerId: " + chat.getProvider().getId() + "\n\n\n\n");
+
         List<ChatMessageDTO> messages = messageService.getAllMessageHistory(chatId);
         model.addAttribute("messages", messages);
         model.addAttribute("chats", chats);
         model.addAttribute("chatId", chatId);
+        model.addAttribute("otherName", providerProfile == null ? chat.getProvider().getCompanyName() : chat.getClient().getUserName());
+        model.addAttribute("providerId", chat.getProvider().getId());
         model.addAttribute("userId", user.getId());
         model.addAttribute("unreadMessages", messageService.getUnreadMessagesCount(user));
         return "shared/chat";
