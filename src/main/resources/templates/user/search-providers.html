@@ -87,7 +87,7 @@
                                 <span th:if="${showHalfStar}">
                                     <i class="bi bi-star-half"></i>
                                 </span>
-                                <span th:each="i : ${#numbers.sequence(1, emptyStars)}">
+                                <span th:if="${emptyStars > 0}" th:each="i : ${#numbers.sequence(1, emptyStars)}">
                                     <i class="bi bi-star"></i>
                                 </span>
                             </div>
