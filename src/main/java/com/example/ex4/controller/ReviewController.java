@@ -1,6 +1,7 @@
 package com.example.ex4.controller;
 
 import com.example.ex4.MyUserPrincipal;
+import com.example.ex4.dto.SearchResultDTO;
 import com.example.ex4.entity.ProviderProfile;
 import com.example.ex4.entity.Review;
 import com.example.ex4.repository.ProviderProfileRepository;
@@ -97,7 +98,9 @@ public class ReviewController {
     public ModelAndView addReview(@AuthenticationPrincipal MyUserPrincipal userPrincipal,
                                   @Valid @ModelAttribute Review review,
                                   BindingResult bindingResult,
-                                  @RequestParam Long providerProfileId, ModelMap model) {
+                                  @RequestParam Long providerProfileId,
+                                  @RequestParam String category,
+                                  ModelMap model) {
 
         ProviderProfile provider = providerProfileRepository.findById(providerProfileId)
                 .orElseThrow(() -> new RuntimeException("No profile found"));
@@ -113,6 +116,6 @@ public class ReviewController {
         review.setCreatedAt(LocalDateTime.now());
         reviewService.saveReview(review);
 
-        return new ModelAndView("redirect:/reviews?providerProfileId=" + providerProfileId);
+        return new ModelAndView("redirect:/reviews?providerProfileId=" + providerProfileId +"&category="+category);
     }
 }
