@@ -45,9 +45,14 @@ public class SearchProviderService {
      * @return list of search result DTOs for each provider in the category
      */
     public List<SearchResultDTO> findAllProviderResultByCategory(String category) {
-        ProviderCategory providerCategory = providerCategoryService.findByName(category);
-        List<ProviderProfile> providers = providerProfileRepository.findByCategoryAndPlanPackagesIsNotEmpty(providerCategory);
-
+        List<ProviderProfile> providers;
+        if (category != null && !category.equals("All Categories")) {
+            ProviderCategory providerCategory = providerCategoryService.findByName(category);
+            providers = providerProfileRepository.findByCategoryAndPlanPackagesIsNotEmpty(providerCategory);
+        }
+        else{
+            providers=providerProfileRepository.findByPlanPackagesIsNotEmpty();
+        }
         return providers.stream().map(provider -> {
             double avgStars = reviewRepository.findAvgStarsByProviderProfile(provider).orElse(0.0);
             long reviewCount = reviewRepository.countAllByProviderProfile(provider);

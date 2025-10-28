@@ -40,7 +40,7 @@
             <div class="flex-grow-1">
                 <label for="category" class="form-label">Category</label>
                 <select id="category" class="form-select" name="category" required>
-                    <option value="" th:selected="${selectedCategory == null or selectedCategory == ''}" disabled>All
+                    <option value="All Categories" selected>All Categories</option>All
                         Categories
                     </option>
                     <option th:each="category : ${providers}"
@@ -62,7 +62,7 @@
 <div class="container results-section">
     <div class="results-info mb-4">
         <div class="results-count">
-            <span th:if="${results!= null}" th:text="${#lists.size(results)}">0</span> results found
+            <span th:if="${results!= null}" th:text="${#lists.size(results)}"></span> results found
         </div>
     </div>
     <div class="row row-cols-1">
@@ -111,10 +111,10 @@
             </div>
         </div>
 
-        <div th:unless="${results != null}" class="no-results">
+        <div th:if="${results != null and #lists.isEmpty(results)}" class="no-results">
             <i class="bi bi-search"></i>
             <h3>No results found</h3>
-            <p>Try adjusting your search criteria or browse our categories to find what you're looking for.</p>
+            <p>Try browse our other categories to find what you're looking for.</p>
         </div>
     </div>
 </div>
