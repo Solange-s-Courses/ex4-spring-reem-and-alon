@@ -37,5 +37,7 @@ public interface ProviderProfileRepository extends JpaRepository<ProviderProfile
      */
     List<ProviderProfile> findByCategoryAndPlanPackagesIsNotEmpty(ProviderCategory category);
 
+    List<ProviderProfile> findByPlanPackagesIsNotEmpty();
+
     Optional<ProviderProfile> findByCompanyName(String companyName);
 }

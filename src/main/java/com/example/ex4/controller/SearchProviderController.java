@@ -65,7 +65,7 @@ public class SearchProviderController {
             model.addAttribute("selectedCategory", category);
             return new ModelAndView("forward:/user/search-providers/result", model);
         }
-
+        model.addAttribute("results",searchProviderService.findAllProviderResultByCategory(category));
         return new ModelAndView("user/search-providers", model);
     }
 
