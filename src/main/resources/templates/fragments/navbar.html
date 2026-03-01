@@ -2,55 +2,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div th:fragment="navbar">
-  <nav class="navbar navbar-expand navbar-dark bg-secondary p-0">
-    <div class="collapse navbar-collapse justify-content-center ">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">
-          <a class="nav-link position-relative" href="/user/search-providers">
-            <i class="bi bi-search fs-1 text-center"></i>
-          </a>
-        </li>
-        <li class="nav-item ms-4 pt-1">
-          <a class="nav-link position-relative" href="/chat">
-            <i class="bi bi-chat-text fs-1 text-center"></i>
-            <span class="position-absolute my-3 translate-middle badge rounded-pill bg-danger"
-                  th:text="${unreadMessagesCount != null} ? ${unreadMessagesCount} : 0">
-                5
-            </span>
-          </a>
-        </li>
-        <li  class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">
-          <a class="nav-link position-relative" href="/user/checkout">
-            <i class="bi bi-cart2 fs-1"></i>
-            <span id="cart-size"
-                  class="position-absolute my-3 translate-middle badge rounded-pill bg-danger"
-                  th:text="${shoppingCartSize}">
-            </span>
-          </a>
-        </li>
-        <li  class="nav-item ms-4 pt-1" sec:authorize="hasRole('USER')">
-          <a class="nav-link position-relative" href="/user">
-            <i class="bi bi-person fs-1"></i>
-          </a>
-        </li>
-        <li class="nav-item ms-4 pt-1" sec:authorize="hasRole('ADMIN')">
-          <a class="nav-link position-relative" href="/admin">
-            <i class="bi bi-person fs-1"></i>
-          </a>
-        </li>
-        <!-- יתרת קרדיט -->
-        <li class="nav-item ms-4 pt-1 d-flex align-items-center" sec:authorize="hasRole('USER')">
-          <span class="nav-link position-relative d-flex align-items-center gap-2 p-1">
-            <i class="bi bi-cash-coin fs-1"></i>
-              <span class="fs-5 text-light">
-                $<span th:text="${balance != null ? balance : 0}"></span>
+  <nav class="navbar navbar-expand navbar-dark bg-secondary p-0 shadow-sm">
+    <div class="container-fluid px-4">
+
+      <a class="navbar-brand fw-bold text-white fs-4 d-flex align-items-center py-2"
+        href="/"
+        style="letter-spacing:0.5px;">
+          Telco<span class="fw-light ms-1">Market</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav mx-auto align-items-center py-2">
+          
+          <li class="nav-item ms-md-4" sec:authorize="hasRole('USER')">
+            <a class="nav-link position-relative d-inline-block" href="/user/search-providers">
+              <i class="bi bi-search fs-3"></i>
+            </a>
+          </li>
+          
+          <li class="nav-item ms-md-4">
+            <a class="nav-link position-relative d-inline-block" href="/chat">
+              <i class="bi bi-chat-text fs-3"></i>
+              <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size: 0.65rem; top: 30%;"
+                    th:text="${unreadMessagesCount != null} ? ${unreadMessagesCount} : 0">
+                  5
               </span>
-          </span>
-        </li>
-      </ul>
-      <form th:action="@{/logout}" method="post" class="d-flex me-3">
-        <button type="submit" class="btn btn-outline-light">Logout</button>
-      </form>
+            </a>
+          </li>
+          
+          <li class="nav-item ms-md-4" sec:authorize="hasRole('USER')">
+            <a class="nav-link position-relative d-inline-block" href="/user/checkout">
+              <i class="bi bi-cart2 fs-3"></i>
+              <span id="cart-size"
+                    class="position-absolute start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size: 0.65rem; top: 30%;"
+                    th:text="${shoppingCartSize}">
+              </span>
+            </a>
+          </li>
+          
+          <li class="nav-item ms-md-4" sec:authorize="hasRole('USER')">
+            <a class="nav-link position-relative d-inline-block" href="/user">
+              <i class="bi bi-person fs-3"></i>
+            </a>
+          </li>
+          
+          <li class="nav-item ms-md-4" sec:authorize="hasRole('ADMIN')">
+            <a class="nav-link position-relative d-inline-block" href="/admin">
+              <i class="bi bi-person fs-3"></i>
+            </a>
+          </li>
+          
+          <li class="nav-item ms-md-4 d-flex align-items-center" sec:authorize="hasRole('USER')">
+            <span class="nav-link d-flex align-items-center gap-2 p-1">
+              <i class="bi bi-cash-coin fs-3"></i>
+                <span class="fs-6 text-light">
+                  $<span th:text="${balance != null ? balance : 0}"></span>
+                </span>
+            </span>
+          </li>
+        </ul>
+        
+        <form th:action="@{/logout}" method="post" class="d-flex ms-md-3 my-2 my-md-0">
+          <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+        </form>
+      </div>
     </div>
   </nav>
 </div>

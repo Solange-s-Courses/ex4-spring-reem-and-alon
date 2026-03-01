@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: ex4-mysql
+    restart: always
+    command: ["mysqld", "--bind-address=0.0.0.0", "--port=3306"]
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ex4
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./ex4.sql:/docker-entrypoint-initdb.d/01-ex4.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -uroot -proot -h127.0.0.1 -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: ex4-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ex4?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
+    restart: always
+    mem_limit: 512m
+
+volumes:
+  db-data:
